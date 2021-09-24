@@ -21,7 +21,12 @@ public class MecanumTestArcade extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            mecanum.move(gamepad1.right_stick_x, gamepad1.right_stick_y, gamepad1.left_stick_x);
+            telemetry.addData("Speed", gamepad1.left_stick_y);
+            telemetry.addData("Strafe", gamepad1.left_stick_x);
+            telemetry.addData("Rotation", gamepad1.right_stick_x);
+            telemetry.update();
+
+            mecanum.moveGamepad(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
         }
     }
 }

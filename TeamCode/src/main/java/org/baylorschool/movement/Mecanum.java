@@ -58,36 +58,32 @@ public class Mecanum {
      * @param x left / right power (-1 to 1)
      * @param rotation left / right power (-1 to 1)
      */
-    public void move(double x, double y, double rotation) {
-        double flPower = x + y + rotation;
-        double blPower = x - y + rotation;
-        double frPower = x - y - rotation;
-        double brPower = x + y - rotation;
-
-        flMotor.setPower(flPower);
-        blMotor.setPower(blPower);
-        frMotor.setPower(frPower);
-        brMotor.setPower(brPower);
-
+    public void moveGamepad(double y, double x, double rotation) {
         /*
             Taken from
             https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
          */
-        double Magnitude = abs(x) + abs(rotation) + abs(y);
+        double rot = -rotation;
+        double Magnitude = abs(x) + abs(rot) + abs(y);
         Magnitude = (Magnitude > 1) ? Magnitude : 1;
 
-        flMotor.setPower(scale((scaleInput(x) + scaleInput(rotation) - scaleInput(y)),
+        flMotor.setPower(scale((scaleInput(y) + scaleInput(rot) - scaleInput(x)),
                 -Magnitude, +Magnitude, -1, +1));
-        blMotor.setPower(scale((scaleInput(x) + scaleInput(rotation) + scaleInput(y)),
+        blMotor.setPower(scale((scaleInput(y) + scaleInput(rot) + scaleInput(x)),
                 -Magnitude, +Magnitude, -1, +1));
-        frMotor.setPower(scale((scaleInput(x) - scaleInput(rotation) + scaleInput(y)),
+        frMotor.setPower(scale((scaleInput(y) - scaleInput(rot) + scaleInput(x)),
                 -Magnitude, +Magnitude, -1, +1));
-        brMotor.setPower(scale((scaleInput(x) - scaleInput(rotation) - scaleInput(y)),
+        brMotor.setPower(scale((scaleInput(y) - scaleInput(rot) - scaleInput(x)),
                 -Magnitude, +Magnitude, -1, +1));
     }
 
     private double scaleInput(double x) {
-        return x * x;
+        /*
+        Squaring allows for finer adjustments when lower power.
+        Disabled for now as it causes slower movement during diagonal (ask Javier).
+        return x * x * (x > 0 ? 1 : -1);
+         */
+        return x;
     }
 
     public DcMotor getFrMotor() {
