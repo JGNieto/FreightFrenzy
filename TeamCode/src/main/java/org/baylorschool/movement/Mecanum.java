@@ -1,6 +1,11 @@
 package org.baylorschool.movement;
 
+import static com.qualcomm.robotcore.util.Range.scale;
+import static java.lang.Math.abs;
+
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 public class Mecanum {
 
@@ -9,27 +14,95 @@ public class Mecanum {
     private DcMotor flMotor;
     private DcMotor blMotor;
 
+    public enum Side {
+        LEFT,
+        RIGHT
+    }
+
     /**
      *
-     * @param frMotor
-     * @param brMotor
-     * @param flMotor
+     * @param hardwareMap
+     * @param reverse
      * @param blMotor
+     * @param flMotor
+     * @param brMotor
+     * @param frMotor
      */
-    public Mecanum(DcMotor frMotor, DcMotor brMotor, DcMotor flMotor, DcMotor blMotor) {
-        this.frMotor = frMotor;
-        this.brMotor = brMotor;
-        this.flMotor = flMotor;
-        this.blMotor = blMotor;
+    public Mecanum(HardwareMap hardwareMap, Side reverse, String blMotor, String flMotor,
+                   String brMotor, String frMotor) {
+        this.blMotor = hardwareMap.get(DcMotor.class, blMotor);
+        this.flMotor = hardwareMap.get(DcMotor.class, flMotor);
+        this.brMotor = hardwareMap.get(DcMotor.class, brMotor);
+        this.frMotor = hardwareMap.get(DcMotor.class, frMotor);
+
+        setReverse(reverse);
+    }
+
+    public void setReverse(Side reverse) {
+        if (reverse.equals(Side.LEFT)) {
+            frMotor.setDirection(DcMotor.Direction.FORWARD);
+            brMotor.setDirection(DcMotor.Direction.FORWARD);
+            flMotor.setDirection(DcMotor.Direction.REVERSE);
+            blMotor.setDirection(DcMotor.Direction.REVERSE);
+        } else {
+            frMotor.setDirection(DcMotor.Direction.REVERSE);
+            brMotor.setDirection(DcMotor.Direction.REVERSE);
+            flMotor.setDirection(DcMotor.Direction.FORWARD);
+            blMotor.setDirection(DcMotor.Direction.FORWARD);
+        }
     }
 
     /**
-     *
-     * @param angle in degrees (forward is 0, right is 90, back is 180, and left is 270.
-     * @param speed Speed (from 0 to 1)
+     * Changes motion of robot
+     * @param y forward / backward power (1 to -1)
+     * @param x left / right power (-1 to 1)
+     * @param rotation left / right power (-1 to 1)
      */
-    public void move(double angle, double speed) {
+    public void move(double x, double y, double rotation) {
+        double flPower = x + y + rotation;
+        double blPower = x - y + rotation;
+        double frPower = x - y - rotation;
+        double brPower = x + y - rotation;
 
+        flMotor.setPower(flPower);
+        blMotor.setPower(blPower);
+        frMotor.setPower(frPower);
+        brMotor.setPower(brPower);
+
+        /*
+            Taken from
+            https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
+         */
+        double Magnitude = abs(x) + abs(rotation) + abs(y);
+        Magnitude = (Magnitude > 1) ? Magnitude : 1;
+
+        flMotor.setPower(scale((scaleInput(x) + scaleInput(rotation) - scaleInput(y)),
+                -Magnitude, +Magnitude, -1, +1));
+        blMotor.setPower(scale((scaleInput(x) + scaleInput(rotation) + scaleInput(y)),
+                -Magnitude, +Magnitude, -1, +1));
+        frMotor.setPower(scale((scaleInput(x) - scaleInput(rotation) + scaleInput(y)),
+                -Magnitude, +Magnitude, -1, +1));
+        brMotor.setPower(scale((scaleInput(x) - scaleInput(rotation) - scaleInput(y)),
+                -Magnitude, +Magnitude, -1, +1));
     }
 
+    private double scaleInput(double x) {
+        return x * x;
+    }
+
+    public DcMotor getFrMotor() {
+        return frMotor;
+    }
+
+    public DcMotor getBrMotor() {
+        return brMotor;
+    }
+
+    public DcMotor getFlMotor() {
+        return flMotor;
+    }
+
+    public DcMotor getBlMotor() {
+        return blMotor;
+    }
 }
