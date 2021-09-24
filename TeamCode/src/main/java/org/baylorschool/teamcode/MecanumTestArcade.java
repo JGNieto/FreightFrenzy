@@ -2,6 +2,7 @@ package org.baylorschool.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.baylorschool.movement.Mecanum;
 
@@ -20,13 +21,37 @@ public class MecanumTestArcade extends LinearOpMode {
 
         waitForStart();
 
+        boolean slowMode = false;
+
         while (opModeIsActive()) {
-            telemetry.addData("Speed", gamepad1.left_stick_y);
-            telemetry.addData("Strafe", gamepad1.left_stick_x);
-            telemetry.addData("Rotation", gamepad1.right_stick_x);
+            double y = gamepad1.left_stick_y;
+            double x = gamepad1.left_stick_x;
+            double rotation = gamepad1.right_stick_x;
+
+            slowMode = slowModeToggle(gamepad1, slowMode);
+
+            telemetry.addData("Speed", y);
+            telemetry.addData("Strafe", x);
+            telemetry.addData("Rotation", rotation);
             telemetry.update();
 
-            mecanum.moveGamepad(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+            mecanum.moveGamepad(y, x, rotation);
         }
+    }
+
+    private boolean slowModeToggle(Gamepad gamepad, boolean current) {
+        if (gamepad.left_bumper) {
+            return true;
+        }
+
+        if (gamepad.right_bumper) {
+            return false;
+        }
+
+        return current;
+    }
+
+    private boolean slowModeHold(Gamepad gamepad) {
+        return gamepad.left_bumper;
     }
 }
