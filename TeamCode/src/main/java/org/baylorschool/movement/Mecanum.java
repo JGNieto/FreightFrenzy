@@ -16,17 +16,19 @@ public class Mecanum {
 
     public enum Side {
         LEFT,
-        RIGHT
+        RIGHT,
+        NONE,
+        BOTH
     }
 
     /**
-     *
-     * @param hardwareMap
-     * @param reverse
-     * @param blMotor
-     * @param flMotor
-     * @param brMotor
-     * @param frMotor
+     * Class for managing four mecanum wheels.
+     * @param hardwareMap for retrieving motors.
+     * @param reverse Side of the robot with wheels reversed
+     * @param blMotor Back left motor name in config file.
+     * @param flMotor Front left motor name in config file.
+     * @param brMotor Back right motor name in config file.
+     * @param frMotor Front right motor name in config file.
      */
     public Mecanum(HardwareMap hardwareMap, Side reverse, String blMotor, String flMotor,
                    String brMotor, String frMotor) {
@@ -38,15 +40,29 @@ public class Mecanum {
         setReverse(reverse);
     }
 
+    /**
+     * Changes the side that is reverse.
+     * @param reverse Side that requires reversing.
+     */
     public void setReverse(Side reverse) {
         if (reverse.equals(Side.LEFT)) {
             frMotor.setDirection(DcMotor.Direction.FORWARD);
             brMotor.setDirection(DcMotor.Direction.FORWARD);
             flMotor.setDirection(DcMotor.Direction.REVERSE);
             blMotor.setDirection(DcMotor.Direction.REVERSE);
-        } else {
+        } else if (reverse.equals(Side.RIGHT)) {
             frMotor.setDirection(DcMotor.Direction.REVERSE);
             brMotor.setDirection(DcMotor.Direction.REVERSE);
+            flMotor.setDirection(DcMotor.Direction.FORWARD);
+            blMotor.setDirection(DcMotor.Direction.FORWARD);
+        } else if (reverse.equals(Side.BOTH)) {
+            frMotor.setDirection(DcMotor.Direction.REVERSE);
+            brMotor.setDirection(DcMotor.Direction.REVERSE);
+            flMotor.setDirection(DcMotor.Direction.REVERSE);
+            blMotor.setDirection(DcMotor.Direction.REVERSE);
+        } else if (reverse.equals(Side.NONE)) {
+            frMotor.setDirection(DcMotor.Direction.FORWARD);
+            brMotor.setDirection(DcMotor.Direction.FORWARD);
             flMotor.setDirection(DcMotor.Direction.FORWARD);
             blMotor.setDirection(DcMotor.Direction.FORWARD);
         }
