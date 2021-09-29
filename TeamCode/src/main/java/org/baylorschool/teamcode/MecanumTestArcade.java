@@ -10,6 +10,8 @@ import org.baylorschool.movement.Mecanum;
 public class MecanumTestArcade extends LinearOpMode {
 
     private Mecanum mecanum;
+    private final double SLOWMODE_COEFFICIENT = 0.5;
+    private final double ROTATION_COEFFICIENT = 0.8;
 
     @Override
     public void runOpMode() {
@@ -26,20 +28,34 @@ public class MecanumTestArcade extends LinearOpMode {
         while (opModeIsActive()) {
             double y = gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
-            double rotation = gamepad1.right_stick_x;
+            double rotation = gamepad1.right_stick_x * ROTATION_COEFFICIENT;
 
+            // Detect slow mode.
             slowMode = slowModeToggle(gamepad1, slowMode);
 
+            if (slowMode) {
+                x *= SLOWMODE_COEFFICIENT;
+                y *= SLOWMODE_COEFFICIENT;
+                rotation *= SLOWMODE_COEFFICIENT;
+            }
+
+            // If driver wants full power, give it to them.
+            if (gamepad1.right_stick_button)
+                rotation = gamepad1.right_stick_x;
+
+            // Execute movement
+            mecanum.moveGamepad(y, x, rotation);
+
+            // Report telemetry
             telemetry.addData("Speed", y);
             telemetry.addData("Strafe", x);
             telemetry.addData("Rotation", rotation);
             telemetry.update();
-
-            mecanum.moveGamepad(y, x, rotation);
         }
     }
 
     private boolean slowModeToggle(Gamepad gamepad, boolean current) {
+        // If the users presses one of the buttons, set slow mode to that value, otherwise keep as is.
         if (gamepad.left_bumper) {
             return true;
         }
