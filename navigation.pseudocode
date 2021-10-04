@@ -1,0 +1,11 @@
+current_position = init_position()
+
+while True:
+    if vuforia_position_available():
+        current_position = vuforia_position()
+    else:
+        current_position = calculate_encoder_displacement(current_position)
+
+def init_position():
+    # Calculate relevant coordinates from each of the four the initial positions beforehand.
+    return COORDINATES_FROM_POSITION_START
