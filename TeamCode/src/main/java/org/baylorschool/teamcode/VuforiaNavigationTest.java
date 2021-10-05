@@ -81,7 +81,7 @@ public class VuforiaNavigationTest extends LinearOpMode {
         // The following constants are for the test with the duct tape.
         final float CAMERA_FORWARD_DISPLACEMENT  = 9.375f * mmPerInch; // eg: Enter the forward distance from the center of the robot to the camera lens
         final float CAMERA_LEFT_DISPLACEMENT     = 5.75f * mmPerInch; // eg: Enter the left distance from the center of the robot to the camera lens
-        final float CAMERA_VERTICAL_DISPLACEMENT = 4.0f * mmPerInch; // eg: Camera is 6 Inches above ground
+        final float CAMERA_VERTICAL_DISPLACEMENT = 4.0f * mmPerInch; // eg: Camera is X Inches above ground
 
         OpenGLMatrix cameraLocationOnRobot = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
