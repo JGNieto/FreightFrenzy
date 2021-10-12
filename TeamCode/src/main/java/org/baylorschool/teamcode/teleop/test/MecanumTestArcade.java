@@ -1,11 +1,11 @@
-package org.baylorschool.teamcode;
+package org.baylorschool.teamcode.teleop.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.baylorschool.movement.Mecanum;
+import org.baylorschool.library.Mecanum;
 
 @TeleOp(name="MecanumTestArcade", group="Test")
 public class MecanumTestArcade extends LinearOpMode {
