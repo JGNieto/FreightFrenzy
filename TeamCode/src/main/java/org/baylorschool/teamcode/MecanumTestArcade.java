@@ -2,6 +2,7 @@ package org.baylorschool.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.baylorschool.movement.Mecanum;
@@ -12,6 +13,9 @@ public class MecanumTestArcade extends LinearOpMode {
     private Mecanum mecanum;
     private final double SLOWMODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
+    private final double FLYWHEEL_SPEED = 0.65;
+
+    private DcMotor flyWheel = null;
 
     @Override
     public void runOpMode() {
@@ -21,6 +25,8 @@ public class MecanumTestArcade extends LinearOpMode {
         mecanum = new Mecanum(hardwareMap, Mecanum.Side.RIGHT,
                 "blMotor", "flMotor", "brMotor", "frMotor");
 
+
+        flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
         waitForStart();
 
         boolean slowMode = false;
@@ -29,6 +35,10 @@ public class MecanumTestArcade extends LinearOpMode {
             double y = gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
             double rotation = gamepad1.right_stick_x * ROTATION_COEFFICIENT;
+            double flyWheelPower = 0;
+
+            if (gamepad1.a) flyWheelPower += FLYWHEEL_SPEED;
+            if (gamepad1.b) flyWheelPower -= FLYWHEEL_SPEED;
 
             // Detect slow mode.
             slowMode = slowModeToggle(gamepad1, slowMode);
@@ -45,11 +55,13 @@ public class MecanumTestArcade extends LinearOpMode {
 
             // Execute movement
             mecanum.moveGamepad(y, x, rotation);
+            flyWheel.setPower(flyWheelPower);
 
             // Report telemetry
             telemetry.addData("Speed", y);
             telemetry.addData("Strafe", x);
             telemetry.addData("Rotation", rotation);
+            telemetry.addData("FlyWheel", flyWheelPower);
             telemetry.update();
         }
     }
