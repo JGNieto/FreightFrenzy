@@ -17,19 +17,39 @@ public class Location {
     public Location(OpenGLMatrix matrix) {
         VectorF translation = matrix.getTranslation();
         Orientation rotation = Orientation.getOrientation(matrix, EXTRINSIC, XYZ, DEGREES);
-        x = translation.get(0);
-        y = translation.get(1);
-        z = translation.get(2);
+        this.x = translation.get(0);
+        this.y = translation.get(1);
+        this.z = translation.get(2);
 
-        roll = rotation.firstAngle;
-        pitch = rotation.secondAngle;
-        heading = rotation.thirdAngle;
+        this.roll = rotation.firstAngle;
+        this.pitch = rotation.secondAngle;
+        this.heading = rotation.thirdAngle;
+    }
+
+    public Location(float x, float y, float z, float roll, float pitch, float heading) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.roll = roll;
+        this.pitch = pitch;
+        this.heading = heading;
     }
 
     public void reportTelemtry(Telemetry telemetry) {
         telemetry.addData("Pos (inches)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                 x, y, z);
         telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", roll, pitch, heading);
+    }
+
+    public static Location difference(Location location1, Location location2) {
+        return new Location(
+                Math.abs(location1.getX() - location2.getX()),
+                Math.abs(location1.getY() - location2.getY()),
+                Math.abs(location1.getZ() - location2.getZ()),
+                Math.abs(location1.getRoll() - location2.getRoll()),
+                Math.abs(location1.getPitch() - location2.getPitch()),
+                Math.abs(location1.getHeading() - location2.getHeading())
+        );
     }
 
     public float getX() {
