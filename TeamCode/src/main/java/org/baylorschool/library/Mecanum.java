@@ -73,7 +73,7 @@ public class Mecanum {
      * @param x left / right power (-1 to 1)
      * @param rotation left / right power (-1 to 1)
      */
-    public void moveGamepad(double y, double x, double rotation) {
+    public void moveGamepad(double y, double x, double rotation, double motorCoefficient) {
         /*
             Taken from
             https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
@@ -83,13 +83,13 @@ public class Mecanum {
         Magnitude = (Magnitude > 1) ? Magnitude : 1;
 
         flMotor.setPower(scale((scaleInput(y) + scaleInput(rot) - scaleInput(x)),
-                -Magnitude, +Magnitude, -1, +1));
+                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
         blMotor.setPower(scale((scaleInput(y) + scaleInput(rot) + scaleInput(x)),
-                -Magnitude, +Magnitude, -1, +1));
+                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
         frMotor.setPower(scale((scaleInput(y) - scaleInput(rot) + scaleInput(x)),
-                -Magnitude, +Magnitude, -1, +1));
+                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
         brMotor.setPower(scale((scaleInput(y) - scaleInput(rot) - scaleInput(x)),
-                -Magnitude, +Magnitude, -1, +1));
+                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
     }
 
     private double scaleInput(double x) {

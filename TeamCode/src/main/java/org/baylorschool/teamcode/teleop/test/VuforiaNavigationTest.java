@@ -16,7 +16,6 @@ public class VuforiaNavigationTest extends LinearOpMode {
         vuforia = new Vuforia(hardwareMap);
         vuforia.initializeParamers(true);
 
-        waitForStart();
         vuforia.startTracking();
 
         while (opModeIsActive()) {

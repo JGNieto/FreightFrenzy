@@ -36,11 +36,17 @@ public class Park extends LinearOpMode {
             if (location != null) {
                 currentLocation = location;
             }
+
+
+
             telemetry.update();
         }
 
         vuforia.stopTracking();
     }
 
+    private void turnToHeading(double heading) {
+
+    }
 
 }

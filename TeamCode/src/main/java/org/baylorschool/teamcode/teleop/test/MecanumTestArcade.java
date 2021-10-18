@@ -43,18 +43,15 @@ public class MecanumTestArcade extends LinearOpMode {
             // Detect slow mode.
             slowMode = slowModeToggle(gamepad1, slowMode);
 
-            if (slowMode) {
-                x *= SLOWMODE_COEFFICIENT;
-                y *= SLOWMODE_COEFFICIENT;
+            if (slowMode)
                 rotation *= SLOWMODE_COEFFICIENT;
-            }
 
             // If driver wants full power, give it to them.
             if (gamepad1.right_stick_button)
                 rotation = gamepad1.right_stick_x;
 
             // Execute movement
-            mecanum.moveGamepad(y, x, rotation);
+            mecanum.moveGamepad(y, x, rotation, slowMode ? SLOWMODE_COEFFICIENT : 1);
             flyWheel.setPower(flyWheelPower);
 
             // Report telemetry
