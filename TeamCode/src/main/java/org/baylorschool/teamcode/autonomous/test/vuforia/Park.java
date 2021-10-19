@@ -14,6 +14,7 @@ public class Park extends LinearOpMode {
 
     private Vuforia vuforia;
     private Location currentLocation;
+    private Location startLocation;
 
     private Path path;
 
@@ -32,12 +33,6 @@ public class Park extends LinearOpMode {
         vuforia.startTracking();
 
         while (opModeIsActive()) {
-            Location location = vuforia.lookForTargets(telemetry);
-            if (location != null) {
-                currentLocation = location;
-            }
-
-
 
             telemetry.update();
         }

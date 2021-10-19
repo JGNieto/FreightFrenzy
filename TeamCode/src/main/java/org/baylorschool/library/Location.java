@@ -11,8 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class Location {
 
-    private float x, y, z;
-    private float roll, pitch, heading;
+    private double x, y, z;
+    private double roll, pitch, heading;
 
     public Location(OpenGLMatrix matrix) {
         VectorF translation = matrix.getTranslation();
@@ -26,7 +26,7 @@ public class Location {
         this.heading = rotation.thirdAngle;
     }
 
-    public Location(float x, float y, float z, float roll, float pitch, float heading) {
+    public Location(double x, double y, double z, double roll, double pitch, double heading) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -52,27 +52,75 @@ public class Location {
         );
     }
 
-    public float getX() {
+    public static Location updateLocation(Location currentLocation, Vuforia vuforia, IMU imu, Telemetry telemetry) {
+        Location vuforiaLocation = vuforia.lookForTargets(telemetry);
+        imu.updateOrientation();
+        if (vuforiaLocation != null) {
+            imu.forceValue(vuforiaLocation.heading);
+            return vuforiaLocation;
+        }
+        currentLocation.setHeading(imu.getHeading());
+        return currentLocation;
+    }
+
+    /**
+     * Makes the angle be between -180 and 180.
+     * @param angle
+     * @return
+     */
+    public static double angleBound(double angle) {
+        if (angle > 180)
+            return -180 + (angle - 180);
+        else if (angle < -180)
+            return 180 + (angle + 180);
+        else return angle;
+    }
+
+    public double getX() {
         return x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public float getZ() {
+    public double getZ() {
         return z;
     }
 
-    public float getRoll() {
+    public double getRoll() {
         return roll;
     }
 
-    public float getPitch() {
+    public double getPitch() {
         return pitch;
     }
 
-    public float getHeading() {
+    public double getHeading() {
         return heading;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setZ(double z) {
+        this.z = z;
+    }
+
+    public void setRoll(double roll) {
+        this.roll = roll;
+    }
+
+    public void setPitch(double pitch) {
+        this.pitch = pitch;
+    }
+
+    public void setHeading(double heading) {
+        this.heading = heading;
     }
 }
