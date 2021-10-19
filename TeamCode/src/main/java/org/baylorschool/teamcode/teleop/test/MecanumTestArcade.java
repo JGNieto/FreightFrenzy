@@ -13,7 +13,7 @@ public class MecanumTestArcade extends LinearOpMode {
     private Mecanum mecanum;
     private final double SLOWMODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
-    private final double FLYWHEEL_SPEED = 0.65;
+    private final double FLYWHEEL_SPEED = 0.8; // Pneumatic wheel: 0.65
 
     private DcMotor flyWheel = null;
 
