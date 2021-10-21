@@ -34,9 +34,9 @@ public class Vuforia {
     private static final String webcamDeviceName = "Webcam 1";
 
     // Physical webcam location
-    private static final float CAMERA_FORWARD_DISPLACEMENT = 9.375f * mmPerInch;
-    private static final float CAMERA_LEFT_DISPLACEMENT = 5.75f * mmPerInch;
-    private static final float CAMERA_VERTICAL_DISPLACEMENT = 4.0f * mmPerInch;
+    private static final float CAMERA_FORWARD_DISPLACEMENT = 192;
+    private static final float CAMERA_LEFT_DISPLACEMENT = -114;
+    private static final float CAMERA_VERTICAL_DISPLACEMENT = 124;
 
     private List<VuforiaTrackable> allTrackables = new ArrayList<>();
     private OpenGLMatrix cameraLocationOnRobot = null;

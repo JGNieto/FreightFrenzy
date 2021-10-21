@@ -21,6 +21,10 @@ public class IMU {
 
     private BNO055IMU imu;
 
+    public IMU() {
+        // FIXME: Initialize IMU
+    }
+
     public void forceValue(double value) {
         adjustment = value - orientation;
     }
@@ -38,14 +42,6 @@ public class IMU {
             return angles.secondAngle;
         else
             return angles.thirdAngle;
-    }
-
-    String formatAngle(AngleUnit angleUnit, double angle) {
-        return formatDegrees(AngleUnit.DEGREES.fromUnit(angleUnit, angle));
-    }
-
-    String formatDegrees(double degrees){
-        return String.format(Locale.getDefault(), "%.1f", AngleUnit.DEGREES.normalize(degrees));
     }
 
     public BNO055IMU getImu() {

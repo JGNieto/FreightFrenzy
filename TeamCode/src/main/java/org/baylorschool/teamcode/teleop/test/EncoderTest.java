@@ -12,41 +12,53 @@ public class EncoderTest extends LinearOpMode {
     private DcMotor frMotor = null;
     private DcMotor blMotor = null;
     private DcMotor brMotor = null;
-    final int target = 6161;
+    final int target = -616;
 
     @Override
     public void runOpMode() {
-        flMotor = hardwareMap.get(DcMotor.class, "FLMotor");
-        frMotor = hardwareMap.get(DcMotor.class, "FRMotor");
-        brMotor = hardwareMap.get(DcMotor.class, "BRMotor");
-        blMotor = hardwareMap.get(DcMotor.class, "BLMotor");
+        flMotor = hardwareMap.get(DcMotor.class, "flMotor");
+        frMotor = hardwareMap.get(DcMotor.class, "frMotor");
+        brMotor = hardwareMap.get(DcMotor.class, "brMotor");
+        blMotor = hardwareMap.get(DcMotor.class, "blMotor");
 
-        flMotor.setDirection(DcMotor.Direction.REVERSE);
         frMotor.setDirection(DcMotor.Direction.REVERSE);
-
-        waitForStart();
+        brMotor.setDirection(DcMotor.Direction.REVERSE);
 
         flMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         frMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         blMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         brMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        flMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        frMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        blMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        brMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        flMotor.setTargetPosition(target);
-        frMotor.setTargetPosition(target);
-        blMotor.setTargetPosition(target);
-        brMotor.setTargetPosition(target);
-
-        flMotor.setPower(0.7);
-        frMotor.setPower(0.7);
-        blMotor.setPower(0.7);
-        brMotor.setPower(0.7);
+        waitForStart();
 
         while (opModeIsActive()) {
+            if (!(frMotor.isBusy() || flMotor.isBusy() || brMotor.isBusy() || blMotor.isBusy())) {
+                flMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                frMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                blMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                brMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+                flMotor.setTargetPosition(target);
+                frMotor.setTargetPosition(target);
+                blMotor.setTargetPosition(target);
+                brMotor.setTargetPosition(target);
+
+                flMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                frMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                blMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                brMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                flMotor.setPower(0.4);
+                frMotor.setPower(0.4);
+                blMotor.setPower(0.4);
+                brMotor.setPower(0.4);
+            }
+
+            telemetry.addData("fl", flMotor.getCurrentPosition());
+            telemetry.addData("fr", frMotor.getCurrentPosition());
+            telemetry.addData("bl", blMotor.getCurrentPosition());
+            telemetry.addData("br", brMotor.getCurrentPosition());
+            telemetry.update();
         }
     }
 }

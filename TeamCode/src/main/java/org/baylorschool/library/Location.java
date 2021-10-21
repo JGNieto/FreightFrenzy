@@ -35,12 +35,22 @@ public class Location {
         this.heading = heading;
     }
 
+    /**
+     * Adds location to telemetry
+     * @param telemetry
+     */
     public void reportTelemtry(Telemetry telemetry) {
         telemetry.addData("Pos (inches)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                 x, y, z);
         telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", roll, pitch, heading);
     }
 
+    /**
+     * Absolute difference between two locations in
+     * @param location1
+     * @param location2
+     * @return location whose values are the differences
+     */
     public static Location difference(Location location1, Location location2) {
         return new Location(
                 Math.abs(location1.getX() - location2.getX()),
@@ -52,21 +62,96 @@ public class Location {
         );
     }
 
-    public static Location updateLocation(Location currentLocation, Vuforia vuforia, IMU imu, Telemetry telemetry) {
-        Location vuforiaLocation = vuforia.lookForTargets(telemetry);
+    /**
+     * Uses available sensors to make best guess of current location
+     * @param currentLocation from previous iteration
+     * @param vuforia if available; if not, use null
+     * @param imu for heading
+     * @param telemetry for vuforia (can be null if vuforia is too)
+     * @param mecanum for encoders
+     * @return best guess of location
+     */
+    public static Location updateLocation(Location currentLocation, Vuforia vuforia, IMU imu, Telemetry telemetry, Mecanum mecanum) {
+        // Use vuforia if available
+        Location vuforiaLocation = vuforia == null ? null: vuforia.lookForTargets(telemetry);
         imu.updateOrientation();
+
+        // Reset current location if vuforia has target in sight
         if (vuforiaLocation != null) {
             imu.forceValue(vuforiaLocation.heading);
             return vuforiaLocation;
         }
+
         currentLocation.setHeading(imu.getHeading());
+
+        // Calculate movement from wheel encoders
+        // Movement is a vector, which we break down into x and y components with math
+        double movementModulus = (
+                mecanum.getLatestDeltaBl() +
+                mecanum.getLatestDeltaBr() +
+                mecanum.getLatestDeltaFl() +
+                mecanum.getLatestDeltaFr()
+        ) / 4;
+        double headingRadians = Math.toRadians(currentLocation.getHeading());
+
+        double movementX = movementModulus * Math.sin(headingRadians);
+        double movementY = movementModulus * Math.cos(headingRadians);
+
+        currentLocation.setX(currentLocation.getX() + movementX);
+        currentLocation.setY(currentLocation.getY() + movementY);
+
         return currentLocation;
+    }
+
+    /**
+     * Check whether the robot is pointing in the right direction
+     * @param expectedValue in degrees
+     * @param tolerance in degrees
+     * @return
+     */
+    public boolean rotationTolerance(double expectedValue, double tolerance) {
+        double error = Math.abs(heading - expectedValue);
+        return error < tolerance;
+    }
+
+    /**
+     * Angle between two locations
+     * @param locationStart
+     * @param locationTarget
+     * @return angle in degrees
+     */
+    public static double angleLocations(Location locationStart, Location locationTarget) {
+        double deltaX = locationTarget.getX() - locationStart.getX();
+        double deltaY = locationTarget.getY() - locationStart.getY();
+
+        return Math.toDegrees(Math.atan2(deltaY, deltaX));
+    }
+
+    /**
+     * How many degrees to go from one heading to another and in which way
+     * Positive is counterclockwise and negative clockwise.
+     * Angles between -180 and 180 degrees.
+     * @param current angle
+     * @param target angle
+     * @return number of degrees to turn
+     */
+    public static double angleTurn(double current, double target) {
+        // TODO: Check if there is a more efficient way to do this. This looks quite spaghetti.
+        double val;
+        int sign = 1;
+        if (Math.abs((target - current) % 360) < 180) {
+            val = (target - current) % 360;
+        } else {
+            if (target - current > 0) sign = -1;
+            val = (360 - Math.abs(target - current)) % 360;
+        }
+        return val * sign;
     }
 
     /**
      * Makes the angle be between -180 and 180.
      * @param angle
-     * @return
+     * @return bound angle
      */
     public static double angleBound(double angle) {
         if (angle > 180)

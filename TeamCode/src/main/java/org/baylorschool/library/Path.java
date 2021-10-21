@@ -15,12 +15,12 @@ public class Path {
     public void checkGoal(Location robotLocation) {
         Location difference = Location.difference(currentGoal(), robotLocation);
         if (!(
-            difference.getX() > tolerance.getX() ||
-            difference.getY() > tolerance.getY() ||
-            difference.getZ() > tolerance.getZ() ||
-            difference.getRoll() > tolerance.getRoll() ||
-            difference.getPitch() > tolerance.getPitch() ||
-            difference.getHeading() > tolerance.getHeading()
+            (difference.getX() > tolerance.getX() && difference.getX() != -1) ||
+            (difference.getY() > tolerance.getY() && difference.getY() != -1) ||
+            (difference.getZ() > tolerance.getZ() && difference.getZ() != -1) ||
+            (difference.getRoll() > tolerance.getRoll() && difference.getRoll() != -1) ||
+            (difference.getPitch() > tolerance.getPitch() && difference.getPitch() != -1) ||
+            (difference.getHeading() > tolerance.getHeading() && difference.getHeading() != -1)
         )) {
             locations.remove(0);
         }
@@ -31,5 +31,9 @@ public class Path {
             return locations.get(0);
         else
             return null;
+    }
+
+    public Location getTolerance() {
+        return tolerance;
     }
 }

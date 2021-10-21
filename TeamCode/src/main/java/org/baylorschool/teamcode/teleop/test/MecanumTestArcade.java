@@ -13,7 +13,9 @@ public class MecanumTestArcade extends LinearOpMode {
     private Mecanum mecanum;
     private final double SLOWMODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
-    private final double FLYWHEEL_SPEED = 0.8; // Pneumatic wheel: 0.65
+    // Pneumatic wheel: 0.65
+    // Green wheel: 0.8
+    private final double FLYWHEEL_SPEED = 0.65;
 
     private DcMotor flyWheel = null;
 
@@ -22,8 +24,7 @@ public class MecanumTestArcade extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        mecanum = new Mecanum(hardwareMap, Mecanum.Side.RIGHT,
-                "blMotor", "flMotor", "brMotor", "frMotor");
+        mecanum = new Mecanum(hardwareMap);
 
 
         flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
@@ -43,9 +44,6 @@ public class MecanumTestArcade extends LinearOpMode {
             // Detect slow mode.
             slowMode = slowModeToggle(gamepad1, slowMode);
 
-            if (slowMode)
-                rotation *= SLOWMODE_COEFFICIENT;
-
             // If driver wants full power, give it to them.
             if (gamepad1.right_stick_button)
                 rotation = gamepad1.right_stick_x;
@@ -59,6 +57,7 @@ public class MecanumTestArcade extends LinearOpMode {
             telemetry.addData("Strafe", x);
             telemetry.addData("Rotation", rotation);
             telemetry.addData("FlyWheel", flyWheelPower);
+            telemetry.addData("Encoder", mecanum.getBlMotor().getCurrentPosition());
             telemetry.update();
         }
     }
