@@ -26,7 +26,7 @@ public class Mecanum {
     private DcMotor.RunMode runMode;
 
     private static final double ticksPerRevolution = 537.7;
-    private static final double wheelDiameter = 10; // In millimeters
+    private static final double wheelDiameter = 100; // In millimeters
     public static final double ticksPerMm = ticksPerRevolution / (Math.PI * wheelDiameter);
     private final double autonomousSpeed = 0.3;
 
@@ -63,7 +63,7 @@ public class Mecanum {
     }
     /**
      * Class for managing four mecanum wheels.
-     * Constructor with default, global values.
+     * Constructor with default values.
      * @param hardwareMap for retrieving motors.
      */
     public Mecanum(HardwareMap hardwareMap) {
@@ -127,7 +127,7 @@ public class Mecanum {
      * @param dcMotor
      */
     public void setTargetPosition(int targetPosition, DcMotor dcMotor) {
-        dcMotor.setTargetPosition(targetPosition + dcMotor.getTargetPosition());
+        dcMotor.setTargetPosition(-(targetPosition + dcMotor.getCurrentPosition()));
     }
 
     /**
@@ -156,19 +156,25 @@ public class Mecanum {
      */
     public void rotate(double angle) {
         // Distance that each wheel has to travel.
-        double arch = Math.PI * turningDiameter * (angle / 360);
+        //double arch = Math.PI * turningDiameter * (angle / 360);
+        int arch = (int) (4218 * (angle/360));
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
+/*
         setTargetDistance(-arch, frMotor);
         setTargetDistance(-arch, brMotor);
         setTargetDistance(arch, flMotor);
         setTargetDistance(arch, blMotor);
+*/
+        setTargetPosition(-arch, frMotor);
+        setTargetPosition(-arch, brMotor);
+        setTargetPosition(arch, flMotor);
+        setTargetPosition(arch, blMotor);
 
         frMotor.setPower(autonomousSpeed);
         brMotor.setPower(autonomousSpeed);
-        flMotor.setPower(-autonomousSpeed);
-        blMotor.setPower(-autonomousSpeed);
+        flMotor.setPower(autonomousSpeed);
+        blMotor.setPower(autonomousSpeed);
     }
 
     /**
@@ -193,10 +199,10 @@ public class Mecanum {
      * Retrieves encoder values from the motor, calculates deltas and stores them.
      */
     public void updateEncoderReadings() {
-        int frReading = frMotor.getCurrentPosition() * 1;
-        int flReading = flMotor.getCurrentPosition() * 1;
-        int brReading = brMotor.getCurrentPosition() * 1;
-        int blReading = blMotor.getCurrentPosition() * 1;
+        int frReading = frMotor.getCurrentPosition() * -1;
+        int flReading = flMotor.getCurrentPosition() * -1;
+        int brReading = brMotor.getCurrentPosition() * -1;
+        int blReading = blMotor.getCurrentPosition() * -1;
 
         latestDeltaFr = (frReading - lastReadingFr) / ticksPerMm;
         latestDeltaFl = (flReading - lastReadingFl) / ticksPerMm;

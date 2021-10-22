@@ -73,7 +73,7 @@ public class Location {
      */
     public static Location updateLocation(Location currentLocation, Vuforia vuforia, IMU imu, Telemetry telemetry, Mecanum mecanum) {
         // Use vuforia if available
-        Location vuforiaLocation = vuforia == null ? null: vuforia.lookForTargets(telemetry);
+        Location vuforiaLocation = vuforia == null ? null : vuforia.lookForTargets(telemetry);
         imu.updateOrientation();
 
         // Reset current location if vuforia has target in sight
@@ -109,8 +109,9 @@ public class Location {
      * @param tolerance in degrees
      * @return
      */
+    // FIXME: Bound angles
     public boolean rotationTolerance(double expectedValue, double tolerance) {
-        double error = Math.abs(heading - expectedValue);
+        double error = Math.abs(angleTurn(heading, expectedValue));
         return error < tolerance;
     }
 

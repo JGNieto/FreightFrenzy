@@ -19,8 +19,8 @@ public class Path {
             (difference.getY() > tolerance.getY() && difference.getY() != -1) ||
             (difference.getZ() > tolerance.getZ() && difference.getZ() != -1) ||
             (difference.getRoll() > tolerance.getRoll() && difference.getRoll() != -1) ||
-            (difference.getPitch() > tolerance.getPitch() && difference.getPitch() != -1) ||
-            (difference.getHeading() > tolerance.getHeading() && difference.getHeading() != -1)
+            (difference.getPitch() > tolerance.getPitch() && difference.getPitch() != -1) /*||
+            (difference.getHeading() > tolerance.getHeading() && difference.getHeading() != -1)*/
         )) {
             locations.remove(0);
         }
@@ -35,5 +35,9 @@ public class Path {
 
     public Location getTolerance() {
         return tolerance;
+    }
+
+    public List<Location> getLocations() {
+        return locations;
     }
 }

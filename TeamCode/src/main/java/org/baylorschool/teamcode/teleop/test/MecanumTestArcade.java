@@ -57,7 +57,10 @@ public class MecanumTestArcade extends LinearOpMode {
             telemetry.addData("Strafe", x);
             telemetry.addData("Rotation", rotation);
             telemetry.addData("FlyWheel", flyWheelPower);
-            telemetry.addData("Encoder", mecanum.getBlMotor().getCurrentPosition());
+            telemetry.addData("EncoderFR", mecanum.getFrMotor().getCurrentPosition());
+            telemetry.addData("EncoderBR", mecanum.getBrMotor().getCurrentPosition());
+            telemetry.addData("EncoderFL", mecanum.getFlMotor().getCurrentPosition());
+            telemetry.addData("EncoderBL", mecanum.getBlMotor().getCurrentPosition());
             telemetry.update();
         }
     }

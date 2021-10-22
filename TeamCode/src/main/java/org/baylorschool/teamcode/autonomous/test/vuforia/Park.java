@@ -29,14 +29,16 @@ public class Park extends LinearOpMode {
         vuforia.initializeParamers(false);
 
         Location[] locations = new Location[]{
-                new Location(0, 0, 0, 0, 0, 0)
+                new Location(0, 0, 0, 0, 0, 0),
+                new Location(-1219.2, 0, 0, 0, 0, 0)
         };
 
         mecanum = new Mecanum(hardwareMap);
-        path = new Path(Arrays.asList(locations), new Location(10,10,-1,-1,-1,3));
+        path = new Path(Arrays.asList(locations), new Location(100,100,-1,-1,-1,3));
         imu = new IMU();
 
         imu.initializeImu(hardwareMap);
+        imu.forceValue(currentLocation.getHeading());
 
         vuforia.startTracking();
 
@@ -59,17 +61,20 @@ public class Park extends LinearOpMode {
             }
 
             double targetAngle = Location.angleLocations(currentLocation, currentGoal);
+            telemetry.addData("Angle Diff", Location.angleTurn(currentLocation.getHeading(), targetAngle));
+            telemetry.addData("Locations Left", path.getLocations().size());
             if (!mecanum.isBusy()) {
-                sleep(2000);
                 if (!currentLocation.rotationTolerance(targetAngle, path.getTolerance().getHeading())) {
                     mecanum.rotate(Location.angleTurn(currentLocation.getHeading(), targetAngle));
                 } else {
                     mecanum.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     mecanum.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    mecanum.setTargetDistance(Location.distance(currentLocation, currentGoal) * Mecanum.ticksPerMm);
+                    mecanum.setTargetDistance(Location.distance(currentLocation, currentGoal));
                     mecanum.setPowerAutonomous();
                 }
             }
+
+            currentLocation.reportTelemtry(telemetry);
 
             telemetry.addData("Encoders Delta", "{FR, FL, BR, BL} = %.0f, %.0f, %.0f, %.0f",
                     mecanum.getLatestDeltaFr(),
@@ -83,9 +88,11 @@ public class Park extends LinearOpMode {
                     mecanum.getLastReadingBr(),
                     mecanum.getLastReadingBl()
             );
-            currentLocation.reportTelemtry(telemetry);
-            //telemetry.update();
+            telemetry.addData("Target", mecanum.getBlMotor().getTargetPosition());
+            telemetry.update();
         }
+
+        vuforia.stopTracking();
     }
 
 }
