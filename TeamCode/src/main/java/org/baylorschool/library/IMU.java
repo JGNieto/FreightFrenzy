@@ -1,6 +1,7 @@
 package org.baylorschool.library;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
@@ -13,7 +14,7 @@ public class IMU {
 
     private double orientation;
     private double adjustment = 0;
-    private Axis axis = Axis.Z;
+    private Axis axis = Axis.X;
 
     public enum Axis {
         X, Y, Z
@@ -21,8 +22,14 @@ public class IMU {
 
     private BNO055IMU imu;
 
-    public IMU() {
-        // FIXME: Initialize IMU
+    public void initializeImu(HardwareMap hardwareMap) {
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+
+        imu = hardwareMap.get(BNO055IMU.class, "imu");
+        imu.initialize(parameters);
     }
 
     public void forceValue(double value) {

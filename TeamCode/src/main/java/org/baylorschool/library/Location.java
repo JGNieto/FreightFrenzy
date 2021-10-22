@@ -154,11 +154,23 @@ public class Location {
      * @return bound angle
      */
     public static double angleBound(double angle) {
+        angle = angle % 360;
         if (angle > 180)
             return -180 + (angle - 180);
         else if (angle < -180)
             return 180 + (angle + 180);
         else return angle;
+    }
+
+    /**
+     * 2D distance between two locations
+     * @return distance in mm
+     */
+    public static double distance(Location location1, Location location2) {
+        double deltaX = Math.abs(location1.getX() - location2.getX());
+        double deltaY = Math.abs(location1.getY() - location2.getY());
+
+        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     }
 
     public double getX() {

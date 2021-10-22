@@ -28,7 +28,7 @@ public class Mecanum {
     private static final double ticksPerRevolution = 537.7;
     private static final double wheelDiameter = 10; // In millimeters
     public static final double ticksPerMm = ticksPerRevolution / (Math.PI * wheelDiameter);
-    private final double autonomousSpeed = 0.6;
+    private final double autonomousSpeed = 0.3;
 
     // In mm, the distance between two diagonally opposed wheels.
     // (also twice the distance of any wheel from the center of the robot)
@@ -157,12 +157,13 @@ public class Mecanum {
     public void rotate(double angle) {
         // Distance that each wheel has to travel.
         double arch = Math.PI * turningDiameter * (angle / 360);
+        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        setTargetDistance(arch, frMotor);
-        setTargetDistance(arch, brMotor);
-        setTargetDistance(-arch, flMotor);
-        setTargetDistance(-arch, blMotor);
+        setTargetDistance(-arch, frMotor);
+        setTargetDistance(-arch, brMotor);
+        setTargetDistance(arch, flMotor);
+        setTargetDistance(arch, blMotor);
 
         frMotor.setPower(autonomousSpeed);
         brMotor.setPower(autonomousSpeed);
@@ -294,5 +295,21 @@ public class Mecanum {
 
     public double getLatestDeltaBl() {
         return latestDeltaBl;
+    }
+
+    public int getLastReadingFr() {
+        return lastReadingFr;
+    }
+
+    public int getLastReadingFl() {
+        return lastReadingFl;
+    }
+
+    public int getLastReadingBr() {
+        return lastReadingBr;
+    }
+
+    public int getLastReadingBl() {
+        return lastReadingBl;
     }
 }

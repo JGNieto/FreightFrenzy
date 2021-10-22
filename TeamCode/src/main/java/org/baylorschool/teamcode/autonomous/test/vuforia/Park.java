@@ -23,6 +23,8 @@ public class Park extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        telemetry.addData("Status", "Getting ready");
+        telemetry.update();
         vuforia = new Vuforia(hardwareMap);
         vuforia.initializeParamers(false);
 
@@ -34,36 +36,56 @@ public class Park extends LinearOpMode {
         path = new Path(Arrays.asList(locations), new Location(10,10,-1,-1,-1,3));
         imu = new IMU();
 
-        waitForStart();
+        imu.initializeImu(hardwareMap);
+
         vuforia.startTracking();
+
+        telemetry.addData("Status", "Ready!");
+        telemetry.update();
+
+        waitForStart();
         mecanum.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         while (opModeIsActive()) {
+            mecanum.updateEncoderReadings();
+            currentLocation = Location.updateLocation(currentLocation, null, imu, telemetry, mecanum);
+            path.checkGoal(currentLocation);
             Location currentGoal = path.currentGoal();
+
             if (currentGoal == null) {
                 requestOpModeStop();
                 continue;
             }
 
-            mecanum.updateEncoderReadings();
-
-            currentLocation = Location.updateLocation(currentLocation, vuforia, imu, telemetry, mecanum);
             double targetAngle = Location.angleLocations(currentLocation, currentGoal);
-
-            if (!currentLocation.rotationTolerance(targetAngle, path.getTolerance().getHeading())) {
-                mecanum.rotate(Location.angleTurn(currentLocation.getHeading(), targetAngle));
-            } else if (!mecanum.isBusy()) {
-                mecanum.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                mecanum.setTargetDistance(50);
-                mecanum.setPowerAutonomous();
+            if (!mecanum.isBusy()) {
+                sleep(2000);
+                if (!currentLocation.rotationTolerance(targetAngle, path.getTolerance().getHeading())) {
+                    mecanum.rotate(Location.angleTurn(currentLocation.getHeading(), targetAngle));
+                } else {
+                    mecanum.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    mecanum.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    mecanum.setTargetDistance(Location.distance(currentLocation, currentGoal) * Mecanum.ticksPerMm);
+                    mecanum.setPowerAutonomous();
+                }
             }
 
+            telemetry.addData("Encoders Delta", "{FR, FL, BR, BL} = %.0f, %.0f, %.0f, %.0f",
+                    mecanum.getLatestDeltaFr(),
+                    mecanum.getLatestDeltaFl(),
+                    mecanum.getLatestDeltaBr(),
+                    mecanum.getLatestDeltaBl()
+            );
+            telemetry.addData("Encoders Value", "{FR, FL, BR, BL} = %d, %d, %d, %d",
+                    mecanum.getLastReadingFr(),
+                    mecanum.getLastReadingFl(),
+                    mecanum.getLastReadingBr(),
+                    mecanum.getLastReadingBl()
+            );
             currentLocation.reportTelemtry(telemetry);
-            telemetry.update();
+            //telemetry.update();
         }
-
-        vuforia.stopTracking();
     }
 
 }
