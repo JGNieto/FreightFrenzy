@@ -258,6 +258,13 @@ public class Mecanum {
                 -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
     }
 
+    public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
+        flMotor.setZeroPowerBehavior(zeroPowerBehavior);
+        frMotor.setZeroPowerBehavior(zeroPowerBehavior);
+        blMotor.setZeroPowerBehavior(zeroPowerBehavior);
+        brMotor.setZeroPowerBehavior(zeroPowerBehavior);
+    }
+
     private double scaleInput(double x) {
         /*
         Squaring allows for finer adjustments when lower power.
