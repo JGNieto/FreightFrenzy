@@ -6,10 +6,7 @@ public enum State {
     APPROACHING_CARGO,
     PICKING_CARGO,
     APPROACHING_HUB,
-    DROPPING_CARGO,
-    ENTERING_WAREHOUSE,
-    LEAVING_WAREHOUSE,
-    HALT;
+    DROPPING_CARGO;
 
     private static State state;
 
