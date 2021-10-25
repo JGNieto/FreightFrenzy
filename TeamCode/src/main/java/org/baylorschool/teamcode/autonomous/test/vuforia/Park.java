@@ -46,6 +46,7 @@ public class Park extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
+        mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         mecanum.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 

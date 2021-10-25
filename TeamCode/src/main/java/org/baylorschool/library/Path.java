@@ -1,5 +1,7 @@
 package org.baylorschool.library;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 import java.util.List;
 
 public class Path {
@@ -15,12 +17,12 @@ public class Path {
     public void checkGoal(Location robotLocation) {
         Location difference = Location.difference(currentGoal(), robotLocation);
         if (!(
-            (difference.getX() > tolerance.getX() && difference.getX() != -1) ||
-            (difference.getY() > tolerance.getY() && difference.getY() != -1) ||
-            (difference.getZ() > tolerance.getZ() && difference.getZ() != -1) ||
-            (difference.getRoll() > tolerance.getRoll() && difference.getRoll() != -1) ||
-            (difference.getPitch() > tolerance.getPitch() && difference.getPitch() != -1) /*||
-            (difference.getHeading() > tolerance.getHeading() && difference.getHeading() != -1)*/
+            (difference.getX() > tolerance.getX() && tolerance.getX() != -1) ||
+            (difference.getY() > tolerance.getY() && tolerance.getY() != -1) ||
+            (difference.getZ() > tolerance.getZ() && tolerance.getZ() != -1) ||
+            (difference.getRoll() > tolerance.getRoll() && tolerance.getRoll() != -1) ||
+            (difference.getPitch() > tolerance.getPitch() && tolerance.getPitch() != -1) ||
+            (difference.getHeading() > tolerance.getHeading() && tolerance.getHeading() != -1)
         )) {
             locations.remove(0);
         }
