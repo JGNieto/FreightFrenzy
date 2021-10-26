@@ -50,10 +50,14 @@ public class Park extends LinearOpMode {
         mecanum.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        boolean wasBusy = false;
+
         while (opModeIsActive()) {
             mecanum.updateEncoderReadings();
-            currentLocation = Location.updateLocation(currentLocation, null, imu, telemetry, mecanum);
+            currentLocation = Location.updateLocation(currentLocation, vuforia, imu, telemetry, mecanum);
             path.checkGoal(currentLocation);
+            // FIXME: REMOVE NEXT LINE
+            path.checkGoalTelemetry(currentLocation, telemetry);
             Location currentGoal = path.currentGoal();
 
             if (currentGoal == null) {
@@ -65,6 +69,12 @@ public class Park extends LinearOpMode {
             telemetry.addData("Angle Diff", Location.angleTurn(currentLocation.getHeading(), targetAngle));
             telemetry.addData("Locations Left", path.getLocations().size());
             if (!mecanum.isBusy()) {
+                if (wasBusy) {
+                    sleep(500);
+                    wasBusy = false;
+                    continue;
+                }
+                wasBusy = true;
                 if (!currentLocation.rotationTolerance(targetAngle, path.getTolerance().getHeading())) {
                     mecanum.rotate(Location.angleTurn(currentLocation.getHeading(), targetAngle));
                 } else {

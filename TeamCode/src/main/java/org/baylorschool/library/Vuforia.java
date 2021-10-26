@@ -57,10 +57,10 @@ public class Vuforia {
         for (VuforiaTrackable trackable : allTrackables) {
             if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                 telemetry.addData("Visible Target", trackable.getName());
-                targetVisible = true;
 
                 OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
                 if (robotLocationTransform != null) {
+                    targetVisible = true;
                     lastMatrixLocation = robotLocationTransform;
                 }
                 break;
@@ -69,7 +69,6 @@ public class Vuforia {
 
         if (targetVisible) {
             Location location = new Location(lastMatrixLocation);
-            location.reportTelemtry(telemetry);
             return location;
         } else {
             telemetry.addData("Visible Target", "none");

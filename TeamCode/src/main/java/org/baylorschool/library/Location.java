@@ -73,8 +73,8 @@ public class Location {
      */
     public static Location updateLocation(Location currentLocation, Vuforia vuforia, IMU imu, Telemetry telemetry, Mecanum mecanum) {
         // Use vuforia if available
-        Location vuforiaLocation = vuforia == null ? null : vuforia.lookForTargets(telemetry);
         imu.updateOrientation();
+        Location vuforiaLocation = vuforia == null ? null : vuforia.lookForTargets(telemetry);
 
         // Reset current location if vuforia has target in sight
         if (vuforiaLocation != null) {
@@ -94,8 +94,8 @@ public class Location {
         ) / 4;
         double headingRadians = Math.toRadians(currentLocation.getHeading());
 
-        double movementX = movementModulus * Math.sin(headingRadians);
-        double movementY = movementModulus * Math.cos(headingRadians);
+        double movementX = movementModulus * Math.cos(headingRadians);
+        double movementY = movementModulus * Math.sin(headingRadians);
 
         currentLocation.setX(currentLocation.getX() + movementX);
         currentLocation.setY(currentLocation.getY() + movementY);
@@ -109,7 +109,6 @@ public class Location {
      * @param tolerance in degrees
      * @return
      */
-    // FIXME: Bound angles
     public boolean rotationTolerance(double expectedValue, double tolerance) {
         double error = Math.abs(angleTurn(heading, expectedValue));
         return error < tolerance;

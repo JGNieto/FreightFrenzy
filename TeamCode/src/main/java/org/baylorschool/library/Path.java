@@ -2,15 +2,16 @@ package org.baylorschool.library;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Path {
 
-    private List<Location> locations;
+    private ArrayList<Location> locations;
     private Location tolerance;
 
     public Path(List<Location> locations, Location tolerance) {
-        this.locations = locations;
+        this.locations = new ArrayList<>(locations);
         this.tolerance = tolerance;
     }
 
@@ -26,6 +27,13 @@ public class Path {
         )) {
             locations.remove(0);
         }
+    }
+
+    public void checkGoalTelemetry(Location robotLocation, Telemetry telemetry) {
+        Location difference = Location.difference(currentGoal(), robotLocation);
+        telemetry.addData("X Diff", difference.getX());
+        telemetry.addData("Y Diff", difference.getY());
+        telemetry.addData("Heading Diff", difference.getHeading());
     }
 
     public Location currentGoal() {
