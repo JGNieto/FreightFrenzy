@@ -157,7 +157,7 @@ public class Mecanum {
     public void rotate(double angle) {
         // Distance that each wheel has to travel.
         //double arch = Math.PI * turningDiameter * (angle / 360);
-        int arch = (int) (4218 * (angle/360));
+        int arch = (int) (4230 * (angle/360));
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
 /*
@@ -172,9 +172,9 @@ public class Mecanum {
         setTargetPosition(arch, blMotor);
 
         frMotor.setPower(autonomousSpeed);
-        brMotor.setPower(autonomousSpeed);
         flMotor.setPower(autonomousSpeed);
         blMotor.setPower(autonomousSpeed);
+        brMotor.setPower(autonomousSpeed);
     }
 
     /**
@@ -190,9 +190,9 @@ public class Mecanum {
      */
     public void setPower(double power) {
         frMotor.setPower(power);
-        brMotor.setPower(power);
         flMotor.setPower(power);
         blMotor.setPower(power);
+        brMotor.setPower(power);
     }
 
     /**
@@ -259,8 +259,8 @@ public class Mecanum {
     }
 
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {
-        flMotor.setZeroPowerBehavior(zeroPowerBehavior);
         frMotor.setZeroPowerBehavior(zeroPowerBehavior);
+        flMotor.setZeroPowerBehavior(zeroPowerBehavior);
         blMotor.setZeroPowerBehavior(zeroPowerBehavior);
         brMotor.setZeroPowerBehavior(zeroPowerBehavior);
     }

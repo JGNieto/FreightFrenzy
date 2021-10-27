@@ -29,6 +29,7 @@ public class MecanumTestArcade extends LinearOpMode {
 
         flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
         waitForStart();
+        mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         boolean slowMode = false;
 
