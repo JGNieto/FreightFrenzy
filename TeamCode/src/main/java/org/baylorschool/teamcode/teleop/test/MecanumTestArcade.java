@@ -39,7 +39,7 @@ public class MecanumTestArcade extends LinearOpMode {
             double rotation = gamepad1.right_stick_x * ROTATION_COEFFICIENT;
             double flyWheelPower = 0;
 
-            if (gamepad1.a) flyWheelPower += FLYWHEEL_SPEED;
+            if (gamepad1.x) flyWheelPower += FLYWHEEL_SPEED;
             if (gamepad1.b) flyWheelPower -= FLYWHEEL_SPEED;
 
             // Detect slow mode.

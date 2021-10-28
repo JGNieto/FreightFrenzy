@@ -14,6 +14,7 @@ public class Path {
     }
 
     public void checkGoal(Location robotLocation) {
+        // TODO: Check for goals in the future, to cut corners.
         Location difference = Location.difference(currentGoal(), robotLocation);
         if (difference.getX() < tolerance.getX() && difference.getY() < tolerance.getY()) {
             locations.remove(0);
