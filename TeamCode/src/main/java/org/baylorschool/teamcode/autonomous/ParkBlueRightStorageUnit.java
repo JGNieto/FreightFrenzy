@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.baylorschool.actions.MoveWaypoints;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
@@ -52,56 +53,7 @@ public class ParkBlueRightStorageUnit extends LinearOpMode {
         mecanum.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        boolean wasBusy = false;
-
-        while (opModeIsActive()) {
-            mecanum.updateEncoderReadings();
-            currentLocation = Location.updateLocation(currentLocation, vuforia, imu, telemetry, mecanum);
-            path.checkGoal(currentLocation);
-            Location currentGoal = path.currentGoal();
-
-            if (currentGoal == null) {
-                requestOpModeStop();
-                continue;
-            }
-
-            double targetAngle = Location.angleLocations(currentLocation, currentGoal);
-            telemetry.addData("Angle Diff", Location.angleTurn(currentLocation.getHeading(), targetAngle));
-            telemetry.addData("Locations Left", path.getLocations().size());
-            if (!mecanum.isBusy()) {
-                if (wasBusy) {
-                    sleep(500);
-                    wasBusy = false;
-                    continue;
-                }
-                wasBusy = true;
-                if (!currentLocation.rotationTolerance(targetAngle, path.getTolerance().getHeading())) {
-                    mecanum.rotate(Location.angleTurn(currentLocation.getHeading(), targetAngle));
-                } else {
-                    mecanum.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-                    mecanum.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                    mecanum.setTargetDistance(Location.distance(currentLocation, currentGoal));
-                    mecanum.setPowerAutonomous();
-                }
-            }
-
-            currentLocation.reportTelemtry(telemetry);
-
-            telemetry.addData("Encoders Delta", "{FR, FL, BR, BL} = %.0f, %.0f, %.0f, %.0f",
-                    mecanum.getLatestDeltaFr(),
-                    mecanum.getLatestDeltaFl(),
-                    mecanum.getLatestDeltaBr(),
-                    mecanum.getLatestDeltaBl()
-            );
-            telemetry.addData("Encoders Value", "{FR, FL, BR, BL} = %d, %d, %d, %d",
-                    mecanum.getLastReadingFr(),
-                    mecanum.getLastReadingFl(),
-                    mecanum.getLastReadingBr(),
-                    mecanum.getLastReadingBl()
-            );
-            telemetry.addData("Target", mecanum.getBlMotor().getTargetPosition());
-            telemetry.update();
-        }
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, null, imu, Arrays.asList(locations), telemetry, mecanum, 180, this);
 
         vuforia.stopTracking();
     }

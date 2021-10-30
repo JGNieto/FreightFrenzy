@@ -18,7 +18,7 @@ public class VuforiaNavigationTest extends LinearOpMode {
 
         vuforia.startTracking();
 
-        while (opModeIsActive()) {
+        while (!isStopRequested()) {
             vuforia.lookForTargets(telemetry);
         }
 

@@ -5,19 +5,17 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Mecanum;
 
 @TeleOp(name="MecanumTestArcade", group="Test")
 public class MecanumTestArcade extends LinearOpMode {
 
     private Mecanum mecanum;
+    private Carousel carousel;
+
     private final double SLOWMODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
-    // Pneumatic wheel: 0.65
-    // Green wheel: 0.8
-    private final double FLYWHEEL_SPEED = 0.65;
-
-    private DcMotor flyWheel = null;
 
     @Override
     public void runOpMode() {
@@ -25,9 +23,8 @@ public class MecanumTestArcade extends LinearOpMode {
         telemetry.update();
 
         mecanum = new Mecanum(hardwareMap);
+        carousel = new Carousel(hardwareMap);
 
-
-        flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
         waitForStart();
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -37,10 +34,13 @@ public class MecanumTestArcade extends LinearOpMode {
             double y = gamepad1.left_stick_y;
             double x = gamepad1.left_stick_x;
             double rotation = gamepad1.right_stick_x * ROTATION_COEFFICIENT;
-            double flyWheelPower = 0;
 
-            if (gamepad1.x) flyWheelPower += FLYWHEEL_SPEED;
-            if (gamepad1.b) flyWheelPower -= FLYWHEEL_SPEED;
+            if (gamepad1.x)
+                carousel.move(Carousel.CarouselSide.BLUE);
+            else if (gamepad1.b)
+                carousel.move(Carousel.CarouselSide.RED);
+            else
+                carousel.stop();
 
             // Detect slow mode.
             slowMode = slowModeToggle(gamepad1, slowMode);
@@ -51,13 +51,11 @@ public class MecanumTestArcade extends LinearOpMode {
 
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, slowMode ? SLOWMODE_COEFFICIENT : 1);
-            flyWheel.setPower(flyWheelPower);
 
             // Report telemetry
             telemetry.addData("Speed", y);
             telemetry.addData("Strafe", x);
             telemetry.addData("Rotation", rotation);
-            telemetry.addData("FlyWheel", flyWheelPower);
             telemetry.addData("EncoderFR", mecanum.getFrMotor().getCurrentPosition());
             telemetry.addData("EncoderBR", mecanum.getBrMotor().getCurrentPosition());
             telemetry.addData("EncoderFL", mecanum.getFlMotor().getCurrentPosition());

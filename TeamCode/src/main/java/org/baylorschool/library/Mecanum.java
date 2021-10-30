@@ -233,6 +233,10 @@ public class Mecanum {
         return frMotor.isBusy() || flMotor.isBusy() || brMotor.isBusy() || blMotor.isBusy();
     }
 
+    public void moveMecanum(double y, double x, double rotation) {
+        moveGamepad(y, x, rotation, Math.min(autonomousSpeed*1.5, 1));
+    }
+
     /**
      * Changes motion of robot
      * @param y forward / backward power (1 to -1)

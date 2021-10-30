@@ -14,7 +14,7 @@ import java.util.List;
 
 public class MoveWaypoints {
 
-    public static void moveToWaypoints(Location currentLocation, Vuforia vuforia, IMU imu, List<Location> locations, Telemetry telemetry, Mecanum mecanum, double finalAngle, LinearOpMode opMode) {
+    public static Location moveToWaypoints(Location currentLocation, Vuforia vuforia, IMU imu, List<Location> locations, Telemetry telemetry, Mecanum mecanum, double finalAngle, LinearOpMode opMode) {
         Path path = new Path(locations, new Location(50,50,-1,-1,-1,3));
         boolean wasBusy = false; // FIXME Test without "wasBusy" feature.
         while (opMode.opModeIsActive()) {
@@ -64,8 +64,9 @@ public class MoveWaypoints {
             telemetry.addData("Target", mecanum.getBlMotor().getTargetPosition());
             telemetry.update();
         }
-        mecanum.rotate(finalAngle);
+        mecanum.rotate(Location.angleTurn(currentLocation.getHeading(), finalAngle));
         while (mecanum.isBusy()) { }
+        return currentLocation;
     }
 
 }
