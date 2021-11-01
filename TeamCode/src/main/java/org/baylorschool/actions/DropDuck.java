@@ -12,12 +12,15 @@ public class DropDuck {
     static final Location blueLocation = new Location(0,0,0,0,0,-90);
 
     public static Location dropTheDuck(Carousel.CarouselSide side, Mecanum mecanum, LinearOpMode opMode, Carousel carousel) {
-        mecanum.moveMecanum(0, 1, 0);
-        opMode.sleep(1000);
-        mecanum.moveMecanum(-1, 0, 0);
+        mecanum.moveMecanum(0, .5, 0);
+        opMode.sleep(2000);
+        mecanum.moveMecanum(.4, 0, 0);
         //while (sensorNotTouched()) {}
+        opMode.sleep(1500);
+        mecanum.stop();
         carousel.move(side);
-        opMode.sleep(3000);
+        opMode.sleep(1500);
+        carousel.stop();
         return side == Carousel.CarouselSide.RED ? redLocation : blueLocation;
     }
 }

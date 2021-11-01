@@ -237,6 +237,10 @@ public class Mecanum {
         moveGamepad(y, x, rotation, Math.min(autonomousSpeed*1.5, 1));
     }
 
+    public void stop() {
+        setPower(0);
+    }
+
     /**
      * Changes motion of robot
      * @param y forward / backward power (1 to -1)
