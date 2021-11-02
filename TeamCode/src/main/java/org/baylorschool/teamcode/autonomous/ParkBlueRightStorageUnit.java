@@ -16,7 +16,7 @@ import java.util.Arrays;
 @Autonomous(name="Park Storage Unit BR", group ="BlueRight")
 public class ParkBlueRightStorageUnit extends LinearOpMode {
 
-    private Location currentLocation = new Location(-609.6, 1568.8, 0, 0, 0, -90);
+    private Location currentLocation = new Location(-609.6, 1608, 0, 0, 0, -90);
     private Vuforia vuforia;
     private Mecanum mecanum;
     private Path path;

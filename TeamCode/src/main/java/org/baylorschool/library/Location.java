@@ -145,7 +145,7 @@ public class Location {
             if (target - current > 0) sign = -1;
             val = (360 - Math.abs(target - current)) % 360;
         }
-        return val * sign;
+        return -(val * sign);
     }
 
     /**

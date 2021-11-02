@@ -1,5 +1,6 @@
 package org.baylorschool.teamcode.teleop.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -19,6 +20,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import java.util.ArrayList;
 import java.util.List;
 
+@Disabled
 @TeleOp(name="EasyOpenCVTest", group="Test")
 public class EasyOpenCVTest extends LinearOpMode {
     OpenCvWebcam webcam;
