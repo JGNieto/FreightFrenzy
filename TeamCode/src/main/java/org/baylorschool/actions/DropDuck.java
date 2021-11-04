@@ -1,6 +1,7 @@
 package org.baylorschool.actions;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Location;
@@ -12,15 +13,15 @@ public class DropDuck {
     static final Location blueLocation = new Location(0,0,0,0,0,-90);
 
     public static Location dropTheDuck(Carousel.CarouselSide side, Mecanum mecanum, LinearOpMode opMode, Carousel carousel) {
-        mecanum.moveMecanum(0, .5, 0);
+        mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mecanum.moveMecanum(0, .23, 0);
         opMode.sleep(2000);
-        mecanum.moveMecanum(.4, 0, 0);
-        //while (sensorNotTouched()) {}
+        mecanum.moveMecanum(-.18, 0, 0);
         opMode.sleep(1500);
+        mecanum.moveMecanum(.045, 0, 0);
+        opMode.sleep(150);
         mecanum.stop();
-        carousel.move(side);
-        opMode.sleep(1500);
-        carousel.stop();
+        carousel.dropDuck(side, opMode);
         return side == Carousel.CarouselSide.RED ? redLocation : blueLocation;
     }
 }

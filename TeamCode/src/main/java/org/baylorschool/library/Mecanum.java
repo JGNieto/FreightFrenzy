@@ -122,6 +122,15 @@ public class Mecanum {
     }
 
     /**
+     * Resets the encoders by changing their mode twice
+     */
+    public void resetEncoders() {
+        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+
+    /**
      * Position to which wheels with encoders will move
      * @param targetPosition in ticks
      * @param dcMotor
@@ -234,7 +243,7 @@ public class Mecanum {
     }
 
     public void moveMecanum(double y, double x, double rotation) {
-        moveGamepad(y, x, rotation, Math.min(autonomousSpeed*1.5, 1));
+        moveGamepad(-y, x, rotation, 1);
     }
 
     public void stop() {

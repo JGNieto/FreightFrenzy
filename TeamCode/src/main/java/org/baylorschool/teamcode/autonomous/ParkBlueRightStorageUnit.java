@@ -34,7 +34,7 @@ public class ParkBlueRightStorageUnit extends LinearOpMode {
                 //new Location(-914.4, 914.4, 0, 0, 0, 0),
                 new Location(-609.6, 1219.2, 0, 0, 0, 0),
                 new Location(-914.4, 914.4, 0, 0, 0, 0),
-                new Location(-1544, 914.4, 0, 0, 0, 0)
+                new Location(-1564, 914.4, 0, 0, 0, 0)
         };
 
         mecanum = new Mecanum(hardwareMap);
@@ -51,8 +51,7 @@ public class ParkBlueRightStorageUnit extends LinearOpMode {
 
         waitForStart();
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        mecanum.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mecanum.resetEncoders();
 
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, null, imu, Arrays.asList(locations), telemetry, mecanum, 180, this);
 

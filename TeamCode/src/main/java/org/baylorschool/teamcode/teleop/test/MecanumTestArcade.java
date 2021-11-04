@@ -36,9 +36,9 @@ public class MecanumTestArcade extends LinearOpMode {
             double rotation = gamepad1.right_stick_x * ROTATION_COEFFICIENT;
 
             if (gamepad1.x)
-                carousel.move(Carousel.CarouselSide.BLUE);
+                carousel.dropDuck(Carousel.CarouselSide.BLUE, this);
             else if (gamepad1.b)
-                carousel.move(Carousel.CarouselSide.RED);
+                carousel.dropDuck(Carousel.CarouselSide.RED, this);
             else
                 carousel.stop();
 
@@ -53,6 +53,8 @@ public class MecanumTestArcade extends LinearOpMode {
             mecanum.moveGamepad(y, x, rotation, slowMode ? SLOWMODE_COEFFICIENT : 1);
 
             // Report telemetry
+            telemetry.addData("X Gamepad", x);
+            telemetry.addData("Y Gamepad", y);
             telemetry.addData("Speed", y);
             telemetry.addData("Strafe", x);
             telemetry.addData("Rotation", rotation);

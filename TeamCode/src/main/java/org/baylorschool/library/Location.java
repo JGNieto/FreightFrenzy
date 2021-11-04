@@ -35,6 +35,24 @@ public class Location {
         this.heading = heading;
     }
 
+    public Location(double x, double y, double heading) {
+        this.x = x;
+        this.y = y;
+        this.heading = heading;
+        this.z = 0;
+        this.roll = 0;
+        this.pitch = 0;
+    }
+
+    public Location(double x, double y) {
+        this.x = x;
+        this.y = y;
+        this.z = 0;
+        this.roll = 0;
+        this.pitch = 0;
+        this.heading = 0;
+    }
+
     /**
      * Adds location to telemetry
      * @param telemetry
