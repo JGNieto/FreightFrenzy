@@ -4,7 +4,7 @@ while True:
     if vuforia_position_available():
         current_position = vuforia_position()
     else:
-        current_position = calculate_encoder_displacement(current_position)
+        current_position = calculate_encoder_and_imu_displacement(current_position)
 
 def init_position():
     # Calculate relevant coordinates from each of the four the initial positions beforehand.
