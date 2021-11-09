@@ -9,6 +9,7 @@ import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Path;
+import org.baylorschool.library.Sensors;
 import org.baylorschool.library.Vuforia;
 
 import java.util.Arrays;
@@ -16,45 +17,31 @@ import java.util.Arrays;
 @Autonomous(name="Park Storage Unit BR", group ="BlueRight")
 public class ParkBlueRightStorageUnit extends LinearOpMode {
 
-    private Location currentLocation = new Location(-609.6, 1608, 0, 0, 0, -90);
-    private Vuforia vuforia;
-    private Mecanum mecanum;
-    private Path path;
-    private IMU imu;
+    private Location currentLocation = new Location(-609.6, 1608, -90);
+    private Sensors sensors;
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Getting ready");
         telemetry.update();
-        vuforia = new Vuforia(hardwareMap);
-        vuforia.initializeParamers(false);
 
-        Location[] locations = new Location[]{
-                //new Location(-609.6, 1568.8-300, 0, 0, 0, 0),
-                //new Location(-914.4, 914.4, 0, 0, 0, 0),
-                new Location(-609.6, 1219.2, 0, 0, 0, 0),
-                new Location(-914.4, 914.4, 0, 0, 0, 0),
-                new Location(-1564, 914.4, 0, 0, 0, 0)
+        sensors = new Sensors(hardwareMap, false);
+        sensors.initialize(hardwareMap, currentLocation.getHeading());
+
+        Location[] locations = new Location[] {
+                new Location(-609.6, 1219.2),
+                new Location(-914.4, 914.4),
+                new Location(-1564, 914.4)
         };
-
-        mecanum = new Mecanum(hardwareMap);
-        path = new Path(Arrays.asList(locations), new Location(100,100,-1,-1,-1,3));
-        imu = new IMU();
-
-        imu.initializeImu(hardwareMap);
-        imu.forceValue(currentLocation.getHeading());
-
-        vuforia.startTracking();
 
         telemetry.addData("Status", "Ready!");
         telemetry.update();
 
         waitForStart();
-        mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        mecanum.resetEncoders();
+        sensors.getMecanum().resetEncoders();
 
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, null, imu, Arrays.asList(locations), telemetry, mecanum, 180, this);
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors.getVuforia(), sensors.getImu(), Arrays.asList(locations), telemetry, sensors.getMecanum(), 180, this);
 
-        vuforia.stopTracking();
+        sensors.end();
     }
 }

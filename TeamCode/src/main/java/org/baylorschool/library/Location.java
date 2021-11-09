@@ -174,7 +174,7 @@ public class Location {
     public static double angleBound(double angle) {
         angle = angle % 360;
         if (angle > 180)
-            return -180 + (angle - 180);
+            return - 180 + (angle - 180);
         else if (angle < -180)
             return 180 + (angle + 180);
         else return angle;
@@ -188,7 +188,7 @@ public class Location {
         double deltaX = Math.abs(location1.getX() - location2.getX());
         double deltaY = Math.abs(location1.getY() - location2.getY());
 
-        return Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        return Math.hypot(deltaX, deltaY);
     }
 
     public double getX() {
