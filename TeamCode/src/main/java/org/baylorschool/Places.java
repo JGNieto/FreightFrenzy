@@ -38,7 +38,7 @@ public class Places {
      */
     static double closeParallel(double tile) {
         int sign = tile < 0 ? -1 : 1;
-        return sign * (Math.abs(tile * tileLength) - robotLength);
+        return sign * (Math.abs(tile * tileLength) - robotLength / 2);
     }
 
     /**
@@ -61,28 +61,28 @@ public class Places {
     }
 
     public static Location[] ParkRedLeftStorageUnit = new Location[] {
-            new Location(middle(-1), closeParallel(-3)),
+            new Location(middle(-1), closeParallel(-3), 90),
             new Location(middle(-1), middle(-2)),
             new Location(middle(-1.5), middle(-1.5)),
             new Location(closeParallel(-3), middle(-1.5)),
     };
 
     public static Location[] ParkRedRightStorageUnit = new Location[] {
-            new Location(middle(0), closeParallel(-3)),
+            new Location(middle(0), closeParallel(-3), 90),
             new Location(middle(0), middle(-2)),
             new Location(middle(-1.5), middle(-1.5)),
             new Location(closeParallel(-3), middle(-1.5)),
     };
 
     public static Location[] ParkBlueLeftStorageUnit = new Location[] {
-            new Location(middle(-1), closeParallel(3)),
+            new Location(middle(-1), closeParallel(3), -90),
             new Location(middle(-1), middle(2)),
             new Location(middle(-1.5), middle(1.5)),
             new Location(closeParallel(-3), middle(1.5)),
     };
 
     public static Location[] ParkBlueRightStorageUnit = new Location[] {
-            new Location(middle(0), closeParallel(3)),
+            new Location(middle(0), closeParallel(3), -90),
             new Location(middle(0), middle(2)),
             new Location(middle(-1.5), middle(1.5)),
             new Location(closeParallel(-3), middle(1.5)),
