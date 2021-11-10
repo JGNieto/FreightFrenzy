@@ -31,7 +31,7 @@ public class ParkBlueRightStorageUnit extends LinearOpMode {
         Location[] locations = new Location[] {
                 new Location(-609.6, 1219.2),
                 new Location(-914.4, 914.4),
-                new Location(-1564, 914.4)
+                new Location(-1564, 914.4, 180)
         };
 
         telemetry.addData("Status", "Ready!");
@@ -40,7 +40,7 @@ public class ParkBlueRightStorageUnit extends LinearOpMode {
         waitForStart();
         sensors.getMecanum().resetEncoders();
 
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors.getVuforia(), sensors.getImu(), Arrays.asList(locations), telemetry, sensors.getMecanum(), 180, this);
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors.getVuforia(), sensors.getImu(), Arrays.asList(locations), telemetry, sensors.getMecanum(), this);
 
         sensors.end();
     }

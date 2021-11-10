@@ -14,8 +14,8 @@ import java.util.List;
 
 public class MoveWaypoints {
 
-    public static Location moveToWaypoints(Location currentLocation, Vuforia vuforia, IMU imu, List<Location> locations, Telemetry telemetry, Mecanum mecanum, double finalAngle, LinearOpMode opMode) {
-        Path path = new Path(locations, new Location(50,50,-1,-1,-1,3));
+    public static Location moveToWaypoints(Location currentLocation, Vuforia vuforia, IMU imu, List<Location> locations, Telemetry telemetry, Mecanum mecanum, LinearOpMode opMode, double finalAngle) {
+        Path path = new Path(locations, new Location(50, 50, -1, -1, -1, 3));
         boolean wasBusy = false; // FIXME Test without "wasBusy" feature.
         while (opMode.opModeIsActive()) {
             mecanum.updateEncoderReadings();
@@ -64,9 +64,15 @@ public class MoveWaypoints {
             telemetry.addData("Target", mecanum.getBlMotor().getTargetPosition());
             telemetry.update();
         }
-        mecanum.rotate(Location.angleTurn(currentLocation.getHeading(), finalAngle));
-        while (mecanum.isBusy()) { }
+        if (finalAngle != -1) {
+            mecanum.rotate(Location.angleTurn(currentLocation.getHeading(), finalAngle));
+            while (mecanum.isBusy()) {
+            }
+        }
         return currentLocation;
     }
 
+    public static Location moveToWaypoints(Location currentLocation, Vuforia vuforia, IMU imu, List<Location> locations, Telemetry telemetry, Mecanum mecanum, LinearOpMode opMode) {
+        return moveToWaypoints(currentLocation, vuforia, imu, locations, telemetry, mecanum, opMode, locations.get(locations.size() - 1).getHeading());
+    }
 }

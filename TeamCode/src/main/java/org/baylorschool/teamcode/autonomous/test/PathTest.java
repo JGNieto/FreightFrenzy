@@ -38,7 +38,7 @@ public class PathTest extends LinearOpMode {
         waitForStart();
         sensors.getMecanum().resetEncoders();
 
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors.getVuforia(), sensors.getImu(), Arrays.asList(locations), telemetry, sensors.getMecanum(), 180, this);
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors.getVuforia(), sensors.getImu(), Arrays.asList(locations), telemetry, sensors.getMecanum(), this);
 
         sensors.end();
     }

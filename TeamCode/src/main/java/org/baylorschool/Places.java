@@ -10,6 +10,15 @@ public class Places {
 
     static final double tileLength = 609.6;
 
+    public static final Location redCarouselLocation = new Location(-1390.3,-1610.8,0);
+    public static final Location blueCarouselLocation = new Location(0,0,-90); // FIXME MEASURE
+
+    public static final Location redLeftStart = new Location(middle(-1), closeParallel(-3), 90);
+    public static final Location redRightStart = new Location(middle(0), closeParallel(-3), 90);
+    public static final Location bLueLeftStart = new Location(middle(-1), closeParallel(3), -90);
+    public static final Location blueRightStart = new Location(middle(0), closeParallel(3), -90);
+
+
     /**
      * Position of robot in one axis, so that the robot touches it while being close to the origin.
      * The wheels are perpendicular to the axis.
@@ -17,7 +26,8 @@ public class Places {
      * @return
      */
     static double closePerpendicular(double tile) {
-        return 0;
+        int sign = tile < 0 ? -1 : +1;
+        return sign * (Math.abs(tile * tileLength) - robotWidth / 2);
     }
 
     /**
@@ -27,7 +37,8 @@ public class Places {
      * @return
      */
     static double awayPerpendicular(double tile) {
-        return 0;
+        int sign = tile < 0 ? -1 : +1;
+        return sign * (Math.abs(tile * tileLength) + robotWidth / 2);
     }
 
     /**
@@ -37,7 +48,7 @@ public class Places {
      * @return
      */
     static double closeParallel(double tile) {
-        int sign = tile < 0 ? -1 : 1;
+        int sign = tile < 0 ? -1 : +1;
         return sign * (Math.abs(tile * tileLength) - robotLength / 2);
     }
 
@@ -48,7 +59,8 @@ public class Places {
      * @return
      */
     static double awayParallel(double tile) {
-        return 0;
+        int sign = tile < 0 ? -1 : +1;
+        return sign * (Math.abs(tile * tileLength) + robotLength / 2);
     }
 
     /**
@@ -60,29 +72,29 @@ public class Places {
         return tile * tileLength;
     }
 
-    public static Location[] ParkRedLeftStorageUnit = new Location[] {
-            new Location(middle(-1), closeParallel(-3), 90),
+    public static final Location[] ParkRedLeftStorageUnit = new Location[] {
+            redLeftStart,
             new Location(middle(-1), middle(-2)),
             new Location(middle(-1.5), middle(-1.5)),
             new Location(closeParallel(-3), middle(-1.5)),
     };
 
-    public static Location[] ParkRedRightStorageUnit = new Location[] {
-            new Location(middle(0), closeParallel(-3), 90),
+    public static final Location[] ParkRedRightStorageUnit = new Location[] {
+            redRightStart,
             new Location(middle(0), middle(-2)),
             new Location(middle(-1.5), middle(-1.5)),
             new Location(closeParallel(-3), middle(-1.5)),
     };
 
-    public static Location[] ParkBlueLeftStorageUnit = new Location[] {
-            new Location(middle(-1), closeParallel(3), -90),
+    public static final Location[] ParkBlueLeftStorageUnit = new Location[] {
+            bLueLeftStart,
             new Location(middle(-1), middle(2)),
             new Location(middle(-1.5), middle(1.5)),
             new Location(closeParallel(-3), middle(1.5)),
     };
 
-    public static Location[] ParkBlueRightStorageUnit = new Location[] {
-            new Location(middle(0), closeParallel(3), -90),
+    public static final Location[] ParkBlueRightStorageUnit = new Location[] {
+            blueRightStart,
             new Location(middle(0), middle(2)),
             new Location(middle(-1.5), middle(1.5)),
             new Location(closeParallel(-3), middle(1.5)),

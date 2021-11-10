@@ -50,7 +50,7 @@ public class Location {
         this.z = 0;
         this.roll = 0;
         this.pitch = 0;
-        this.heading = 0;
+        this.heading = -1;
     }
 
     /**
