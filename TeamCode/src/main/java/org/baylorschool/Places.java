@@ -100,5 +100,37 @@ public class Places {
             new Location(closeParallel(-3), middle(1.5)),
     };
 
+    public static final Location[] BlueRightToCarousel = new Location[] {
+            blueRightStart,
+            new Location(middle(0), middle(2)),
+            new Location(middle(-2.5), middle(2), -90),
+    };
 
+    public static final Location[] BlueLeftToCarousel = new Location[] {
+            bLueLeftStart,
+            new Location(middle(-1), middle(2)),
+            new Location(middle(-2.5), middle(2), -90),
+    };
+
+    public static final Location[] RedRightToCarousel = new Location[] {
+            redRightStart,
+            new Location(middle(0), middle(-2)),
+            new Location(middle(-2), middle(-2.5), 0).backwards(),
+    };
+
+    public static final Location[] RedLeftToCarousel = new Location[] {
+            redLeftStart,
+            new Location(middle(-1), middle(-2)),
+            new Location(middle(-2), middle(-2.5), 0).backwards(),
+    };
+
+    public static final Location[] CarouselToBluePark = new Location[] {
+            new Location(closePerpendicular(-3), middle(1.5), -90),
+    };
+
+    public static final Location[] CarouselToRedPark = new Location[] {
+            /**
+             * The robot's length is close to the wall which make it unable to go anywhere.
+            */
+    };
 }
