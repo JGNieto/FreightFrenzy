@@ -14,6 +14,8 @@ public class Location {
     private double x, y, z;
     private double roll, pitch, heading;
 
+    private boolean backwards = false;
+
     public Location(OpenGLMatrix matrix) {
         VectorF translation = matrix.getTranslation();
         Orientation rotation = Orientation.getOrientation(matrix, EXTRINSIC, XYZ, DEGREES);
@@ -191,6 +193,11 @@ public class Location {
         return Math.hypot(deltaX, deltaY);
     }
 
+    public Location backwards() {
+        this.backwards = true;
+        return this;
+    }
+
     public double getX() {
         return x;
     }
@@ -237,5 +244,9 @@ public class Location {
 
     public void setHeading(double heading) {
         this.heading = heading;
+    }
+
+    public boolean isBackwards() {
+        return backwards;
     }
 }

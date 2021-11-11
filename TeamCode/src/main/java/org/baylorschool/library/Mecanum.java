@@ -23,6 +23,11 @@ public class Mecanum {
     private int lastReadingBr = 0;
     private int lastReadingBl = 0;
 
+    private Side reverse;
+
+    // TODO: THIS IS A PATCH, DO BACKWARDS
+    private boolean backwards = false;
+
     private DcMotor.RunMode runMode;
 
     private static final double ticksPerRevolution = 537.7;
@@ -82,6 +87,7 @@ public class Mecanum {
      * @param reverse Side that requires reversing.
      */
     public void setReverse(Side reverse) {
+        this.reverse = reverse;
         if (reverse.equals(Side.LEFT)) {
             frMotor.setDirection(DcMotor.Direction.FORWARD);
             brMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -169,21 +175,13 @@ public class Mecanum {
         int arch = (int) (4230 * (angle/360));
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
-/*
-        setTargetDistance(-arch, frMotor);
-        setTargetDistance(-arch, brMotor);
-        setTargetDistance(arch, flMotor);
-        setTargetDistance(arch, blMotor);
-*/
+
         setTargetPosition(-arch, frMotor);
         setTargetPosition(-arch, brMotor);
         setTargetPosition(arch, flMotor);
         setTargetPosition(arch, blMotor);
 
-        frMotor.setPower(autonomousSpeed);
-        flMotor.setPower(autonomousSpeed);
-        blMotor.setPower(autonomousSpeed);
-        brMotor.setPower(autonomousSpeed);
+        setPowerAutonomous();
     }
 
     /**
@@ -273,6 +271,17 @@ public class Mecanum {
                 -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
         brMotor.setPower(scale((scaleInput(y) - scaleInput(rot) - scaleInput(x)),
                 -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
+    }
+
+    public void setBackwards(boolean backwards) {
+        if (this.backwards != backwards) {
+            if (reverse == Side.LEFT) setReverse(Side.RIGHT);
+            else if (reverse == Side.RIGHT) setReverse(Side.LEFT);
+            else if (reverse == Side.NONE) setReverse(Side.BOTH);
+            else setReverse(Side.NONE);
+
+        }
+        this.backwards = backwards;
     }
 
     public void setZeroPowerBehavior(DcMotor.ZeroPowerBehavior zeroPowerBehavior) {

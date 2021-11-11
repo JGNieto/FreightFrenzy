@@ -32,6 +32,13 @@ public class MoveWaypoints {
             telemetry.addData("Locations Left", path.getLocations().size());
             if (!mecanum.isBusy()) {
                 if (wasBusy) {
+                    if (currentGoal.isBackwards()) {
+                        mecanum.setBackwards(true);
+                        imu.setBackwards(true);
+                    } else {
+                        mecanum.setBackwards(false);
+                        imu.setBackwards(false);
+                    }
                     opMode.sleep(500);
                     wasBusy = false;
                     continue;
@@ -64,6 +71,8 @@ public class MoveWaypoints {
             telemetry.addData("Target", mecanum.getBlMotor().getTargetPosition());
             telemetry.update();
         }
+        mecanum.setBackwards(false);
+        imu.setBackwards(false);
         if (finalAngle != -1) {
             mecanum.rotate(Location.angleTurn(currentLocation.getHeading(), finalAngle));
             while (mecanum.isBusy()) {

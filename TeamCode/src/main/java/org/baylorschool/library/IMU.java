@@ -15,6 +15,7 @@ public class IMU {
     private double orientation;
     private double adjustment = 0;
     private Axis axis = Axis.X;
+    private boolean backwards = false;
 
     public enum Axis {
         X, Y, Z
@@ -56,6 +57,14 @@ public class IMU {
     }
 
     public double getHeading() {
-        return Location.angleBound(orientation + adjustment);
+        return Location.angleBound(orientation + adjustment + (backwards ? 180 : 0));
+    }
+
+    public boolean isBackwards() {
+        return backwards;
+    }
+
+    public void setBackwards(boolean backwards) {
+        this.backwards = backwards;
     }
 }
