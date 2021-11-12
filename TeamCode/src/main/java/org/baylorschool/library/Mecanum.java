@@ -33,7 +33,8 @@ public class Mecanum {
     private static final double ticksPerRevolution = 537.7;
     private static final double wheelDiameter = 100; // In millimeters
     public static final double ticksPerMm = ticksPerRevolution / (Math.PI * wheelDiameter);
-    private final double autonomousSpeed = 0.3;
+    private static final double autonomousSpeed = 0.3;
+    private static final double fullTurnEncoderCount = 4230; // Encoder ticks to rotate 360 degrees.
 
     // In mm, the distance between two diagonally opposed wheels.
     // (also twice the distance of any wheel from the center of the robot)
@@ -63,8 +64,7 @@ public class Mecanum {
         this.frMotor = hardwareMap.get(DcMotor.class, frMotor);
 
         setReverse(reverse);
-        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        resetEncoders();
     }
     /**
      * Class for managing four mecanum wheels.
@@ -78,8 +78,7 @@ public class Mecanum {
         this.frMotor = hardwareMap.get(DcMotor.class, "frMotor");
 
         setReverse(Side.RIGHT);
-        setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        resetEncoders();
     }
 
     /**
@@ -133,6 +132,7 @@ public class Mecanum {
     public void resetEncoders() {
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        resetEncoderReadings();
     }
 
 
@@ -172,7 +172,7 @@ public class Mecanum {
     public void rotate(double angle) {
         // Distance that each wheel has to travel.
         //double arch = Math.PI * turningDiameter * (angle / 360);
-        int arch = (int) (4230 * (angle/360));
+        int arch = (int) (fullTurnEncoderCount * (angle/360));
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -279,7 +279,7 @@ public class Mecanum {
             else if (reverse == Side.RIGHT) setReverse(Side.LEFT);
             else if (reverse == Side.NONE) setReverse(Side.BOTH);
             else setReverse(Side.NONE);
-
+            resetEncoders();
         }
         this.backwards = backwards;
     }
