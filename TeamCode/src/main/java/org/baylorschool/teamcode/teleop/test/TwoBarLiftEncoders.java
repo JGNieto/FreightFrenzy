@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name="TwoBarLiftEncoders", group="Test")
 public class TwoBarLiftEncoders extends LinearOpMode {
-    private DcMotor roller;
-    private DcMotor twobar1;
+    private DcMotor roller = null;
+    private DcMotor twobar1 = null;
 
     @Override
     public void runOpMode() {
@@ -31,8 +31,10 @@ public class TwoBarLiftEncoders extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (gamepad1.dpad_up) {
+                movingTwobar = true;
                 twobar1.setPower(.8);
-            } else if(gamepad1.dpad_down) {
+            } else if (gamepad1.dpad_down) {
+                movingTwobar = true;
                 twobar1.setPower(.2);
             } else {
                 if (movingTwobar) {
@@ -44,7 +46,11 @@ public class TwoBarLiftEncoders extends LinearOpMode {
                     twobar1.setPower(.6);
                 }
             }
-
+            if (gamepad1.dpad_right) {
+                roller.setPower(1);
+            } else if (gamepad1.dpad_left) {
+                roller.setPower(-1);
+            }
         }
     }
 }
