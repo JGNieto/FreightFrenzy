@@ -129,8 +129,22 @@ public class Places {
     };
 
     public static final Location[] CarouselToRedPark = new Location[] {
-            /**
-             * The robot's length is close to the wall which make it unable to go anywhere.
-            */
+            new Location(closePerpendicular(-3), middle(-1.5), -90),
+    };
+
+    public static final Location[] BlueLeftHubToWarehouse = new Location[] {
+            new Location(middle(-0.5), closePerpendicular(3), 30),
+    };
+
+    public static final Location[] BlueRightHubToWarehouse = new Location[] {
+            new Location(middle( 0), closePerpendicular(3), 30),
+    };
+
+    public static final Location[] RedRightHubToWarehouse = new Location[] {
+            new Location(middle( 0), closePerpendicular(-3), -30),
+    };
+
+    public static final Location[] RedLeftHubToWarehouse = new Location[] {
+            new Location(middle( -1.5), closePerpendicular(-3), -30),
     };
 }
