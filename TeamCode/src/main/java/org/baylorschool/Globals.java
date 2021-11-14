@@ -14,4 +14,10 @@ public class Globals {
      */
     public static final String VUFORIA_LICENSE = "PLACEHOLDER";
 
+    public enum DropLevel {
+        BOTTOM,
+        MIDDLE,
+        TOP,
+    }
+
 }

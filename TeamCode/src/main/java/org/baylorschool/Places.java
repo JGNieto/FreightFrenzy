@@ -18,6 +18,12 @@ public class Places {
     public static final Location bLueLeftStart = new Location(middle(-1), closeParallel(3), -90);
     public static final Location blueRightStart = new Location(middle(0), closeParallel(3), -90);
 
+    public enum StartLocation {
+        BLUE_LEFT,
+        BLUE_RIGHT,
+        RED_LEFT,
+        RED_RIGHT,
+    }
 
     /**
      * Position of robot in one axis, so that the robot touches it while being close to the origin.
@@ -25,7 +31,7 @@ public class Places {
      * @param tile number of tiles away from the center cross
      * @return
      */
-    static double closePerpendicular(double tile) {
+    public static double closePerpendicular(double tile) {
         int sign = tile < 0 ? -1 : +1;
         return sign * (Math.abs(tile * tileLength) - robotWidth / 2);
     }
@@ -36,7 +42,7 @@ public class Places {
      * @param tile number of tiles away from the center cross
      * @return
      */
-    static double awayPerpendicular(double tile) {
+    public static double awayPerpendicular(double tile) {
         int sign = tile < 0 ? -1 : +1;
         return sign * (Math.abs(tile * tileLength) + robotWidth / 2);
     }
@@ -47,7 +53,7 @@ public class Places {
      * @param tile number of tiles away from the center cross
      * @return
      */
-    static double closeParallel(double tile) {
+    public static double closeParallel(double tile) {
         int sign = tile < 0 ? -1 : +1;
         return sign * (Math.abs(tile * tileLength) - robotLength / 2);
     }
@@ -58,7 +64,7 @@ public class Places {
      * @param tile number of tiles away from the center cross
      * @return
      */
-    static double awayParallel(double tile) {
+    public static double awayParallel(double tile) {
         int sign = tile < 0 ? -1 : +1;
         return sign * (Math.abs(tile * tileLength) + robotLength / 2);
     }
@@ -68,7 +74,7 @@ public class Places {
      * @param tile number of tiles away from the center cross
      * @return
      */
-    static double middle(double tile) {
+    public static double middle(double tile) {
         return tile * tileLength;
     }
 
