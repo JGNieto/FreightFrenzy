@@ -13,10 +13,10 @@ public class Places {
     public static final Location redCarouselLocation = new Location(-1390.3,-1610.8,0);
     public static final Location blueCarouselLocation = new Location(0,0,-90); // FIXME MEASURE
 
-    public static final Location redLeftStart = new Location(middle(-1), closeParallel(-3), 90);
-    public static final Location redRightStart = new Location(middle(0), closeParallel(-3), 90);
-    public static final Location bLueLeftStart = new Location(middle(-1), closeParallel(3), -90);
-    public static final Location blueRightStart = new Location(middle(0), closeParallel(3), -90);
+    public static final Location redLeftStart = new Location(middle(-1.5), closeParallel(-3), 90);
+    public static final Location redRightStart = new Location(middle(-0.5), closeParallel(-3), 90);
+    public static final Location bLueLeftStart = new Location(middle(-1.5), closeParallel(3), -90);
+    public static final Location blueRightStart = new Location(middle(-0.5), closeParallel(3), -90);
 
     public enum StartLocation {
         BLUE_LEFT,
@@ -80,28 +80,26 @@ public class Places {
 
     public static final Location[] ParkRedLeftStorageUnit = new Location[] {
             redLeftStart,
-            new Location(middle(-1), middle(-2)),
             new Location(middle(-1.5), middle(-1.5)),
             new Location(closeParallel(-3), middle(-1.5)),
     };
 
     public static final Location[] ParkRedRightStorageUnit = new Location[] {
             redRightStart,
-            new Location(middle(0), middle(-2)),
+            new Location(middle(-0.5), middle(-2)),
             new Location(middle(-1.5), middle(-1.5)),
             new Location(closeParallel(-3), middle(-1.5)),
     };
 
     public static final Location[] ParkBlueLeftStorageUnit = new Location[] {
             bLueLeftStart,
-            new Location(middle(-1), middle(2)),
             new Location(middle(-1.5), middle(1.5)),
             new Location(closeParallel(-3), middle(1.5)),
     };
 
     public static final Location[] ParkBlueRightStorageUnit = new Location[] {
             blueRightStart,
-            new Location(middle(0), middle(2)),
+            new Location(middle(-0.5), middle(2)),
             new Location(middle(-1.5), middle(1.5)),
             new Location(closeParallel(-3), middle(1.5)),
     };
