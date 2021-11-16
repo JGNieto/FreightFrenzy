@@ -5,8 +5,8 @@ import org.baylorschool.library.Path;
 
 public class Places {
     // MILLIMETERS
-    static final double robotLength = 455;
-    static final double robotWidth = 430;
+    static final double robotLength = 433;
+    static final double robotWidth = 337;
 
     static final double tileLength = 609.6;
 
