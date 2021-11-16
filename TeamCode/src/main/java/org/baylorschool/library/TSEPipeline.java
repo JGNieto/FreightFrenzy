@@ -1,17 +1,24 @@
 package org.baylorschool.library;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
+import org.openftc.easyopencv.OpenCvWebcam;
 
 public class TSEPipeline extends OpenCvPipeline {
-    private volatile Globals.DropLevel dropLevel = Globals.DropLevel.TOP;
+    private Globals.DropLevel dropLevel = Globals.DropLevel.TOP;
     private Places.StartLocation startLocation;
     private Mat onlyGreen;
     private Mat mask;
@@ -32,14 +39,34 @@ public class TSEPipeline extends OpenCvPipeline {
     private Mat middleMat;
     private Mat bottomMat;
 
-    private volatile int topAvg;
-    private volatile int middleAvg;
-    private volatile int bottomAvg;
+    private int topAvg;
+    private int middleAvg;
+    private int bottomAvg;
+
+    public static OpenCvWebcam openWebcam(LinearOpMode opMode, OpenCvPipeline pipeline) {
+        int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
+        OpenCvWebcam webcam = OpenCvCameraFactory.getInstance().createWebcam(opMode.hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        webcam.setMillisecondsPermissionTimeout(2500);
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
+            @Override
+            public void onOpened() {
+                webcam.setPipeline(pipeline);
+                webcam.startStreaming(TSEPipeline.screenWidth, TSEPipeline.screenHeight, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode) {
+                opMode.telemetry.addData("Error opening the camera", errorCode);
+                opMode.telemetry.update();
+            }
+        });
+
+        return webcam;
+    }
 
     public TSEPipeline(Places.StartLocation startLocation) {
         this.startLocation = startLocation;
 
-        // FIXME: SET RECTS INSIDE HERE.
         this.bottomRect = new Rect(0,screenHeight - rectHeight, rectWidth, rectHeight);
         this.middleRect = new Rect(screenWidth / 3,screenHeight - rectHeight, rectWidth, rectHeight);
         this.topRect = new Rect(2 * screenWidth / 3, screenHeight - rectHeight, rectWidth, rectHeight);
@@ -64,11 +91,11 @@ public class TSEPipeline extends OpenCvPipeline {
     // Dirty function to determine largest average of green.
     private void determineLargest() {
         if (topAvg >= middleAvg && middleAvg >= bottomAvg) {
-            dropLevel = Globals.DropLevel.TOP;
+            this.dropLevel = Globals.DropLevel.TOP;
         } else if (middleAvg >= topAvg && topAvg >= bottomAvg) {
-            dropLevel = Globals.DropLevel.MIDDLE;
+            this.dropLevel = Globals.DropLevel.MIDDLE;
         } else {
-            dropLevel = Globals.DropLevel.BOTTOM;
+            this.dropLevel = Globals.DropLevel.BOTTOM;
         }
     }
 

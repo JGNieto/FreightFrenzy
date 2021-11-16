@@ -7,12 +7,14 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Mecanum;
+import org.baylorschool.library.TwoBarLift;
 
 @TeleOp(name="MecanumTestArcade", group="Test")
 public class MecanumTestArcade extends LinearOpMode {
 
     private Mecanum mecanum;
     private Carousel carousel;
+    private TwoBarLift lift;
 
     private final double SLOWMODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
@@ -24,6 +26,7 @@ public class MecanumTestArcade extends LinearOpMode {
 
         mecanum = new Mecanum(hardwareMap);
         carousel = new Carousel(hardwareMap);
+        lift = new TwoBarLift(this);
 
         waitForStart();
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -49,8 +52,10 @@ public class MecanumTestArcade extends LinearOpMode {
             if (gamepad1.right_stick_button)
                 rotation = gamepad1.right_stick_x;
 
+
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, slowMode ? SLOWMODE_COEFFICIENT : 1);
+            lift.loopIterationTeleOp();
 
             // Report telemetry
             telemetry.addData("X Gamepad", x);

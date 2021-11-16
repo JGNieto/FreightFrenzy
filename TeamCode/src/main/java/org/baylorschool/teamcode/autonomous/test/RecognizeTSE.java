@@ -17,35 +17,18 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class RecognizeTSE extends LinearOpMode {
     OpenCvWebcam webcam;
     TSEPipeline tsePipeline;
+    Globals.DropLevel dropLevel;
 
     @Override
     public void runOpMode() {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT);
-
-        webcam.setMillisecondsPermissionTimeout(2500);
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
-            @Override
-            public void onOpened() {
-                webcam.setPipeline(tsePipeline);
-                webcam.startStreaming(TSEPipeline.screenWidth, TSEPipeline.screenHeight, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode) {
-                telemetry.addData("Error opening the camera", errorCode);
-                telemetry.update();
-            }
-        });
+        webcam = TSEPipeline.openWebcam(this, tsePipeline);
 
         telemetry.addLine("Waiting for start");
         telemetry.update();
 
         waitForStart();
-        Globals.DropLevel dropLevel = tsePipeline.getDropLevel();
-        //webcam.stopStreaming();
-        //webcam.closeCameraDevice();
+        dropLevel = tsePipeline.getDropLevel();
 
         while (opModeIsActive()) {
             telemetry.addData("Frame Count", webcam.getFrameCount());

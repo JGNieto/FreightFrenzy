@@ -15,6 +15,12 @@ public class TwoBarLiftEncoders extends LinearOpMode {
     @Override
     public void runOpMode() {
 
+        lift = new TwoBarLift(this);
+
+        waitForStart();
+
+        lift.startThread();
+
         while (opModeIsActive()) {
             if (gamepad1.dpad_up)
                 lift.setMovement(TwoBarLift.LiftMovement.UP);
@@ -30,7 +36,8 @@ public class TwoBarLiftEncoders extends LinearOpMode {
             else
                 lift.setRollerState(TwoBarLift.RollerState.STOP);
 
-            lift.loopIteration();
         }
+
+        lift.closeThread();
     }
 }
