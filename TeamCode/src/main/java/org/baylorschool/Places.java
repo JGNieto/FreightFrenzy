@@ -21,8 +21,8 @@ public class Places {
 
     public static final Location redLeftStart = new Location(middle(-1.5), closeParallel(-3), 90);
     public static final Location redRightStart = new Location(middle(-0.5), closeParallel(-3), 90);
-    public static final Location bLueLeftStart = new Location(middle(-1.5), closeParallel(3), -90);
-    public static final Location blueRightStart = new Location(middle(-0.5), closeParallel(3), -90);
+    public static final Location bLueLeftStart = new Location(middle(-0.5), closeParallel(3), -90);
+    public static final Location blueRightStart = new Location(middle(-1.5), closeParallel(3), -90);
 
     public static final Location redTeamShippingHub = new Location(middle(-0.5), middle(-1));
     public static final Location blueTeamShippingHub = new Location(middle(-0.5), middle(1));
@@ -102,38 +102,38 @@ public class Places {
 
     public static final Location[] ParkBlueLeftStorageUnit = new Location[] {
             bLueLeftStart,
+            new Location(middle(-0.5), middle(2)),
             new Location(middle(-1.5), middle(1.5)),
             new Location(closeParallel(-3), middle(1.5)),
     };
 
     public static final Location[] ParkBlueRightStorageUnit = new Location[] {
             blueRightStart,
-            new Location(middle(-0.5), middle(2)),
             new Location(middle(-1.5), middle(1.5)),
             new Location(closeParallel(-3), middle(1.5)),
     };
 
     public static final Location[] BlueRightToCarousel = new Location[] {
             blueRightStart,
-            new Location(middle(0), middle(2)),
+            new Location(middle(-1.5), middle(2)),
             new Location(middle(-2.5), middle(2), -90),
     };
 
     public static final Location[] BlueLeftToCarousel = new Location[] {
             bLueLeftStart,
-            new Location(middle(-1), middle(2)),
+            new Location(middle(-0.5), middle(2)),
             new Location(middle(-2.5), middle(2), -90),
     };
 
     public static final Location[] RedRightToCarousel = new Location[] {
             redRightStart,
-            new Location(middle(0), middle(-2)),
+            new Location(middle(-0.5), middle(-2)),
             new Location(middle(-2), middle(-2.5), 0).backwards(),
     };
 
     public static final Location[] RedLeftToCarousel = new Location[] {
             redLeftStart,
-            new Location(middle(-1), middle(-2)),
+            new Location(middle(-1.5), middle(-2)),
             new Location(middle(-2), middle(-2.5), 0).backwards(),
     };
 
@@ -161,14 +161,41 @@ public class Places {
             new Location(middle( -1.5), closePerpendicular(-3), -30),
     };
 
-    // FIXME: AMANDA DO THIS FOR ALL (4) STARTING LOCATIONS
     public static final Location[] BlueRightToHub = new Location[] {
             blueRightStart,
             new Location(middle(-1.5), middle(3)),
     };
 
-    // FIXME: AMANDA DO THIS FOR ALL (4) SHIPPING HUB LOCATIONS
-    public static final Location[] BlueHubToCarousel = new Location[] {
+    public static final Location[] BlueLeftToHub = new Location[] {
+            bLueLeftStart,
+            new Location(middle(-0.5), middle(3)),
+    };
+
+    public static final Location[] RedRightToHub = new Location[] {
+            redRightStart,
+            new Location(middle(-0.5), middle(-3)),
+    };
+
+    public static final Location[] RedLeftToHub = new Location[] {
+            redLeftStart,
+            new Location(middle(-1.5), middle(-3)),
+    };
+
+    public static final Location[] BlueRightHubToCarousel = new Location[] {
+            new Location(middle(-2), middle(2.5), 0).backwards(),
+    };
+
+    public static final Location[] BlueLeftHubToCarousel = new Location[] {
+            new Location(middle(0.5), middle(2)),
+            new Location(middle(-2), middle(2.5), 0),
+    };
+
+    public static final Location[] RedRightHubToCarousel = new Location[] {
+            new Location(middle(0.5), middle(-2.5), 0).backwards(),
+            new Location(middle(-2), middle(-2.5), 0),
+    };
+
+    public static final Location[] RedLeftHubToCarousel = new Location[] {
             new Location(middle(-2), middle(-2.5), 0).backwards(),
     };
 }
