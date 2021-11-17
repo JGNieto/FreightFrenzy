@@ -4,6 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.baylorschool.Globals;
+import org.baylorschool.Places;
+import org.baylorschool.library.math.CircleIntersect;
+
+import java.util.List;
 
 public class TwoBarLift {
     // Millimeters and degrees
@@ -36,6 +40,11 @@ public class TwoBarLift {
     private static final double liftPowerDown = 0;
     private static final double liftPowerHold = .2;
 
+    // Distance away from the CENTER of the Team Shipping Hub to drop on each level.
+    private static final double dropDistanceTop = 50;
+    private static final double dropDistanceMiddle = 50;
+    private static final double dropDistanceBottom = 50;
+
     // Use separate thread to fix cases when the main OpMode thread is in an infinite loop.
     // Ex: waiting for isBusy to be false
     private boolean threadShouldStop = false;
@@ -65,6 +74,11 @@ public class TwoBarLift {
         UP,
         DOWN,
         HOLD
+    }
+
+    public enum Hub {
+        RED,
+        BLUE,
     }
 
     public TwoBarLift(LinearOpMode opMode) {
@@ -172,6 +186,57 @@ public class TwoBarLift {
         loopIteration();
     }
 
+    /**
+     * Location for scoring taking into account desired TSH level and current location.
+     * @param currentLocation of the robot
+     * @param hub where the freight must be dropped.
+     * @param dropLevel of the Team Shipping Hub
+     * @return the Location where the robot should go to score.
+     */
+    public static Location getScoringLocation(Location currentLocation, Hub hub, Globals.DropLevel dropLevel) {
+        double radius;
+        Location targetHubLocation;
+        switch (hub) {
+            case RED:
+                targetHubLocation = Places.redTeamShippingHub;
+                break;
+            case BLUE:
+                targetHubLocation = Places.blueTeamShippingHub;
+                break;
+            default:
+                throw new IllegalArgumentException("Hub argument for getScoringLocation() invalid.");
+        }
+
+        switch (dropLevel) {
+            case TOP:
+                radius = dropDistanceTop;
+                break;
+            case MIDDLE:
+                radius = dropDistanceMiddle;
+                break;
+            case BOTTOM:
+                radius = dropDistanceBottom;
+                break;
+            default:
+                throw new IllegalArgumentException("Drop Level argument for getScoringLocation() invalid.");
+        }
+        // Point B equals the circle center because we want the point in the circle that intersects
+        // the line between the robot and the center.
+        List<Location> potentialLocations = CircleIntersect.getCircleLineIntersectionLocation(currentLocation, targetHubLocation, targetHubLocation, radius);
+        Location closestLocation = null;
+        double distanceToLocation = -1;
+
+        for (Location location : potentialLocations) {
+            double distance = Location.distance(currentLocation, location);
+            if (closestLocation == null || distance < distanceToLocation) {
+                closestLocation = location;
+                distanceToLocation = distance;
+            }
+        }
+
+        return closestLocation;
+    }
+
     public void moveToDropLevel(Globals.DropLevel dropLevel) {
         if (dropLevel == Globals.DropLevel.TOP)
             //setTargetHeight(topLevelTSH);
@@ -184,6 +249,12 @@ public class TwoBarLift {
             targetEncoderPosition = bottomLevelTSHEncoder;
         else
             retract();
+    }
+
+    public void releaseItem() {
+        setRollerState(RollerState.RELEASING);
+        opMode.sleep(2000);
+        setRollerState(RollerState.STOP);
     }
 
     public void setMovement(LiftMovement movement) {

@@ -13,6 +13,9 @@ import org.baylorschool.library.TSEPipeline;
 import org.baylorschool.library.TwoBarLift;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 @Autonomous(name = "BlueRightTSEDuckPark", group = "BlueRight")
 public class BlueRightTSEDuckPark extends LinearOpMode {
 
@@ -20,9 +23,7 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
     private Sensors sensors;
     private TSEPipeline tsePipeline;
     private OpenCvWebcam webcam;
-
     private Location currentLocation = Places.blueRightStart;
-
     private Globals.DropLevel dropLevel;
 
     @Override
@@ -43,7 +44,9 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
         twoBarLift.moveToDropLevel(dropLevel);
 
         twoBarLift.startThread();
-        while (opModeIsActive()) {}
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueRightToHub), this);
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(TwoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.BLUE, dropLevel)), this);
+        twoBarLift.releaseItem();
         twoBarLift.closeThread();
     }
 }

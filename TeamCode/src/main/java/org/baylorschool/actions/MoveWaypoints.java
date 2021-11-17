@@ -7,6 +7,7 @@ import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Path;
+import org.baylorschool.library.Sensors;
 import org.baylorschool.library.Vuforia;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -83,5 +84,9 @@ public class MoveWaypoints {
 
     public static Location moveToWaypoints(Location currentLocation, Vuforia vuforia, IMU imu, List<Location> locations, Telemetry telemetry, Mecanum mecanum, LinearOpMode opMode) {
         return moveToWaypoints(currentLocation, vuforia, imu, locations, telemetry, mecanum, opMode, locations.get(locations.size() - 1).getHeading());
+    }
+
+    public static Location moveToWaypoints(Location currentLocation, Sensors sensors, List<Location> locations, LinearOpMode opMode) {
+        return moveToWaypoints(currentLocation, sensors.getVuforia(), sensors.getImu(), locations, opMode.telemetry, sensors.getMecanum(), opMode);
     }
 }

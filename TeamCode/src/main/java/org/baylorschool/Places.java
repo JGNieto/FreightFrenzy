@@ -2,6 +2,7 @@ package org.baylorschool;
 
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Path;
+import org.baylorschool.library.TwoBarLift;
 
 public class Places {
     // MILLIMETERS
@@ -17,6 +18,9 @@ public class Places {
     public static final Location redRightStart = new Location(middle(-0.5), closeParallel(-3), 90);
     public static final Location bLueLeftStart = new Location(middle(-1.5), closeParallel(3), -90);
     public static final Location blueRightStart = new Location(middle(-0.5), closeParallel(3), -90);
+
+    public static final Location redTeamShippingHub = new Location(middle(-0.5), middle(-1));
+    public static final Location blueTeamShippingHub = new Location(middle(-0.5), middle(1));
 
     public enum StartLocation {
         BLUE_LEFT,
@@ -150,5 +154,11 @@ public class Places {
 
     public static final Location[] RedLeftHubToWarehouse = new Location[] {
             new Location(middle( -1.5), closePerpendicular(-3), -30),
+    };
+
+    // FIXME: AMANDA DO THIS FOR ALL (4) STARTING LOCATIONS
+    public static final Location[] BlueRightToHub = new Location[] {
+            blueRightStart,
+            new Location(middle(-1.5), middle(3)),
     };
 }
