@@ -28,7 +28,8 @@ public class Sensors {
 
     public void end() {
         mecanum.stop();
-        vuforia.stopTracking();
+        if (vuforia != null)
+            vuforia.stopTracking();
     }
 
     public Vuforia getVuforia() {

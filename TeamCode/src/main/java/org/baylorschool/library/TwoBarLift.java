@@ -25,6 +25,10 @@ public class TwoBarLift {
     public static final double middleLevelTSH = 216 + clearanceHeight;
     public static final double topLevelTSH = 375 + clearanceHeight;
 
+    public static final int bottomLevelTSHEncoder = 139;
+    public static final int middleLevelTSHEncoder = 230;
+    public static final int topLevelTSHEncoder = 330;
+
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = 0.5;
 
@@ -170,11 +174,14 @@ public class TwoBarLift {
 
     public void moveToDropLevel(Globals.DropLevel dropLevel) {
         if (dropLevel == Globals.DropLevel.TOP)
-            setTargetHeight(topLevelTSH);
+            //setTargetHeight(topLevelTSH);
+            targetEncoderPosition = topLevelTSHEncoder;
         else if (dropLevel == Globals.DropLevel.MIDDLE)
-            setTargetHeight(middleLevelTSH);
+            //setTargetHeight(middleLevelTSH);
+            targetEncoderPosition = middleLevelTSHEncoder;
         else if (dropLevel == Globals.DropLevel.BOTTOM)
-            setTargetHeight(bottomLevelTSH);
+            //setTargetHeight(bottomLevelTSH);
+            targetEncoderPosition = bottomLevelTSHEncoder;
         else
             retract();
     }
