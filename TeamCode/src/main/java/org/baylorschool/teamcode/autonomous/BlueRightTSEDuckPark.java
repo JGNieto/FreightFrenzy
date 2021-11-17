@@ -5,7 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
+import org.baylorschool.actions.DropDuck;
 import org.baylorschool.actions.MoveWaypoints;
+import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Sensors;
@@ -25,6 +27,7 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
     private OpenCvWebcam webcam;
     private Location currentLocation = Places.blueRightStart;
     private Globals.DropLevel dropLevel;
+    private Carousel carousel;
 
     @Override
     public void runOpMode() {
@@ -33,6 +36,7 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
 
         tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
+        carousel = new Carousel(hardwareMap);
 
         waitForStart();
 
@@ -47,6 +51,9 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueRightToHub), this);
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(TwoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.BLUE, dropLevel)), this);
         twoBarLift.releaseItem();
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueHubToCarousel), this);
+        currentLocation = DropDuck.dropTheDuck(Carousel.CarouselSide.BLUE, sensors.getMecanum(), this, carousel, false);
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.CarouselToBluePark), this);
         twoBarLift.closeThread();
     }
 }

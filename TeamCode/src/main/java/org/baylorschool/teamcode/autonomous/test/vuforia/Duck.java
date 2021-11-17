@@ -49,7 +49,7 @@ public class Duck extends LinearOpMode {
         mecanum.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        currentLocation = DropDuck.dropTheDuck(Carousel.CarouselSide.RED, mecanum, this, carousel);
+        currentLocation = DropDuck.dropTheDuck(Carousel.CarouselSide.RED, mecanum, this, carousel, true);
 
         vuforia.stopTracking();
     }

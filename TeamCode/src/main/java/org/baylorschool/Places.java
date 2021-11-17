@@ -12,7 +12,12 @@ public class Places {
     static final double tileLength = 609.6;
 
     public static final Location redCarouselLocation = new Location(-1390.3,-1610.8,0);
-    public static final Location blueCarouselLocation = new Location(0,0,-90); // FIXME MEASURE
+    public static final Location blueCarouselLocation = new Location(awayPerpendicular(-3),0,-90); // FIXME MEASURE Y VALUE
+
+    // Locations after moving away from carousel to clear it.
+    // See DropDuck class
+    public static final Location redCarouselLocationAway = new Location(-1390.3,-1610.8,0); // FIXME MEASURE
+    public static final Location blueCarouselLocationAway = new Location(0,0,-90); // FIXME MEASURE
 
     public static final Location redLeftStart = new Location(middle(-1.5), closeParallel(-3), 90);
     public static final Location redRightStart = new Location(middle(-0.5), closeParallel(-3), 90);
@@ -133,11 +138,11 @@ public class Places {
     };
 
     public static final Location[] CarouselToBluePark = new Location[] {
-            new Location(closePerpendicular(-3), middle(1.5), -90),
+            new Location(closePerpendicular(-3), middle(1.5)),
     };
 
     public static final Location[] CarouselToRedPark = new Location[] {
-            new Location(closePerpendicular(-3), middle(-1.5), -90),
+            new Location(closePerpendicular(-3), middle(-1.5)),
     };
 
     public static final Location[] BlueLeftHubToWarehouse = new Location[] {
@@ -160,5 +165,10 @@ public class Places {
     public static final Location[] BlueRightToHub = new Location[] {
             blueRightStart,
             new Location(middle(-1.5), middle(3)),
+    };
+
+    // FIXME: AMANDA DO THIS FOR ALL (4) SHIPPING HUB LOCATIONS
+    public static final Location[] BlueHubToCarousel = new Location[] {
+            new Location(middle(-2), middle(-2.5), 0).backwards(),
     };
 }

@@ -7,7 +7,6 @@ import org.baylorschool.Places;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
@@ -18,10 +17,9 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 public class TSEPipeline extends OpenCvPipeline {
-    private Globals.DropLevel dropLevel = Globals.DropLevel.TOP;
+    private volatile Globals.DropLevel dropLevel = Globals.DropLevel.TOP;
     private Places.StartLocation startLocation;
     private Mat onlyGreen;
-    private Mat mask;
 
     public static int screenHeight = 240;
     public static int screenWidth = 320;
@@ -39,9 +37,9 @@ public class TSEPipeline extends OpenCvPipeline {
     private Mat middleMat;
     private Mat bottomMat;
 
-    private int topAvg;
-    private int middleAvg;
-    private int bottomAvg;
+    private volatile int topAvg;
+    private volatile int middleAvg;
+    private volatile int bottomAvg;
 
     public static OpenCvWebcam openWebcam(LinearOpMode opMode, OpenCvPipeline pipeline) {
         int cameraMonitorViewId = opMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", opMode.hardwareMap.appContext.getPackageName());
