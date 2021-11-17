@@ -169,6 +169,19 @@ public class Location {
     }
 
     /**
+     * Adds or subtracts a certain distance based on location and heading.
+     * @param location to which add or subtract to
+     * @param x added or subtracted
+     * @param y added or subtracted
+     * @return modified location
+     */
+    public static Location moveLocation(Location location, double x, double y) {
+        location.setX(location.getX() + x * Math.cos(Math.toRadians(location.getHeading())));
+        location.setY(location.getY() + y * Math.sin(Math.toRadians(location.getHeading())));
+        return location;
+    }
+
+    /**
      * Makes the angle be between -180 and 180.
      * @param angle
      * @return bound angle

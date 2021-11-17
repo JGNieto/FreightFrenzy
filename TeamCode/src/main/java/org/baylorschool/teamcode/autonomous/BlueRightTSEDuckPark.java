@@ -31,12 +31,18 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        telemetry.addData("Status", "Loading...");
+        telemetry.update();
         twoBarLift = new TwoBarLift(this);
         sensors = new Sensors(hardwareMap, false);
+        sensors.initialize(hardwareMap, currentLocation.getHeading());
 
         tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
         carousel = new Carousel(hardwareMap);
+
+        telemetry.addData("Status", "Ready");
+        telemetry.update();
 
         waitForStart();
 
@@ -44,10 +50,10 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
         webcam.stopStreaming();
         webcam.closeCameraDevice();
 
-        telemetry.addData("Level", dropLevel.name());
         twoBarLift.moveToDropLevel(dropLevel);
 
         twoBarLift.startThread();
+
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueRightToHub), this);
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(TwoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.BLUE, dropLevel)), this);
         twoBarLift.releaseItem();

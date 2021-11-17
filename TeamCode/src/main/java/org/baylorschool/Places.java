@@ -21,7 +21,7 @@ public class Places {
 
     public static final Location redLeftStart = new Location(middle(-1.5), closeParallel(-3), 90);
     public static final Location redRightStart = new Location(middle(-0.5), closeParallel(-3), 90);
-    public static final Location bLueLeftStart = new Location(middle(-0.5), closeParallel(3), -90);
+    public static final Location blueLeftStart = new Location(middle(-0.5), closeParallel(3), -90);
     public static final Location blueRightStart = new Location(middle(-1.5), closeParallel(3), -90);
 
     public static final Location redTeamShippingHub = new Location(middle(-0.5), middle(-1));
@@ -101,7 +101,7 @@ public class Places {
     };
 
     public static final Location[] ParkBlueLeftStorageUnit = new Location[] {
-            bLueLeftStart,
+            blueLeftStart,
             new Location(middle(-0.5), middle(2)),
             new Location(middle(-1.5), middle(1.5)),
             new Location(closeParallel(-3), middle(1.5)),
@@ -120,7 +120,7 @@ public class Places {
     };
 
     public static final Location[] BlueLeftToCarousel = new Location[] {
-            bLueLeftStart,
+            blueLeftStart,
             new Location(middle(-0.5), middle(2)),
             new Location(middle(-2.5), middle(2), -90),
     };
@@ -167,7 +167,7 @@ public class Places {
     };
 
     public static final Location[] BlueLeftToHub = new Location[] {
-            bLueLeftStart,
+            blueLeftStart,
             new Location(middle(-0.5), middle(3)),
     };
 

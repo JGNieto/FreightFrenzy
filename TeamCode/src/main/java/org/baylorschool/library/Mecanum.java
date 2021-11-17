@@ -34,7 +34,12 @@ public class Mecanum {
     private static final double wheelDiameter = 100; // In millimeters
     public static final double ticksPerMm = ticksPerRevolution / (Math.PI * wheelDiameter);
     private static final double autonomousSpeed = 0.3;
-    private static final double fullTurnEncoderCount = 4230; // Encoder ticks to rotate 360 degrees.
+
+    // Encoder ticks to rotate 360 degrees.
+    private static final double fullTurnEncoderCountFL = 2975;
+    private static final double fullTurnEncoderCountFR = 3100;
+    private static final double fullTurnEncoderCountBL = 3525;
+    private static final double fullTurnEncoderCountBR = 3420;
 
     // In mm, the distance between two diagonally opposed wheels.
     // (also twice the distance of any wheel from the center of the robot)
@@ -172,14 +177,17 @@ public class Mecanum {
     public void rotate(double angle) {
         // Distance that each wheel has to travel.
         //double arch = Math.PI * turningDiameter * (angle / 360);
-        int arch = (int) (fullTurnEncoderCount * (angle/360));
+        int archFL = (int) (fullTurnEncoderCountFL * (angle/360));
+        int archFR = (int) (fullTurnEncoderCountFR * (angle/360));
+        int archBL = (int) (fullTurnEncoderCountBL * (angle/360));
+        int archBR = (int) (fullTurnEncoderCountBR * (angle/360));
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        setTargetPosition(-arch, frMotor);
-        setTargetPosition(-arch, brMotor);
-        setTargetPosition(arch, flMotor);
-        setTargetPosition(arch, blMotor);
+        setTargetPosition(-archFR, frMotor);
+        setTargetPosition(-archBR, brMotor);
+        setTargetPosition(archFL, flMotor);
+        setTargetPosition(archBL, blMotor);
 
         setPowerAutonomous();
     }
