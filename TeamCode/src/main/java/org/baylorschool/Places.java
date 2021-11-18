@@ -181,6 +181,11 @@ public class Places {
             new Location(middle(-1.5), middle(-2.5)),
     };
 
+    public static final Location[] BlueRightHubToPark = new Location[] {
+            new Location(awayParallel(2), middle(1.5)).backwards(),
+            new Location(middle(2.5), middle(1.5)).backwards(),
+    };
+
     public static final Location[] BlueRightHubToCarousel = new Location[] {
             new Location(middle(-2), middle(2.5), 0).backwards(),
     };
