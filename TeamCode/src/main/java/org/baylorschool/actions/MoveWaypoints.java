@@ -17,7 +17,8 @@ public class MoveWaypoints {
 
     public static Location moveToWaypoints(Location currentLocation, Vuforia vuforia, IMU imu, List<Location> locations, Telemetry telemetry, Mecanum mecanum, LinearOpMode opMode, double finalAngle) {
         Path path = new Path(locations, new Location(50, 50, -1, -1, -1, 3));
-        boolean wasBusy = false; // FIXME Test without "wasBusy" feature.
+        mecanum.updateEncoderReadings();
+        boolean wasBusy = false; // TODO Test without "wasBusy" feature.
         while (opMode.opModeIsActive()) {
             mecanum.updateEncoderReadings();
             currentLocation = Location.updateLocation(currentLocation, vuforia, imu, telemetry, mecanum);
@@ -55,7 +56,7 @@ public class MoveWaypoints {
                 }
             }
 
-            currentLocation.reportTelemtry(telemetry);
+            currentLocation.reportTelemetry(telemetry);
 
             telemetry.addData("Target...", "%.0f, %.0f, %.0f", currentGoal.getX(), currentGoal.getY(), currentGoal.getHeading());
 

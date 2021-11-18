@@ -20,8 +20,8 @@ public class Places {
     public static final Location blueCarouselLocationAway = new Location(0,0,-90); // FIXME MEASURE
 
     public static final Location redLeftStart = new Location(middle(-1.5), closeParallel(-3), 90);
-    public static final Location redRightStart = new Location(middle(-0.5), closeParallel(-3), 90);
-    public static final Location blueLeftStart = new Location(middle(-0.5), closeParallel(3), -90);
+    public static final Location redRightStart = new Location(middle(0.5), closeParallel(-3), 90);
+    public static final Location blueLeftStart = new Location(middle(0.5), closeParallel(3), -90);
     public static final Location blueRightStart = new Location(middle(-1.5), closeParallel(3), -90);
 
     public static final Location redTeamShippingHub = new Location(middle(-0.5), middle(-1));
@@ -182,8 +182,8 @@ public class Places {
     };
 
     public static final Location[] BlueRightHubToPark = new Location[] {
-            new Location(awayParallel(2), middle(1.5)).backwards(),
-            new Location(middle(2.5), middle(1.5)).backwards(),
+            new Location(awayParallel(-2), middle(1.5)).backwards(),
+            new Location(middle(-2.5), middle(1.5)).backwards(),
     };
 
     public static final Location[] BlueRightHubToCarousel = new Location[] {

@@ -19,6 +19,7 @@ public class Sensors {
         imu.forceValue(initialHeading);
 
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mecanum.resetEncoders();
 
         if (vuforia != null) {
             vuforia.initializeParamers(false);

@@ -42,8 +42,8 @@ public class TwoBarLift {
 
     // Distance away from the CENTER of the Team Shipping Hub to drop on each level.
     private static final double dropDistanceTop = 541;
-    private static final double dropDistanceMiddle = 250;
-    private static final double dropDistanceBottom = 250;
+    private static final double dropDistanceMiddle = 684;
+    private static final double dropDistanceBottom = 621;
 
     // Use separate thread to fix cases when the main OpMode thread is in an infinite loop.
     // Ex: waiting for isBusy to be false
@@ -86,16 +86,11 @@ public class TwoBarLift {
 
         twoBarMotor = opMode.hardwareMap.get(DcMotor.class, "twobar");
         rollerMotor = opMode.hardwareMap.get(DcMotor.class, "roller");
-
-        twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        twoBarMotor.setTargetPosition(targetEncoderPosition);
-        twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void startThread() {
+        initialize();
+
         thread = new Thread(() -> {
             try {
                 while (!threadShouldStop) {
@@ -107,6 +102,14 @@ public class TwoBarLift {
             }
         });
         thread.start();
+    }
+
+    public void initialize() {
+        twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        twoBarMotor.setTargetPosition(targetEncoderPosition);
+        twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void closeThread() {

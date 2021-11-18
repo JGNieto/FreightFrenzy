@@ -30,6 +30,7 @@ public class MecanumTestArcade extends LinearOpMode {
 
         waitForStart();
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.initialize();
 
         boolean slowMode = false;
 
@@ -73,11 +74,11 @@ public class MecanumTestArcade extends LinearOpMode {
 
     private boolean slowModeToggle(Gamepad gamepad, boolean current) {
         // If the users presses one of the buttons, set slow mode to that value, otherwise keep as is.
-        if (gamepad.left_bumper) {
+        if (gamepad.a) {
             return true;
         }
 
-        if (gamepad.right_bumper) {
+        if (gamepad.y) {
             return false;
         }
 

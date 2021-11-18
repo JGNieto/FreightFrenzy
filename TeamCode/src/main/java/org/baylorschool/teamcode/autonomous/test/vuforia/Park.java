@@ -83,7 +83,7 @@ public class Park extends LinearOpMode {
                 }
             }
 
-            currentLocation.reportTelemtry(telemetry);
+            currentLocation.reportTelemetry(telemetry);
 
             telemetry.addData("Encoders Delta", "{FR, FL, BR, BL} = %.0f, %.0f, %.0f, %.0f",
                     mecanum.getLatestDeltaFr(),

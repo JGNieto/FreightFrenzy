@@ -59,7 +59,7 @@ public class Location {
      * Adds location to telemetry
      * @param telemetry
      */
-    public void reportTelemtry(Telemetry telemetry) {
+    public void reportTelemetry(Telemetry telemetry) {
         telemetry.addData("Pos (inches)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                 x, y, z);
         telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", roll, pitch, heading);
