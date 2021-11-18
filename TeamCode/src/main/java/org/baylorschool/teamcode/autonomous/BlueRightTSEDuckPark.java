@@ -50,13 +50,14 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
         webcam.stopStreaming();
         webcam.closeCameraDevice();
 
-        twoBarLift.moveToDropLevel(dropLevel);
-
         twoBarLift.startThread();
 
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueRightToHub), this);
+        twoBarLift.moveToDropLevel(dropLevel);
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(TwoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.BLUE, dropLevel)), this);
         twoBarLift.releaseItem();
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(Location.moveLocation(currentLocation, 0, -100).backwards()), this);
+        twoBarLift.retract();
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueRightHubToCarousel), this);
         currentLocation = DropDuck.dropTheDuck(Carousel.CarouselSide.BLUE, sensors.getMecanum(), this, carousel, false);
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.CarouselToBluePark), this);

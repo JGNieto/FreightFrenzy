@@ -57,6 +57,8 @@ public class MoveWaypoints {
 
             currentLocation.reportTelemtry(telemetry);
 
+            telemetry.addData("Target...", "%.0f, %.0f, %.0f", currentGoal.getX(), currentGoal.getY(), currentGoal.getHeading());
+
             telemetry.addData("Encoders Delta", "{FR, FL, BR, BL} = %.0f, %.0f, %.0f, %.0f",
                     mecanum.getLatestDeltaFr(),
                     mecanum.getLatestDeltaFl(),

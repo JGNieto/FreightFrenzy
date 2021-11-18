@@ -118,7 +118,7 @@ public class TSEPipeline extends OpenCvPipeline {
 
         determineLargest();
 
-        Imgproc.rectangle(
+        /*Imgproc.rectangle(
                 input,
                 bottomRect,
                 (dropLevel == Globals.DropLevel.BOTTOM ? new Scalar(0, 255, 0) : new Scalar(0, 0, 255)), 4);
@@ -129,7 +129,7 @@ public class TSEPipeline extends OpenCvPipeline {
         Imgproc.rectangle(
                 input,
                 topRect,
-                (dropLevel == Globals.DropLevel.TOP ? new Scalar(0, 255, 0) : new Scalar(0, 0, 255)), 4);
+                (dropLevel == Globals.DropLevel.TOP ? new Scalar(0, 255, 0) : new Scalar(0, 0, 255)), 4);*/
 
         return onlyGreen;
     }

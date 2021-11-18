@@ -176,8 +176,16 @@ public class Location {
      * @return modified location
      */
     public static Location moveLocation(Location location, double x, double y) {
-        location.setX(location.getX() + x * Math.cos(Math.toRadians(location.getHeading())));
-        location.setY(location.getY() + y * Math.sin(Math.toRadians(location.getHeading())));
+        // TODO: Double check this code to ensure it is correct.
+        double angle = Math.toRadians(location.getHeading());
+        double cosAngle = Math.cos(angle);
+        double sinAngle = Math.sin(angle);
+
+        double deltaX = (x * sinAngle) + (y * cosAngle);
+        double deltaY = (x * cosAngle) + (y * sinAngle);
+
+        location.setX(location.getX() + deltaX);
+        location.setY(location.getY() + deltaY);
         return location;
     }
 

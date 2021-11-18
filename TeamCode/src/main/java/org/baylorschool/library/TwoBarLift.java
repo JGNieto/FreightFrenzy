@@ -29,9 +29,9 @@ public class TwoBarLift {
     public static final double middleLevelTSH = 216 + clearanceHeight;
     public static final double topLevelTSH = 375 + clearanceHeight;
 
-    public static final int bottomLevelTSHEncoder = 139;
-    public static final int middleLevelTSHEncoder = 230;
-    public static final int topLevelTSHEncoder = 330;
+    public static final int bottomLevelTSHEncoder = 169;
+    public static final int middleLevelTSHEncoder = 260;
+    public static final int topLevelTSHEncoder = 360;
 
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = 0.5;
@@ -41,9 +41,9 @@ public class TwoBarLift {
     private static final double liftPowerHold = .2;
 
     // Distance away from the CENTER of the Team Shipping Hub to drop on each level.
-    private static final double dropDistanceTop = 50;
-    private static final double dropDistanceMiddle = 50;
-    private static final double dropDistanceBottom = 50;
+    private static final double dropDistanceTop = 541;
+    private static final double dropDistanceMiddle = 250;
+    private static final double dropDistanceBottom = 250;
 
     // Use separate thread to fix cases when the main OpMode thread is in an infinite loop.
     // Ex: waiting for isBusy to be false

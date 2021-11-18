@@ -163,22 +163,22 @@ public class Places {
 
     public static final Location[] BlueRightToHub = new Location[] {
             blueRightStart,
-            new Location(middle(-1.5), middle(3)),
+            new Location(middle(-1.5), middle(2.5)),
     };
 
     public static final Location[] BlueLeftToHub = new Location[] {
             blueLeftStart,
-            new Location(middle(-0.5), middle(3)),
+            new Location(middle(-0.5), middle(2.5)),
     };
 
     public static final Location[] RedRightToHub = new Location[] {
             redRightStart,
-            new Location(middle(-0.5), middle(-3)),
+            new Location(middle(-0.5), middle(-2.5)),
     };
 
     public static final Location[] RedLeftToHub = new Location[] {
             redLeftStart,
-            new Location(middle(-1.5), middle(-3)),
+            new Location(middle(-1.5), middle(-2.5)),
     };
 
     public static final Location[] BlueRightHubToCarousel = new Location[] {
