@@ -5,11 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
-import org.baylorschool.actions.DropDuck;
 import org.baylorschool.actions.MoveWaypoints;
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Location;
-import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Sensors;
 import org.baylorschool.library.TSEPipeline;
 import org.baylorschool.library.TwoBarLift;
@@ -37,17 +35,17 @@ public class BlueRightTSEPark extends LinearOpMode {
         sensors = new Sensors(hardwareMap, false);
         sensors.initialize(hardwareMap, currentLocation.getHeading());
 
-        tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT);
+        tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT, this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
 
         telemetry.addData("Status", "Ready");
         telemetry.update();
 
         waitForStart();
-
+        sensors.getMecanum().updateEncoderReadings();
         dropLevel = tsePipeline.getDropLevel();
-        webcam.stopStreaming();
-        webcam.closeCameraDevice();
+        /*webcam.stopStreaming();
+        webcam.closeCameraDevice();*/
 
         twoBarLift.startThread();
 
@@ -56,8 +54,10 @@ public class BlueRightTSEPark extends LinearOpMode {
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(TwoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.BLUE, dropLevel)), this);
         twoBarLift.releaseItem();
         //currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(Location.moveLocation(currentLocation, 0, -100).backwards()), this);
+        //currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueRightHubToPark), this);
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(Places.BlueRightHubToPark[0].forward()), this);
         twoBarLift.retract();
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueRightHubToPark), this);
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(Places.BlueRightHubToPark[1].forward()), this);
         twoBarLift.closeThread();
     }
 }

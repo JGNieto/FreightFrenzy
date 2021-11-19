@@ -1,8 +1,6 @@
 package org.baylorschool;
 
 import org.baylorschool.library.Location;
-import org.baylorschool.library.Path;
-import org.baylorschool.library.TwoBarLift;
 
 public class Places {
     // MILLIMETERS
@@ -12,7 +10,7 @@ public class Places {
     static final double tileLength = 609.6;
 
     public static final Location redCarouselLocation = new Location(-1390.3,-1610.8,0);
-    public static final Location blueCarouselLocation = new Location(awayPerpendicular(-3),0,-90); // FIXME MEASURE Y VALUE
+    public static final Location blueCarouselLocation = new Location(awayPerpendicular(-3),402,-90); // FIXME MEASURE Y VALUE
 
     // Locations after moving away from carousel to clear it.
     // See DropDuck class
@@ -183,11 +181,12 @@ public class Places {
 
     public static final Location[] BlueRightHubToPark = new Location[] {
             new Location(awayParallel(-2), middle(1.5)).backwards(),
-            new Location(middle(-2.5), middle(1.5)).backwards(),
+            new Location(closeParallel(-3), middle(1.5)).backwards(),
     };
 
     public static final Location[] BlueRightHubToCarousel = new Location[] {
-            new Location(middle(-2), middle(2.5), 0).backwards(),
+            new Location(middle(-2.5), middle(1.5)),
+            new Location(middle(-2.5), middle(2.5), -90).backwards(),
     };
 
     public static final Location[] BlueLeftHubToCarousel = new Location[] {

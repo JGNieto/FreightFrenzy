@@ -184,6 +184,13 @@ public class Mecanum {
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        if (backwards) {
+            archFL *= -1;
+            archFR *= -1;
+            archBL *= -1;
+            archBR *= -1;
+        }
+
         setTargetPosition(-archFR, frMotor);
         setTargetPosition(-archBR, brMotor);
         setTargetPosition(archFL, flMotor);

@@ -1,4 +1,4 @@
-package org.baylorschool.teamcode.teleop.test;
+package org.baylorschool.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -9,8 +9,8 @@ import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.TwoBarLift;
 
-@TeleOp(name="MecanumTestArcade", group="Test")
-public class MecanumTestArcade extends LinearOpMode {
+@TeleOp(name="MainTeleOP", group="Competition")
+public class MainTeleOP extends LinearOpMode {
 
     private Mecanum mecanum;
     private Carousel carousel;

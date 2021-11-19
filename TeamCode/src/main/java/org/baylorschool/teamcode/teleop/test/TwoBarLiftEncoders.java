@@ -1,13 +1,13 @@
 package org.baylorschool.teamcode.teleop.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.baylorschool.library.TwoBarLift;
 
 @TeleOp(name="TwoBarLiftEncoders", group="Test")
+@Disabled
 public class TwoBarLiftEncoders extends LinearOpMode {
 
     private TwoBarLift lift;

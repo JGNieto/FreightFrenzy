@@ -17,7 +17,6 @@ public class MoveWaypoints {
 
     public static Location moveToWaypoints(Location currentLocation, Vuforia vuforia, IMU imu, List<Location> locations, Telemetry telemetry, Mecanum mecanum, LinearOpMode opMode, double finalAngle) {
         Path path = new Path(locations, new Location(50, 50, -1, -1, -1, 3));
-        mecanum.updateEncoderReadings();
         boolean wasBusy = false; // TODO Test without "wasBusy" feature.
         while (opMode.opModeIsActive()) {
             mecanum.updateEncoderReadings();

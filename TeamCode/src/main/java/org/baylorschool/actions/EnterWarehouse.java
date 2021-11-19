@@ -4,9 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.baylorschool.Places;
-import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
-import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Sensors;
 
 import java.util.Arrays;

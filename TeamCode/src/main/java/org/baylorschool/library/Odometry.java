@@ -1,9 +1,6 @@
 package org.baylorschool.library;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.opencv.core.Mat;
 
 public class Odometry {
     // MILLIMETERS

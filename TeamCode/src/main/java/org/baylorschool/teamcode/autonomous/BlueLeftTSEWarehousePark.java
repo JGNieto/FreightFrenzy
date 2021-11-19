@@ -34,7 +34,7 @@ public class BlueLeftTSEWarehousePark extends LinearOpMode {
         sensors = new Sensors(hardwareMap, false);
         sensors.initialize(hardwareMap, currentLocation.getHeading());
 
-        tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT);
+        tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT, this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
 
         telemetry.addData("Status", "Ready");

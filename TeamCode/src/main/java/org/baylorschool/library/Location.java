@@ -219,6 +219,11 @@ public class Location {
         return this;
     }
 
+    public Location forward() {
+        this.backwards = false;
+        return this;
+    }
+
     public double getX() {
         return x;
     }

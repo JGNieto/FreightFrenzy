@@ -25,6 +25,7 @@ public class Carousel {
         flyWheel.setPower(side == CarouselSide.BLUE ? fastSpeed : -fastSpeed);
     }
 
+    /*
     public void dropDuck(CarouselSide side, LinearOpMode opMode) {
         flyWheel.setPower(side == CarouselSide.BLUE ? slowSpeed : -slowSpeed);
         opMode.sleep(600);
@@ -32,6 +33,12 @@ public class Carousel {
         opMode.sleep(200);
         flyWheel.setPower(side == CarouselSide.BLUE ? fastSpeed : -fastSpeed);
         opMode.sleep(400);
+        this.stop();
+    }
+     */
+    public void dropDuck(CarouselSide side, LinearOpMode opMode) {
+        flyWheel.setPower(side == CarouselSide.BLUE ? .5 : -.5);
+        opMode.sleep(2500);
         this.stop();
     }
 
