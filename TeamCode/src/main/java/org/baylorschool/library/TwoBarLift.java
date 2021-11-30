@@ -37,7 +37,7 @@ public class TwoBarLift {
     private static final double rollerReleasePower = 0.5;
 
     private static final double liftPowerUp = .4;
-    private static final double liftPowerDown = 0;
+    private static final double liftPowerDown = -.2;
     private static final double liftPowerHold = .2;
 
     // Distance away from the CENTER of the Team Shipping Hub to drop on each level.
