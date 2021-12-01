@@ -14,6 +14,8 @@ public class Location {
     private double x, y, z;
     private double roll, pitch, heading;
 
+    private double purePursuitRadius = 250;
+
     private boolean backwards = false;
 
     public Location(OpenGLMatrix matrix) {
@@ -26,6 +28,17 @@ public class Location {
         this.roll = rotation.firstAngle;
         this.pitch = rotation.secondAngle;
         this.heading = rotation.thirdAngle;
+    }
+
+    // For copying in memory instead of references.
+    public Location(Location anotherLocation) {
+        this.x = anotherLocation.x;
+        this.y = anotherLocation.y;
+        this.z = anotherLocation.z;
+        this.roll = anotherLocation.roll;
+        this.pitch = anotherLocation.pitch;
+        this.heading = anotherLocation.heading;
+        this.backwards = anotherLocation.backwards;
     }
 
     public Location(double x, double y, double z, double roll, double pitch, double heading) {
@@ -55,6 +68,11 @@ public class Location {
         this.heading = -1;
     }
 
+    // Check if this location is the same place as another in x and y.
+    public boolean samePlanePlaceAs(Location location) {
+        return this.x == location.x && this.y == location.y;
+    }
+
     /**
      * Adds location to telemetry
      * @param telemetry
@@ -80,6 +98,22 @@ public class Location {
                 Math.abs(location1.getPitch() - location2.getPitch()),
                 Math.abs(location1.getHeading() - location2.getHeading())
         );
+    }
+
+    /**
+     * Whether the robot is within the acceptable tolerance
+     * @param currentLocation
+     * @param target
+     * @param tolerance
+     * @return whether it is within tolerance.
+     */
+    public static boolean withinTolerance(Location currentLocation, Location target, Location tolerance) {
+        Location difference = difference(currentLocation, target);
+        return difference.getX() < tolerance.getX() && difference.getY() < tolerance.getY();
+    }
+
+    public static boolean angleWithinTolerance(Location currentLocation, Location target, Location tolerance) {
+        return Math.abs(Location.angleTurn(currentLocation.getHeading(), target.getHeading())) > tolerance.getHeading();
     }
 
     /**
@@ -274,5 +308,13 @@ public class Location {
 
     public boolean isBackwards() {
         return backwards;
+    }
+
+    public double getPurePursuitRadius() {
+        return purePursuitRadius;
+    }
+
+    public void setPurePursuitRadius(double purePursuitRadius) {
+        this.purePursuitRadius = purePursuitRadius;
     }
 }
