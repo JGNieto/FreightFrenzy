@@ -1,12 +1,13 @@
 package org.baylorschool.library;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class Odometry {
     // MILLIMETERS
 
     // FIXME GET THESE VALUES CORRECT
-    static final double ticksPerRevolution = -1; //
+    static final double ticksPerRevolution = -1; // TODO
     static final double wheelRadius = 30;
     static final double dPar = 100; // Distance between center of robot and parallel wheels.
     static final double dPer = -70; // Distance between center of robot and perpendicular wheel.
@@ -17,16 +18,24 @@ public class Odometry {
     private DcMotor encoderRight;
     private DcMotor encoderMid;
 
+    private Servo servoLeft;
+    private Servo servoRight;
+    private Servo servoMid;
+
     private int previousLeft = 0;
     private int previousRight = 0;
     private int previousMid = 0;
 
     private boolean firstLoop = true;
 
-    public Odometry(DcMotor encoderLeft, DcMotor encoderRight, DcMotor encoderMid) {
+    public Odometry(DcMotor encoderLeft, DcMotor encoderRight, DcMotor encoderMid, Servo servoLeft, Servo servoRight, Servo servoMid) {
         this.encoderLeft = encoderLeft;
         this.encoderRight = encoderRight;
         this.encoderMid = encoderMid;
+
+        this.servoLeft = servoLeft;
+        this.servoRight = servoRight;
+        this.servoMid = servoMid;
     }
 
     public Location calculateNewLocation(Location currentLocation) {
@@ -61,6 +70,14 @@ public class Odometry {
         currentLocation.setHeading(Location.angleBound(currentLocation.getHeading() + Math.toDegrees(dTheta)));
 
         return currentLocation;
+    }
+
+    public void withdraw() {
+
+    }
+
+    public void open() {
+
     }
 
 }
