@@ -4,9 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Mecanum;
+import org.baylorschool.library.Odometry;
 import org.baylorschool.library.TwoBarLift;
 
 @TeleOp(name="MainTeleOP", group="Competition")
@@ -15,8 +17,9 @@ public class MainTeleOP extends LinearOpMode {
     private Mecanum mecanum;
     private Carousel carousel;
     private TwoBarLift lift;
+    private Odometry odometry;
 
-    private final double SLOWMODE_COEFFICIENT = 0.5;
+    private final double SLOW_MODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
 
     @Override
@@ -24,6 +27,12 @@ public class MainTeleOP extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
+        odometry = new Odometry(null, null, null,
+                hardwareMap.get(Servo.class, ""),
+                hardwareMap.get(Servo.class, ""),
+                hardwareMap.get(Servo.class, ""),
+                true
+        );
         mecanum = new Mecanum(hardwareMap);
         carousel = new Carousel(hardwareMap);
         lift = new TwoBarLift(this);
@@ -55,7 +64,7 @@ public class MainTeleOP extends LinearOpMode {
 
 
             // Execute movement
-            mecanum.moveGamepad(y, x, rotation, slowMode ? SLOWMODE_COEFFICIENT : 1);
+            mecanum.moveGamepad(y, x, rotation, slowMode ? SLOW_MODE_COEFFICIENT : 1);
             lift.loopIterationTeleOp();
 
             // Report telemetry
