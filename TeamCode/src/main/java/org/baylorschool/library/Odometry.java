@@ -7,7 +7,7 @@ public class Odometry {
     // MILLIMETERS
 
     // FIXME GET THESE VALUES CORRECT
-    static final double ticksPerRevolution = -1; // TODO
+    static final double ticksPerRevolution = -1;
     static final double wheelRadius = 30;
     static final double dPar = 100; // Distance between center of robot and parallel wheels.
     static final double dPer = -70; // Distance between center of robot and perpendicular wheel.
@@ -17,6 +17,8 @@ public class Odometry {
     private DcMotor encoderLeft;
     private DcMotor encoderRight;
     private DcMotor encoderMid;
+
+    private boolean withdrawn = true;
 
     private Servo servoLeft;
     private Servo servoRight;
@@ -28,7 +30,7 @@ public class Odometry {
 
     private boolean firstLoop = true;
 
-    public Odometry(DcMotor encoderLeft, DcMotor encoderRight, DcMotor encoderMid, Servo servoLeft, Servo servoRight, Servo servoMid) {
+    public Odometry(DcMotor encoderLeft, DcMotor encoderRight, DcMotor encoderMid, Servo servoLeft, Servo servoRight, Servo servoMid, boolean withdrawn) {
         this.encoderLeft = encoderLeft;
         this.encoderRight = encoderRight;
         this.encoderMid = encoderMid;
@@ -36,9 +38,17 @@ public class Odometry {
         this.servoLeft = servoLeft;
         this.servoRight = servoRight;
         this.servoMid = servoMid;
+
+        if (withdrawn)
+            this.withdraw();
+        else
+            this.open();
     }
 
     public Location calculateNewLocation(Location currentLocation) {
+        if (withdrawn) // Can't do much if wheels are up. Don't want to throw exception to avoid crash.
+            return currentLocation;
+
         int measureLeft = encoderLeft.getCurrentPosition();
         int measureRight = encoderRight.getCurrentPosition();
         int measureMid = encoderMid.getCurrentPosition();
@@ -73,10 +83,12 @@ public class Odometry {
     }
 
     public void withdraw() {
+        this.withdrawn = true;
 
     }
 
     public void open() {
+        this.withdrawn = false;
 
     }
 
