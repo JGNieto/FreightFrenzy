@@ -84,11 +84,12 @@ public class Odometry {
 
     public void withdraw() {
         this.withdrawn = true;
-
+        servoLeft.setDirection(Servo.Direction.FORWARD);
     }
 
     public void open() {
         this.withdrawn = false;
+        servoLeft.setDirection(Servo.Direction.REVERSE);
 
     }
 
