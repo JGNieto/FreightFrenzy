@@ -84,13 +84,22 @@ public class Odometry {
 
     public void withdraw() {
         this.withdrawn = true;
-        servoLeft.setDirection(Servo.Direction.FORWARD);
+        moveServoNullSafe(servoLeft, Servo.Direction.FORWARD);
+        moveServoNullSafe(servoRight, Servo.Direction.FORWARD);
+        moveServoNullSafe(servoMid, Servo.Direction.FORWARD);
     }
 
     public void open() {
         this.withdrawn = false;
-        servoLeft.setDirection(Servo.Direction.REVERSE);
+        moveServoNullSafe(servoLeft, Servo.Direction.REVERSE);
+        moveServoNullSafe(servoRight, Servo.Direction.REVERSE);
+        moveServoNullSafe(servoMid, Servo.Direction.REVERSE);
+    }
 
+    // Moves servo if it is not null.
+    public void moveServoNullSafe(Servo servo, Servo.Direction direction) {
+        if (servo != null)
+            servo.setDirection(direction);
     }
 
 }

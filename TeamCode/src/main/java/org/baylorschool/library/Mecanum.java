@@ -255,8 +255,12 @@ public class Mecanum {
         return frMotor.isBusy() || flMotor.isBusy() || brMotor.isBusy() || blMotor.isBusy();
     }
 
+    public void moveNoScaling(double y, double x, double rotation) {
+        moveGamepad(-y, -x, rotation, 1);
+    }
+
     public void moveMecanum(double y, double x, double rotation) {
-        moveGamepad(-y, x, rotation, 1);
+        moveGamepad(-y, -x, rotation, autonomousSpeed);
     }
 
     public void stop() {

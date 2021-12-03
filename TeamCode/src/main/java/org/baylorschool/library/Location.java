@@ -15,6 +15,7 @@ public class Location {
     private double roll, pitch, heading;
 
     private double purePursuitRadius = 250;
+    private double purePursuitTurnSpeed = 0;
 
     private boolean backwards = false;
 
@@ -39,6 +40,7 @@ public class Location {
         this.pitch = anotherLocation.pitch;
         this.heading = anotherLocation.heading;
         this.backwards = anotherLocation.backwards;
+        this.purePursuitRadius = anotherLocation.purePursuitRadius;
     }
 
     public Location(double x, double y, double z, double roll, double pitch, double heading) {
@@ -178,7 +180,7 @@ public class Location {
         double deltaX = locationTarget.getX() - locationStart.getX();
         double deltaY = locationTarget.getY() - locationStart.getY();
 
-        return Math.toDegrees(Math.atan2(deltaY, deltaX));
+        return angleBound(Math.toDegrees(Math.atan2(deltaY, deltaX)));
     }
 
     /**
@@ -316,5 +318,28 @@ public class Location {
 
     public void setPurePursuitRadius(double purePursuitRadius) {
         this.purePursuitRadius = purePursuitRadius;
+    }
+
+    public double getPurePursuitTurnSpeed() {
+        return purePursuitTurnSpeed;
+    }
+
+    public void setPurePursuitTurnSpeed(double purePursuitTurnSpeed) {
+        this.purePursuitTurnSpeed = purePursuitTurnSpeed;
+    }
+
+    // Make robot turn while it moves in Pure Pursuit.
+    public Location moveTurn(double angle, double speed) {
+        this.purePursuitTurnSpeed = speed;
+        this.heading = angle;
+
+        return this;
+    }
+
+    public Location moveTurn(double angle) {
+        this.purePursuitTurnSpeed = 1;
+        this.heading = angle;
+
+        return this;
     }
 }

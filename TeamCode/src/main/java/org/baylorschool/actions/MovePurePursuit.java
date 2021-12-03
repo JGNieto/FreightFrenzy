@@ -7,11 +7,10 @@ import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
 import org.baylorschool.library.Path;
-import org.baylorschool.library.Sensors;
 import org.baylorschool.library.math.CircleIntersect;
 import org.baylorschool.library.math.PerpendicularDistance;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class MovePurePursuit {
@@ -35,12 +34,16 @@ public class MovePurePursuit {
                 break;
 
             Location purePursuitTarget = getPurePursuitPoint(path, currentLocation);
-
-            // TODO Different preferred angle and turnSpeed depending on segment.
-            moveTowardPosition(mecanum, currentLocation, purePursuitTarget, 0, 1);
+            if (purePursuitTarget == null) {
+                moveTowardPosition(mecanum, currentLocation, path.getLocations().get(0), 0, 1);
+            } else {
+                moveTowardPositionAngle(mecanum, currentLocation, purePursuitTarget, purePursuitTarget.getHeading(), purePursuitTarget.getPurePursuitTurnSpeed());
+            }
         }
 
-        while (opMode.opModeIsActive() && !Location.angleWithinTolerance(currentLocation, path.getLastLocation(), path.getTolerance())) {
+        while (opMode.opModeIsActive()) {
+            if (Location.angleWithinTolerance(currentLocation, path.getLastLocation(), path.getTolerance()))
+                break;
             mecanum.moveMecanum(0, 0, getAngleTurnPower(currentLocation.getHeading(), path.getLastLocation().getHeading(), 1));
         }
 
@@ -97,9 +100,9 @@ public class MovePurePursuit {
 
     // The purpose of this function is to move the robot towards the desired position, regardless
     // of the path algorithm (i.e. regardless of Pure Pursuit or others).
-    public static void moveTowardPosition(Mecanum mecanum, Location currentLocation, Location target, double preferredAngle, double turnSpeed) {
+    public static void moveTowardPositionAngle(Mecanum mecanum, Location currentLocation, Location target, double targetAngle, double turnSpeed) {
         double distanceToTarget = Location.distance(currentLocation, target);
-        double absoluteAngleDiff = Location.angleLocations(currentLocation, target); // Angle between points
+        double absoluteAngleDiff = Location.angleLocations(currentLocation, target); // Angle between points.
         double relativeAngleDiff = Location.angleBound(absoluteAngleDiff - currentLocation.getHeading()); // Angle for the robot to turn.
 
         double relativeXDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
@@ -108,12 +111,48 @@ public class MovePurePursuit {
         double xPower = relativeXDiff / (Math.abs(relativeXDiff) + Math.abs(relativeYDiff));
         double yPower = relativeYDiff / (Math.abs(relativeXDiff) + Math.abs(relativeYDiff));
 
-        double rotPower = getAngleTurnPower(relativeAngleDiff, preferredAngle, turnSpeed);
+        double rotPower = 0;
 
         // Don't turn when very close.
-        if (distanceToTarget < 50) rotPower = 0;
+        if (distanceToTarget > 50) rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
 
         mecanum.moveMecanum(yPower, xPower, rotPower);
+    }
+
+    public static void moveTowardPositionAngle(Mecanum mecanum, Location currentLocation, Location target, double targetAngle, double turnSpeed, Telemetry telemetry) {
+        double distanceToTarget = Location.distance(currentLocation, target);
+        telemetry.addData("Dist", distanceToTarget);
+        double absoluteAngleDiff = Location.angleLocations(currentLocation, target); // Angle between points.
+        telemetry.addData("Abs Ang", absoluteAngleDiff);
+        double relativeAngleDiff = Location.angleBound(absoluteAngleDiff - currentLocation.getHeading()); // Angle for the robot to turn.
+        telemetry.addData("Rel Ang", relativeAngleDiff);
+
+        double relativeXDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
+        double relativeYDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
+
+        double xPower = relativeXDiff / (Math.abs(relativeXDiff) + Math.abs(relativeYDiff));
+        double yPower = relativeYDiff / (Math.abs(relativeXDiff) + Math.abs(relativeYDiff));
+
+        double rotPower = 0;
+
+        // Don't turn when very close.
+        if (distanceToTarget > 50) rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
+
+        mecanum.moveMecanum(yPower, xPower, rotPower);
+    }
+
+
+    public static void moveTowardPosition(Mecanum mecanum, Location currentLocation, Location target, double preferredAngle, double turnSpeed) {
+        double distanceToTarget = Location.distance(currentLocation, target);
+        double targetAngle; // Angle between points
+
+        // Don't turn when very close.
+        if (distanceToTarget < 50)
+            targetAngle = currentLocation.getHeading();
+        else
+            targetAngle = Location.angleBound(Location.angleLocations(currentLocation, target) + preferredAngle);
+
+        moveTowardPositionAngle(mecanum, currentLocation, target, targetAngle, turnSpeed);
     }
 
     public static double getAngleTurnPower(double currentAngle, double targetAngle, double turnSpeed) {

@@ -28,9 +28,9 @@ public class MainTeleOP extends LinearOpMode {
         telemetry.update();
 
         odometry = new Odometry(null, null, null,
-                hardwareMap.get(Servo.class, "servoLeft"),
-                hardwareMap.get(Servo.class, "servoRight"),
-                hardwareMap.get(Servo.class, "servoMid"),
+                null, // hardwareMap.get(Servo.class, "servoLeft"),
+                null, //hardwareMap.get(Servo.class, "servoRight"),
+                null, //hardwareMap.get(Servo.class, "servoMid"),
                 true
         );
         mecanum = new Mecanum(hardwareMap);
