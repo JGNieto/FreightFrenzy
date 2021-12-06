@@ -12,6 +12,10 @@ public class Odometry {
     static final double dPar = 100; // Distance between center of robot and parallel wheels.
     static final double dPer = -70; // Distance between center of robot and perpendicular wheel.
 
+    // Servo position value for the respective positions.
+    static final double positionWithdrawn = 0;
+    static final double positionOpen = 0.8;
+
     static final double mmPerTick = 2 * Math.PI * wheelRadius / ticksPerRevolution;
 
     private DcMotor encoderLeft;
@@ -84,16 +88,16 @@ public class Odometry {
 
     public void withdraw() {
         this.withdrawn = true;
-        moveServoNullSafe(servoLeft, 1);
-        moveServoNullSafe(servoRight, 1);
-        moveServoNullSafe(servoMid, 1);
+        moveServoNullSafe(servoLeft, positionWithdrawn);
+        moveServoNullSafe(servoRight, positionWithdrawn);
+        moveServoNullSafe(servoMid, positionWithdrawn);
     }
 
     public void open() {
         this.withdrawn = false;
-        moveServoNullSafe(servoLeft, 0);
-        moveServoNullSafe(servoRight, 0);
-        moveServoNullSafe(servoMid, 0);
+        moveServoNullSafe(servoLeft, positionOpen);
+        moveServoNullSafe(servoRight, positionOpen);
+        moveServoNullSafe(servoMid, positionOpen);
     }
 
     // Moves servo if it is not null.
