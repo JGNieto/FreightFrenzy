@@ -22,7 +22,7 @@ public class ServoTest extends LinearOpMode {
                telemetry.addData("Servo Position", "Left");
             }
             if (gamepad1.dpad_right) {
-                servo.setPosition(.5);
+                servo.setPosition(.47);
                 telemetry.addData("Servo Position", "Right");
             }
 
