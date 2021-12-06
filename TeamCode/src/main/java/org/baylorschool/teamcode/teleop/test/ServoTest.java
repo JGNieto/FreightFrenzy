@@ -18,11 +18,11 @@ public class ServoTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad1.dpad_left) {
-               servo.setPosition(1);
+               servo.setPosition(0);
                telemetry.addData("Servo Position", "Left");
             }
             if (gamepad1.dpad_right) {
-                servo.setPosition(0);
+                servo.setPosition(.8);
                 telemetry.addData("Servo Position", "Right");
             }
 
