@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Freight Frenzy selector</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <link rel="stylesheet"
+      href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+  <script>
+    // EVERYTHING MILLIMETERS
+    const fieldLength = 3658;
+    const imgSize = 600;
+    let points = [];
+
+    $(document).ready(function() {
+      $("#field").height(imgSize);
+      $("#field").width(imgSize);
+
+      $("#field").click(function(event) {
+        console.log(this.width)
+        const xImg = event.pageX - this.offsetLeft;
+        const yImg = event.pageY - this.offsetTop;
+
+        let x = fieldLength * (yImg - this.height / 2) / this.height;
+        let y = fieldLength * (xImg - this.width / 2) / this.width;
+
+        x = roundCoordinate(x);
+        y = roundCoordinate(y);
+
+        points.push([x, y]);
+        updateCode();
+      });
+
+      $("#clear-btn").click(function () {
+        points = [];
+        if (!confirm("Are you sure?")) return;
+        updateCode();
+      });
+
+      const pointsRaw = localStorage.getItem("points");
+      if (pointsRaw)
+        points = JSON.parse(pointsRaw);
+      
+      updateCode();
+    });
+
+    function updateCode() {
+      localStorage.setItem("points", JSON.stringify(points));
+      let text = "new Location[] {";
+      for (const [x, y] of points) {
+        text += `\n\tnew Location(${x}, ${y}),`
+      }
+      text += "\n};";
+      $("#code").html(text);
+      hljs.highlightAll();
+    }
+
+    function roundCoordinate(value) {
+      return Math.round(value * 100) / 100;
+    }
+  </script>
+</head>
+<body>
+  <img src="./field-cropped.png" style="margin:0px;" id="field">
+  <br/>
+  <button id="clear-btn">Clear</button>
+  <pre>
+    <code id="code" class="language-java" style="max-width: 300px;"></code>
+  </pre>
+</body>
+</html>

@@ -31,16 +31,16 @@ public class Location {
         this.heading = rotation.thirdAngle;
     }
 
-    // For copying in memory instead of references.
-    public Location(Location anotherLocation) {
-        this.x = anotherLocation.x;
-        this.y = anotherLocation.y;
-        this.z = anotherLocation.z;
-        this.roll = anotherLocation.roll;
-        this.pitch = anotherLocation.pitch;
-        this.heading = anotherLocation.heading;
-        this.backwards = anotherLocation.backwards;
-        this.purePursuitRadius = anotherLocation.purePursuitRadius;
+    // For actually copying in memory instead of references.
+    public Location(Location that) {
+        this.x = that.x;
+        this.y = that.y;
+        this.z = that.z;
+        this.roll = that.roll;
+        this.pitch = that.pitch;
+        this.heading = that.heading;
+        this.backwards = that.backwards;
+        this.purePursuitRadius = that.purePursuitRadius;
     }
 
     public Location(double x, double y, double z, double roll, double pitch, double heading) {
@@ -284,12 +284,14 @@ public class Location {
         return heading;
     }
 
-    public void setX(double x) {
+    public Location setX(double x) {
         this.x = x;
+        return this;
     }
 
-    public void setY(double y) {
+    public Location setY(double y) {
         this.y = y;
+        return this;
     }
 
     public void setZ(double z) {

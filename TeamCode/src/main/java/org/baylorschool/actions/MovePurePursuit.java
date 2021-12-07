@@ -121,12 +121,14 @@ public class MovePurePursuit {
 
     public static void moveTowardPositionAngle(Mecanum mecanum, Location currentLocation, Location target, double targetAngle, double turnSpeed, Telemetry telemetry) {
         double distanceToTarget = Location.distance(currentLocation, target);
-        telemetry.addData("Dist", distanceToTarget);
         double absoluteAngleDiff = Location.angleLocations(currentLocation, target); // Angle between points.
-        telemetry.addData("Abs Ang", absoluteAngleDiff);
         double relativeAngleDiff = Location.angleBound(absoluteAngleDiff - currentLocation.getHeading()); // Angle for the robot to turn.
-        telemetry.addData("Rel Ang", relativeAngleDiff);
 
+        // Original:
+        // double relativeXDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
+        // double relativeYDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
+
+        // Testing
         double relativeXDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
         double relativeYDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
 
@@ -139,6 +141,14 @@ public class MovePurePursuit {
         if (distanceToTarget > 50) rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
 
         mecanum.moveMecanum(yPower, xPower, rotPower);
+
+        telemetry.addData("Dist", distanceToTarget);
+        telemetry.addData("Abs Ang", absoluteAngleDiff);
+        telemetry.addData("Rel Ang", relativeAngleDiff);
+        telemetry.addData("X Diff", relativeXDiff);
+        telemetry.addData("Y Diff", relativeYDiff);
+        telemetry.addData("X Power", xPower);
+        telemetry.addData("Y Power", yPower);
     }
 
 

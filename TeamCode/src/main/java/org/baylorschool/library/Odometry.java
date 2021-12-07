@@ -14,7 +14,7 @@ public class Odometry {
 
     // Servo position value for the respective positions.
     static final double positionWithdrawn = 0;
-    static final double positionOpen = 0.8;
+    static final double positionOpen = 0.45;
 
     static final double mmPerTick = 2 * Math.PI * wheelRadius / ticksPerRevolution;
 
