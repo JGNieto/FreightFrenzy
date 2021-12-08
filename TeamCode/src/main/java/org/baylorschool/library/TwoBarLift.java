@@ -2,6 +2,7 @@ package org.baylorschool.library;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
@@ -29,21 +30,21 @@ public class TwoBarLift {
     public static final double middleLevelTSH = 216 + clearanceHeight;
     public static final double topLevelTSH = 375 + clearanceHeight;
 
-    public static final int bottomLevelTSHEncoder = 139;
-    public static final int middleLevelTSHEncoder = 230;
-    public static final int topLevelTSHEncoder = 330;
+    public static final int bottomLevelTSHEncoder = 169;
+    public static final int middleLevelTSHEncoder = 260;
+    public static final int topLevelTSHEncoder = 360;
 
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = 0.5;
 
     private static final double liftPowerUp = .4;
-    private static final double liftPowerDown = 0;
+    private static final double liftPowerDown = -.2;
     private static final double liftPowerHold = .2;
 
     // Distance away from the CENTER of the Team Shipping Hub to drop on each level.
-    private static final double dropDistanceTop = 50;
-    private static final double dropDistanceMiddle = 50;
-    private static final double dropDistanceBottom = 50;
+    private static final double dropDistanceTop = 561;
+    private static final double dropDistanceMiddle = 684;
+    private static final double dropDistanceBottom = 621;
 
     // Use separate thread to fix cases when the main OpMode thread is in an infinite loop.
     // Ex: waiting for isBusy to be false
@@ -86,16 +87,11 @@ public class TwoBarLift {
 
         twoBarMotor = opMode.hardwareMap.get(DcMotor.class, "twobar");
         rollerMotor = opMode.hardwareMap.get(DcMotor.class, "roller");
-
-        twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        twoBarMotor.setTargetPosition(targetEncoderPosition);
-        twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void startThread() {
+        initialize();
+
         thread = new Thread(() -> {
             try {
                 while (!threadShouldStop) {
@@ -109,12 +105,23 @@ public class TwoBarLift {
         thread.start();
     }
 
+    public void initialize() {
+        twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        twoBarMotor.setTargetPosition(targetEncoderPosition);
+        twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
     public void closeThread() {
         threadShouldStop = true;
         thread.interrupt();
     }
 
     public void loopIteration() {
+        opMode.telemetry.addData("LiftMove", movement.toString());
+        opMode.telemetry.addData("LiftPos", twoBarMotor.getCurrentPosition());
+        opMode.telemetry.addData("LiftTar", twoBarMotor.getTargetPosition());
         if (movement == LiftMovement.UP) {
             wasMoving = true;
             twoBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -168,20 +175,33 @@ public class TwoBarLift {
         setTargetAngle(0);
     }
 
+    public void retract(long delay) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+            } catch (InterruptedException exception) {
+            } finally {
+                // Finally is used to make sure the angle is changed even if, for some unforeseen
+                // reason, the thread is interrupted.
+                setTargetAngle(0);
+            }
+        }).start();
+    }
+
     public void loopIterationTeleOp() {
         if (opMode.gamepad1.dpad_up)
-            setMovement(TwoBarLift.LiftMovement.UP);
+            movement = TwoBarLift.LiftMovement.UP;
         else if (opMode.gamepad1.dpad_down)
-            setMovement(TwoBarLift.LiftMovement.DOWN);
+            movement = TwoBarLift.LiftMovement.DOWN;
         else
-            setMovement(TwoBarLift.LiftMovement.HOLD);
+            movement = TwoBarLift.LiftMovement.HOLD;
 
         if (opMode.gamepad1.left_bumper)
-            setRollerState(TwoBarLift.RollerState.RELEASING);
+            rollerState = TwoBarLift.RollerState.RELEASING;
         else if (opMode.gamepad1.right_bumper)
-            setRollerState(TwoBarLift.RollerState.GRABBING);
+            rollerState = TwoBarLift.RollerState.GRABBING;
         else
-            setRollerState(TwoBarLift.RollerState.STOP);
+            rollerState = TwoBarLift.RollerState.STOP;
 
         loopIteration();
     }

@@ -34,7 +34,12 @@ public class Mecanum {
     private static final double wheelDiameter = 100; // In millimeters
     public static final double ticksPerMm = ticksPerRevolution / (Math.PI * wheelDiameter);
     private static final double autonomousSpeed = 0.3;
-    private static final double fullTurnEncoderCount = 4230; // Encoder ticks to rotate 360 degrees.
+
+    // Encoder ticks to rotate 360 degrees.
+    private static final double fullTurnEncoderCountFL = 2975;
+    private static final double fullTurnEncoderCountFR = 3100;
+    private static final double fullTurnEncoderCountBL = 3525;
+    private static final double fullTurnEncoderCountBR = 3420;
 
     // In mm, the distance between two diagonally opposed wheels.
     // (also twice the distance of any wheel from the center of the robot)
@@ -172,14 +177,24 @@ public class Mecanum {
     public void rotate(double angle) {
         // Distance that each wheel has to travel.
         //double arch = Math.PI * turningDiameter * (angle / 360);
-        int arch = (int) (fullTurnEncoderCount * (angle/360));
+        int archFL = (int) (fullTurnEncoderCountFL * (angle/360));
+        int archFR = (int) (fullTurnEncoderCountFR * (angle/360));
+        int archBL = (int) (fullTurnEncoderCountBL * (angle/360));
+        int archBR = (int) (fullTurnEncoderCountBR * (angle/360));
         setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        setTargetPosition(-arch, frMotor);
-        setTargetPosition(-arch, brMotor);
-        setTargetPosition(arch, flMotor);
-        setTargetPosition(arch, blMotor);
+        if (backwards) {
+            archFL *= -1;
+            archFR *= -1;
+            archBL *= -1;
+            archBR *= -1;
+        }
+
+        setTargetPosition(-archFR, frMotor);
+        setTargetPosition(-archBR, brMotor);
+        setTargetPosition(archFL, flMotor);
+        setTargetPosition(archBL, blMotor);
 
         setPowerAutonomous();
     }
@@ -240,38 +255,84 @@ public class Mecanum {
         return frMotor.isBusy() || flMotor.isBusy() || brMotor.isBusy() || blMotor.isBusy();
     }
 
+    public void moveNoScaling(double y, double x, double rotation) {
+        moveGamepad(-y, -x, rotation, 1);
+    }
+
     public void moveMecanum(double y, double x, double rotation) {
-        moveGamepad(-y, x, rotation, 1);
+        moveGamepad(-y, -x, rotation, autonomousSpeed);
     }
 
     public void stop() {
         setPower(0);
     }
-
     /**
-     * Changes motion of robot
+     * Changes motion of robot. Gluten Free's code.
      * @param y forward / backward power (1 to -1)
      * @param x left / right power (-1 to 1)
      * @param rotation left / right power (-1 to 1)
      */
     public void moveGamepad(double y, double x, double rotation, double motorCoefficient) {
         /*
-            Taken from
-            https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
+        double flPowerRaw = y-rotation+x*1.5;
+        double blPowerRaw = y-rotation-x*1.5;
+        double frPowerRaw = -y-rotation+x*1.5;
+        double brPowerRaw = -y-rotation-x*1.5;
          */
         double rot = -rotation;
-        double Magnitude = abs(x) + abs(rot) + abs(y);
-        Magnitude = (Magnitude > 1) ? Magnitude : 1;
 
-        flMotor.setPower(scale((scaleInput(y) + scaleInput(rot) - scaleInput(x)),
-                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
-        blMotor.setPower(scale((scaleInput(y) + scaleInput(rot) + scaleInput(x)),
-                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
-        frMotor.setPower(scale((scaleInput(y) - scaleInput(rot) + scaleInput(x)),
-                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
-        brMotor.setPower(scale((scaleInput(y) - scaleInput(rot) - scaleInput(x)),
-                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
+        double flPowerRaw = y+rot-x;
+        double blPowerRaw = y+rot+x;
+        double frPowerRaw = y-rot+x;
+        double brPowerRaw = y-rot-x;
+
+        //find the maximum of the powers
+        double maxRawPower = Math.abs(flPowerRaw);
+        if(Math.abs(blPowerRaw) > maxRawPower){ maxRawPower = Math.abs(blPowerRaw);}
+        if(Math.abs(brPowerRaw) > maxRawPower){ maxRawPower = Math.abs(brPowerRaw);}
+        if(Math.abs(frPowerRaw) > maxRawPower){ maxRawPower = Math.abs(frPowerRaw);}
+
+        double scaleDownAmount = 1.0;
+        if(maxRawPower > 1.0){
+            //when max power is multiplied by this ratio, it will be 1.0, and others less
+            scaleDownAmount = 1.0/maxRawPower;
+        }
+
+        flPowerRaw *= scaleDownAmount * motorCoefficient;
+        blPowerRaw *= scaleDownAmount * motorCoefficient;
+        frPowerRaw *= scaleDownAmount * motorCoefficient;
+        brPowerRaw *= scaleDownAmount * motorCoefficient;
+
+        flMotor.setPower(flPowerRaw);
+        blMotor.setPower(blPowerRaw);
+        frMotor.setPower(frPowerRaw);
+        brMotor.setPower(brPowerRaw);
     }
+
+//    /**
+//     * Changes motion of robot
+//     * @param y forward / backward power (1 to -1)
+//     * @param x left / right power (-1 to 1)
+//     * @param rotation left / right power (-1 to 1)
+//     */
+//    public void moveGamepad(double y, double x, double rotation, double motorCoefficient) {
+//        /*
+//            Taken from
+//            https://ftcforum.firstinspires.org/forum/ftc-technology/android-studio/6361-mecanum-wheels-drive-code-example
+//         */
+//        double rot = -rotation;
+//        double Magnitude = abs(x) + abs(rot) + abs(y);
+//        Magnitude = (Magnitude > 1) ? Magnitude : 1;
+//
+//        flMotor.setPower(scale((scaleInput(y) + scaleInput(rot) - scaleInput(x)),
+//                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
+//        blMotor.setPower(scale((scaleInput(y) + scaleInput(rot) + scaleInput(x)),
+//                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
+//        frMotor.setPower(scale((scaleInput(y) - scaleInput(rot) + scaleInput(x)),
+//                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
+//        brMotor.setPower(scale((scaleInput(y) - scaleInput(rot) - scaleInput(x)),
+//                -Magnitude, +Magnitude, -1, +1) * motorCoefficient);
+//    }
 
     public void setBackwards(boolean backwards) {
         if (this.backwards != backwards) {

@@ -1,22 +1,25 @@
-package org.baylorschool.teamcode.teleop.test;
+package org.baylorschool.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Mecanum;
+import org.baylorschool.library.Odometry;
 import org.baylorschool.library.TwoBarLift;
 
-@TeleOp(name="MecanumTestArcade", group="Test")
-public class MecanumTestArcade extends LinearOpMode {
+@TeleOp(name="MainTeleOP", group="Competition")
+public class MainTeleOP extends LinearOpMode {
 
     private Mecanum mecanum;
     private Carousel carousel;
     private TwoBarLift lift;
+    private Odometry odometry;
 
-    private final double SLOWMODE_COEFFICIENT = 0.5;
+    private final double SLOW_MODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
 
     @Override
@@ -24,12 +27,19 @@ public class MecanumTestArcade extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
+        odometry = new Odometry(null, null, null,
+                null, // hardwareMap.get(Servo.class, "servoLeft"),
+                null, //hardwareMap.get(Servo.class, "servoRight"),
+                null, //hardwareMap.get(Servo.class, "servoMid"),
+                true
+        );
         mecanum = new Mecanum(hardwareMap);
         carousel = new Carousel(hardwareMap);
         lift = new TwoBarLift(this);
 
         waitForStart();
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        lift.initialize();
 
         boolean slowMode = false;
 
@@ -54,7 +64,7 @@ public class MecanumTestArcade extends LinearOpMode {
 
 
             // Execute movement
-            mecanum.moveGamepad(y, x, rotation, slowMode ? SLOWMODE_COEFFICIENT : 1);
+            mecanum.moveGamepad(y, x, rotation, slowMode ? SLOW_MODE_COEFFICIENT : 1);
             lift.loopIterationTeleOp();
 
             // Report telemetry
@@ -73,11 +83,11 @@ public class MecanumTestArcade extends LinearOpMode {
 
     private boolean slowModeToggle(Gamepad gamepad, boolean current) {
         // If the users presses one of the buttons, set slow mode to that value, otherwise keep as is.
-        if (gamepad.left_bumper) {
+        if (gamepad.a) {
             return true;
         }
 
-        if (gamepad.right_bumper) {
+        if (gamepad.y) {
             return false;
         }
 

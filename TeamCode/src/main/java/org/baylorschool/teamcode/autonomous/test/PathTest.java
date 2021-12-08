@@ -2,16 +2,11 @@ package org.baylorschool.teamcode.autonomous.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.baylorschool.Places;
 import org.baylorschool.actions.MoveWaypoints;
-import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
-import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.Path;
 import org.baylorschool.library.Sensors;
-import org.baylorschool.library.Vuforia;
 
 import java.util.Arrays;
 

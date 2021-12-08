@@ -20,4 +20,17 @@ public class Globals {
         TOP,
     }
 
+    /**
+     * Config names:
+     * blMotor
+     * brMotor
+     * flMotor
+     * frMotor
+     * roller
+     * twobar
+     * servoLeft
+     * servoRight
+     * servoMiddle
+     */
+
 }

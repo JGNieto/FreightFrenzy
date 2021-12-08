@@ -15,11 +15,11 @@ public class DropDuck {
 
     public static Location dropTheDuck(Carousel.CarouselSide side, Mecanum mecanum, LinearOpMode opMode, Carousel carousel, boolean clearCarousel) {
         mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        mecanum.moveMecanum(0, .23, 0);
+        mecanum.moveNoScaling(0, .23, 0);
         opMode.sleep(2000);
-        mecanum.moveMecanum(-.18, 0, 0);
+        mecanum.moveNoScaling(-.18, 0, 0);
         opMode.sleep(1500);
-        mecanum.moveMecanum(.045, 0, 0);
+        mecanum.moveNoScaling(.045, 0, 0);
         opMode.sleep(150);
         mecanum.stop();
         carousel.dropDuck(side, opMode);

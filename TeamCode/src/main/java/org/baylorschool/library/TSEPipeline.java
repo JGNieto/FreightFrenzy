@@ -27,6 +27,8 @@ public class TSEPipeline extends OpenCvPipeline {
     public static double rectHeightFraction = 0.4;
     public static int rectHeight = (int) (rectHeightFraction * screenHeight) - 1;
 
+    private LinearOpMode opMode;
+
     public static int rectWidth = screenWidth / 3 - 1;
 
     private Rect topRect;
@@ -62,7 +64,8 @@ public class TSEPipeline extends OpenCvPipeline {
         return webcam;
     }
 
-    public TSEPipeline(Places.StartLocation startLocation) {
+    public TSEPipeline(Places.StartLocation startLocation, LinearOpMode opMode) {
+        this.opMode = opMode;
         this.startLocation = startLocation;
 
         this.bottomRect = new Rect(0,screenHeight - rectHeight, rectWidth, rectHeight);
@@ -118,7 +121,10 @@ public class TSEPipeline extends OpenCvPipeline {
 
         determineLargest();
 
-        Imgproc.rectangle(
+        opMode.telemetry.addData("Drop Level", dropLevel.name());
+        opMode.telemetry.update();
+        
+        /*Imgproc.rectangle(
                 input,
                 bottomRect,
                 (dropLevel == Globals.DropLevel.BOTTOM ? new Scalar(0, 255, 0) : new Scalar(0, 0, 255)), 4);
@@ -129,7 +135,7 @@ public class TSEPipeline extends OpenCvPipeline {
         Imgproc.rectangle(
                 input,
                 topRect,
-                (dropLevel == Globals.DropLevel.TOP ? new Scalar(0, 255, 0) : new Scalar(0, 0, 255)), 4);
+                (dropLevel == Globals.DropLevel.TOP ? new Scalar(0, 255, 0) : new Scalar(0, 0, 255)), 4);*/
 
         return onlyGreen;
     }

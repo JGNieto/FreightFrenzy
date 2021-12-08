@@ -14,6 +14,9 @@ public class Location {
     private double x, y, z;
     private double roll, pitch, heading;
 
+    private double purePursuitRadius = 250;
+    private double purePursuitTurnSpeed = 0;
+
     private boolean backwards = false;
 
     public Location(OpenGLMatrix matrix) {
@@ -26,6 +29,18 @@ public class Location {
         this.roll = rotation.firstAngle;
         this.pitch = rotation.secondAngle;
         this.heading = rotation.thirdAngle;
+    }
+
+    // For actually copying in memory instead of references.
+    public Location(Location that) {
+        this.x = that.x;
+        this.y = that.y;
+        this.z = that.z;
+        this.roll = that.roll;
+        this.pitch = that.pitch;
+        this.heading = that.heading;
+        this.backwards = that.backwards;
+        this.purePursuitRadius = that.purePursuitRadius;
     }
 
     public Location(double x, double y, double z, double roll, double pitch, double heading) {
@@ -55,11 +70,16 @@ public class Location {
         this.heading = -1;
     }
 
+    // Check if this location is the same place as another in x and y.
+    public boolean samePlanePlaceAs(Location location) {
+        return this.x == location.x && this.y == location.y;
+    }
+
     /**
      * Adds location to telemetry
      * @param telemetry
      */
-    public void reportTelemtry(Telemetry telemetry) {
+    public void reportTelemetry(Telemetry telemetry) {
         telemetry.addData("Pos (inches)", "{X, Y, Z} = %.1f, %.1f, %.1f",
                 x, y, z);
         telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", roll, pitch, heading);
@@ -80,6 +100,22 @@ public class Location {
                 Math.abs(location1.getPitch() - location2.getPitch()),
                 Math.abs(location1.getHeading() - location2.getHeading())
         );
+    }
+
+    /**
+     * Whether the robot is within the acceptable tolerance
+     * @param currentLocation
+     * @param target
+     * @param tolerance
+     * @return whether it is within tolerance.
+     */
+    public static boolean withinTolerance(Location currentLocation, Location target, Location tolerance) {
+        Location difference = difference(currentLocation, target);
+        return difference.getX() < tolerance.getX() && difference.getY() < tolerance.getY();
+    }
+
+    public static boolean angleWithinTolerance(Location currentLocation, Location target, Location tolerance) {
+        return Math.abs(Location.angleTurn(currentLocation.getHeading(), target.getHeading())) > tolerance.getHeading();
     }
 
     /**
@@ -144,7 +180,7 @@ public class Location {
         double deltaX = locationTarget.getX() - locationStart.getX();
         double deltaY = locationTarget.getY() - locationStart.getY();
 
-        return Math.toDegrees(Math.atan2(deltaY, deltaX));
+        return angleBound(Math.toDegrees(Math.atan2(deltaY, deltaX)));
     }
 
     /**
@@ -166,6 +202,27 @@ public class Location {
             val = (360 - Math.abs(target - current)) % 360;
         }
         return -(val * sign);
+    }
+
+    /**
+     * Adds or subtracts a certain distance based on location and heading.
+     * @param location to which add or subtract to
+     * @param x added or subtracted
+     * @param y added or subtracted
+     * @return modified location
+     */
+    public static Location moveLocation(Location location, double x, double y) {
+        // TODO: Double check this code to ensure it is correct.
+        double angle = Math.toRadians(location.getHeading());
+        double cosAngle = Math.cos(angle);
+        double sinAngle = Math.sin(angle);
+
+        double deltaX = (x * sinAngle) + (y * cosAngle);
+        double deltaY = (x * cosAngle) + (y * sinAngle);
+
+        location.setX(location.getX() + deltaX);
+        location.setY(location.getY() + deltaY);
+        return location;
     }
 
     /**
@@ -198,6 +255,11 @@ public class Location {
         return this;
     }
 
+    public Location forward() {
+        this.backwards = false;
+        return this;
+    }
+
     public double getX() {
         return x;
     }
@@ -222,12 +284,14 @@ public class Location {
         return heading;
     }
 
-    public void setX(double x) {
+    public Location setX(double x) {
         this.x = x;
+        return this;
     }
 
-    public void setY(double y) {
+    public Location setY(double y) {
         this.y = y;
+        return this;
     }
 
     public void setZ(double z) {
@@ -248,5 +312,36 @@ public class Location {
 
     public boolean isBackwards() {
         return backwards;
+    }
+
+    public double getPurePursuitRadius() {
+        return purePursuitRadius;
+    }
+
+    public void setPurePursuitRadius(double purePursuitRadius) {
+        this.purePursuitRadius = purePursuitRadius;
+    }
+
+    public double getPurePursuitTurnSpeed() {
+        return purePursuitTurnSpeed;
+    }
+
+    public void setPurePursuitTurnSpeed(double purePursuitTurnSpeed) {
+        this.purePursuitTurnSpeed = purePursuitTurnSpeed;
+    }
+
+    // Make robot turn while it moves in Pure Pursuit.
+    public Location moveTurn(double angle, double speed) {
+        this.purePursuitTurnSpeed = speed;
+        this.heading = angle;
+
+        return this;
+    }
+
+    public Location moveTurn(double angle) {
+        this.purePursuitTurnSpeed = 1;
+        this.heading = angle;
+
+        return this;
     }
 }

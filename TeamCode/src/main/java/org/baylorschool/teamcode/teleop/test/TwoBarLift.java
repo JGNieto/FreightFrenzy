@@ -1,13 +1,13 @@
 package org.baylorschool.teamcode.teleop.test;
 
 
-import com.qualcomm.hardware.motors.RevRoboticsCoreHexMotor;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @TeleOp(name="TwoBarLift", group="Test")
+@Disabled
 public class TwoBarLift extends LinearOpMode {
 
     private DcMotor roller;
@@ -17,7 +17,7 @@ public class TwoBarLift extends LinearOpMode {
     public void runOpMode() {
 
         roller = hardwareMap.get(DcMotor.class, "roller");
-        twobar1 = hardwareMap.get(DcMotor.class, "twobar1");
+        twobar1 = hardwareMap.get(DcMotor.class, "twobar");
 
         roller.setDirection(DcMotor.Direction.FORWARD);
         twobar1.setDirection(DcMotor.Direction.REVERSE);

@@ -6,10 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
 import org.baylorschool.library.TSEPipeline;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
-import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 // TSE = Team Shipping Element
@@ -21,7 +17,7 @@ public class RecognizeTSE extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT);
+        tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT, this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
 
         telemetry.addLine("Waiting for start");
