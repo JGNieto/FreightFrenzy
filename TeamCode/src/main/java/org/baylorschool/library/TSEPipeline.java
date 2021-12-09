@@ -21,15 +21,7 @@ public class TSEPipeline extends OpenCvPipeline {
     private Places.StartLocation startLocation;
     private Mat onlyGreen;
 
-    public static int screenHeight = 240;
-    public static int screenWidth = 320;
-
-    public static double rectHeightFraction = 0.4;
-    public static int rectHeight = (int) (rectHeightFraction * screenHeight) - 1;
-
     private LinearOpMode opMode;
-
-    public static int rectWidth = screenWidth / 3 - 1;
 
     private Rect topRect;
     private Rect middleRect;
@@ -51,7 +43,7 @@ public class TSEPipeline extends OpenCvPipeline {
             @Override
             public void onOpened() {
                 webcam.setPipeline(pipeline);
-                webcam.startStreaming(TSEPipeline.screenWidth, TSEPipeline.screenHeight, OpenCvCameraRotation.UPRIGHT);
+                webcam.startStreaming(Globals.screenWidth, Globals.screenHeight, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
@@ -68,9 +60,9 @@ public class TSEPipeline extends OpenCvPipeline {
         this.opMode = opMode;
         this.startLocation = startLocation;
 
-        this.bottomRect = new Rect(0,screenHeight - rectHeight, rectWidth, rectHeight);
-        this.middleRect = new Rect(screenWidth / 3,screenHeight - rectHeight, rectWidth, rectHeight);
-        this.topRect = new Rect(2 * screenWidth / 3, screenHeight - rectHeight, rectWidth, rectHeight);
+        this.bottomRect = new Rect(0,Globals.screenHeight - Globals.rectHeight, Globals.rectWidth, Globals.rectHeight);
+        this.middleRect = new Rect(Globals.screenWidth / 3,Globals.screenHeight - Globals.rectHeight, Globals.rectWidth, Globals.rectHeight);
+        this.topRect = new Rect(2 * Globals.screenWidth / 3, Globals.screenHeight - Globals.rectHeight, Globals.rectWidth, Globals.rectHeight);
         /*if (startLocation == Places.StartLocation.BLUE_LEFT) {
 
         } else if (startLocation == Places.StartLocation.BLUE_RIGHT) {
@@ -86,7 +78,7 @@ public class TSEPipeline extends OpenCvPipeline {
 
     private void processChannel(Mat input) {
         Imgproc.cvtColor(input, onlyGreen, Imgproc.COLOR_RGB2HSV);
-        Core.inRange(onlyGreen, new Scalar(36, 60, 60), new Scalar(86, 255, 255), onlyGreen);
+        Core.inRange(onlyGreen, Globals.greenDetectionLowerThreshold, Globals.greenDetectionUpperThreshold, onlyGreen);
     }
 
     // Dirty function to determine largest average of green.

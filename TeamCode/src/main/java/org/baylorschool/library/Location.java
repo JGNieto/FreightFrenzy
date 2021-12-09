@@ -4,6 +4,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGR
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
+import org.baylorschool.Globals;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -14,8 +15,8 @@ public class Location {
     private double x, y, z;
     private double roll, pitch, heading;
 
-    private double purePursuitRadius = 250;
-    private double purePursuitTurnSpeed = 0;
+    private double purePursuitRadius = Globals.defaultPurePursuitRadius;
+    private double purePursuitTurnSpeed = Globals.defaultPurePursuitTurnSpeed;
 
     private boolean backwards = false;
 

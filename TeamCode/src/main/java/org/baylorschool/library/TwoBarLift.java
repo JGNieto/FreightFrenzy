@@ -85,8 +85,8 @@ public class TwoBarLift {
     public TwoBarLift(LinearOpMode opMode) {
         this.opMode = opMode;
 
-        twoBarMotor = opMode.hardwareMap.get(DcMotor.class, "twobar");
-        rollerMotor = opMode.hardwareMap.get(DcMotor.class, "roller");
+        twoBarMotor = opMode.hardwareMap.get(DcMotor.class, Globals.twoBarHw);
+        rollerMotor = opMode.hardwareMap.get(DcMotor.class, Globals.rollerHw);
     }
 
     public void startThread() {
@@ -273,7 +273,7 @@ public class TwoBarLift {
 
     public void releaseItem() {
         setRollerState(RollerState.RELEASING);
-        opMode.sleep(2000);
+        opMode.sleep(Globals.releaseDelay);
         setRollerState(RollerState.STOP);
     }
 

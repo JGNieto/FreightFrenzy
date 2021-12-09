@@ -4,14 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.baylorschool.Globals;
+
 public class Carousel {
     private DcMotor flyWheel;
 
-    // Pneumatic wheel: 0.65
-    // Green wheel: 0.8
-    private final double slowSpeed = 0.65;
-    private final double mediumSpeed = 0.8;
-    private final double fastSpeed = 1;
 
     public enum CarouselSide {
         RED, BLUE
@@ -22,7 +19,7 @@ public class Carousel {
     }
 
     public void move(CarouselSide side) {
-        flyWheel.setPower(side == CarouselSide.BLUE ? fastSpeed : -fastSpeed);
+        flyWheel.setPower(side == CarouselSide.BLUE ? 1 : -1);
     }
 
     /*
@@ -37,8 +34,8 @@ public class Carousel {
     }
      */
     public void dropDuck(CarouselSide side, LinearOpMode opMode) {
-        flyWheel.setPower(side == CarouselSide.BLUE ? .5 : -.5);
-        opMode.sleep(2500);
+        flyWheel.setPower(side == CarouselSide.BLUE ? Globals.carouselSingleSpeed : -Globals.carouselSingleSpeed);
+        opMode.sleep(Globals.carouselSinglePause);
         this.stop();
     }
 

@@ -3,20 +3,9 @@ package org.baylorschool.library;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.baylorschool.Globals;
+
 public class Odometry {
-    // MILLIMETERS
-
-    // FIXME GET THESE VALUES CORRECT
-    static final double ticksPerRevolution = -1;
-    static final double wheelRadius = 30;
-    static final double dPar = 100; // Distance between center of robot and parallel wheels.
-    static final double dPer = -70; // Distance between center of robot and perpendicular wheel.
-
-    // Servo position value for the respective positions.
-    static final double positionWithdrawn = 0;
-    static final double positionOpen = 0.45;
-
-    static final double mmPerTick = 2 * Math.PI * wheelRadius / ticksPerRevolution;
 
     private DcMotor encoderLeft;
     private DcMotor encoderRight;
@@ -71,9 +60,9 @@ public class Odometry {
             return currentLocation;
         }
 
-        double dTheta = mmPerTick * (diffRight - diffLeft) / dPar;
-        double dX = mmPerTick * (diffRight + diffLeft) / 2.0;
-        double dY = mmPerTick * (diffMid - (diffRight - diffLeft) * dPer / dPar);
+        double dTheta = Globals.mmPerTick * (diffRight - diffLeft) / Globals.dPar;
+        double dX = Globals.mmPerTick * (diffRight + diffLeft) / 2.0;
+        double dY = Globals.mmPerTick * (diffMid - (diffRight - diffLeft) * Globals.dPer / Globals.dPar);
 
         double thetaAvg = Math.toRadians(currentLocation.getHeading()) + (dTheta / 2);
         double cosTheta = Math.cos(thetaAvg);
@@ -88,16 +77,16 @@ public class Odometry {
 
     public void withdraw() {
         this.withdrawn = true;
-        moveServoNullSafe(servoLeft, positionWithdrawn);
-        moveServoNullSafe(servoRight, positionWithdrawn);
-        moveServoNullSafe(servoMid, positionWithdrawn);
+        moveServoNullSafe(servoLeft, Globals.positionWithdrawn);
+        moveServoNullSafe(servoRight, Globals.positionWithdrawn);
+        moveServoNullSafe(servoMid, Globals.positionWithdrawn);
     }
 
     public void open() {
         this.withdrawn = false;
-        moveServoNullSafe(servoLeft, positionOpen);
-        moveServoNullSafe(servoRight, positionOpen);
-        moveServoNullSafe(servoMid, positionOpen);
+        moveServoNullSafe(servoLeft, Globals.positionOpen);
+        moveServoNullSafe(servoRight, Globals.positionOpen);
+        moveServoNullSafe(servoMid, Globals.positionOpen);
     }
 
     // Moves servo if it is not null.

@@ -3,6 +3,7 @@ package org.baylorschool.library;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.baylorschool.Globals;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -12,7 +13,6 @@ public class IMU {
 
     private double orientation;
     private double adjustment = 0;
-    private Axis axis = Axis.X;
     private boolean backwards = false;
 
     public enum Axis {
@@ -42,9 +42,9 @@ public class IMU {
     }
 
     private double getAngle(Orientation angles) {
-        if (axis == Axis.X)
+        if (Globals.imuAxis == Axis.X)
             return angles.firstAngle;
-        else if (axis == Axis.Y)
+        else if (Globals.imuAxis == Axis.Y)
             return angles.secondAngle;
         else
             return angles.thirdAngle;

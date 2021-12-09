@@ -1,5 +1,7 @@
 package org.baylorschool.library;
 
+import org.baylorschool.Globals;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,12 +14,12 @@ public class Path {
 
     public Path(List<Location> locations) {
         this.locations = new ArrayList<>(locations);
-        this.tolerance = new Location(50, 50, -1, -1, -1, 3);
+        this.tolerance = Globals.defaultTolerance;
     }
 
     public Path(Location[] locations) {
         this.locations = new ArrayList<>(Arrays.asList(locations));
-        this.tolerance = new Location(50, 50, -1, -1, -1, 3);
+        this.tolerance = Globals.defaultTolerance;
     }
 
     public Path(List<Location> locations, Location tolerance) {
