@@ -28,6 +28,7 @@ public class Globals {
     ///////////////////////////// HARDWARE CONFIG /////////////////////////////
     // Names of the config MUST match these values
     // Motors (in parentheses the preferred port number on the control hub)
+    // If using dead wheel odometry, the wheel that must be connected to each port is listed.
     public static final String flMotorHw = "flMotor"; // (0) - Odometry Encoder Left
     public static final String frMotorHw = "frMotor"; // (1) - Odometry Encoder Right
     public static final String blMotorHw = "blMotor"; // (2) - Odometry Encoder Middle
@@ -36,6 +37,9 @@ public class Globals {
     // Lift
     public static final String rollerHw = "roller"; // (0) Expansion Hub
     public static final String twoBarHw = "twobar"; // (1) Expansion Hub
+
+    // Fly Wheel (for carousel).
+    public static final String flyWheel = "flyWheel";
 
     // Servos (Odometry)
     public static final String servoLeftHw = "servoLeft"; // (0)

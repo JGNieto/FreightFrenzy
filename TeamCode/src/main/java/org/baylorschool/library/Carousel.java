@@ -15,7 +15,7 @@ public class Carousel {
     }
 
     public Carousel(HardwareMap hardwareMap) {
-        this.flyWheel = hardwareMap.get(DcMotor.class, "flyWheel");
+        this.flyWheel = hardwareMap.get(DcMotor.class, Globals.flyWheel);
     }
 
     public void move(CarouselSide side) {
