@@ -34,13 +34,13 @@ public class Globals {
     public static final String brMotorHw = "brMotor"; // (3)
 
     // Lift
-    public static final String rollerHw = "roller";
-    public static final String twoBarHw = "twobar";
+    public static final String rollerHw = "roller"; // (0) Expansion Hub
+    public static final String twoBarHw = "twobar"; // (1) Expansion Hub
 
     // Servos (Odometry)
-    public static final String servoLeftHw = "servoLeft";
-    public static final String servoRightHw = "servoRight";
-    public static final String servoMiddleHw = "servoMiddle";
+    public static final String servoLeftHw = "servoLeft"; // (0)
+    public static final String servoRightHw = "servoRight"; // (1)
+    public static final String servoMiddleHw = "servoMiddle"; // (2)
 
     ///////////////////////////// IMU /////////////////////////////
     // Axis (may change depending on the orientation of the Control Hub)
