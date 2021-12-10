@@ -4,32 +4,39 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.baylorschool.Globals;
+
 @TeleOp(name="ServoTest", group="Test")
 public class ServoTest extends LinearOpMode {
 
-    Servo servo; // CHANGE THIS TO THE SERVO NAME
+    Servo servoLeft;
+    Servo servoRight;
+    Servo servoMiddle;
 
     @Override
     public void runOpMode() {
 
-        servo = hardwareMap.get(Servo.class, "servo"); //CHANGE THIS TO WHATEVER IT IS IN THE HW MAP
+        servoLeft = hardwareMap.get(Servo.class, Globals.servoLeftHw);
+        servoRight = hardwareMap.get(Servo.class, Globals.servoRightHw);
+        servoMiddle = hardwareMap.get(Servo.class, Globals.servoMiddleHw);
         waitForStart();
 
         while (opModeIsActive()) {
 
             if (gamepad1.dpad_left) {
-               servo.setPosition(0);
-               telemetry.addData("Servo Position", "Left");
+                servoLeft.setPosition(Globals.positionWithdrawnLeft);
+                servoRight.setPosition(Globals.positionWithdrawnRight);
+                servoMiddle.setPosition(Globals.positionWithdrawnMiddle);
+                telemetry.addData("Servo Position", "Withdraw");
             }
             if (gamepad1.dpad_right) {
-                servo.setPosition(.47);
-                telemetry.addData("Servo Position", "Right");
+                servoLeft.setPosition(Globals.positionOpenLeft);
+                servoRight.setPosition(Globals.positionOpenRight);
+                servoMiddle.setPosition(Globals.positionOpenMiddle);
+                telemetry.addData("Servo Position", "Open");
             }
 
-
-
-
-
+            telemetry.update();
         }
     }
 }

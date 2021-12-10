@@ -27,11 +27,11 @@ public class Globals {
 
     ///////////////////////////// HARDWARE CONFIG /////////////////////////////
     // Names of the config MUST match these values
-    // Motors
-    public static final String blMotorHw = "blMotor";
-    public static final String brMotorHw = "brMotor";
-    public static final String flMotorHw = "flMotor";
-    public static final String frMotorHw = "frMotor";
+    // Motors (in parentheses the preferred port number on the control hub)
+    public static final String flMotorHw = "flMotor"; // (0) - Odometry Encoder Left
+    public static final String frMotorHw = "frMotor"; // (1) - Odometry Encoder Right
+    public static final String blMotorHw = "blMotor"; // (2) - Odometry Encoder Middle
+    public static final String brMotorHw = "brMotor"; // (3)
 
     // Lift
     public static final String rollerHw = "roller";
