@@ -77,16 +77,16 @@ public class Odometry {
 
     public void withdraw() {
         this.withdrawn = true;
-        moveServoNullSafe(servoLeft, Globals.positionWithdrawn);
-        moveServoNullSafe(servoRight, Globals.positionWithdrawn);
-        moveServoNullSafe(servoMid, Globals.positionWithdrawn);
+        moveServoNullSafe(servoLeft, Globals.positionWithdrawnLeft);
+        moveServoNullSafe(servoRight, Globals.positionWithdrawnRight);
+        moveServoNullSafe(servoMid, Globals.positionWithdrawnMiddle);
     }
 
     public void open() {
         this.withdrawn = false;
-        moveServoNullSafe(servoLeft, Globals.positionOpen);
-        moveServoNullSafe(servoRight, Globals.positionOpen);
-        moveServoNullSafe(servoMid, Globals.positionOpen);
+        moveServoNullSafe(servoLeft, Globals.positionOpenLeft);
+        moveServoNullSafe(servoRight, Globals.positionOpenRight);
+        moveServoNullSafe(servoMid, Globals.positionOpenMiddle);
     }
 
     // Moves servo if it is not null.

@@ -83,8 +83,12 @@ public class Globals {
     public static final double dPer = -70; // Distance between center of robot and perpendicular wheel.
 
     // Servo position value for the respective positions.
-    public static final double positionWithdrawn = 0;
-    public static final double positionOpen = 0.45;
+    public static final double positionWithdrawnRight = 0;
+    public static final double positionWithdrawnLeft = 0;
+    public static final double positionWithdrawnMiddle = 0;
+    public static final double positionOpenRight = 0.45;
+    public static final double positionOpenLeft = 0.45;
+    public static final double positionOpenMiddle = 0.45;
 
     public static final double mmPerTick = 2 * Math.PI * wheelRadius / ticksPerRevolution;
 
