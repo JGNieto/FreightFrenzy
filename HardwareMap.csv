@@ -1,0 +1,39 @@
+Location,Name,Port,Description
+Control Hub,flMotor,0,Front left motor + left odometry
+Control Hub,frMotor,1,Front right motor + right odometry
+Control Hub,blMotor,2,Back left motor + middle odometry
+Control Hub,brMotor,3,Back right motor
+Expansion Hub,roller,0,Roller motor
+Expansion Hub,twobar,1,Twobar motor
+Control Hub,servoLeft,0,Odometry left
+Control Hub,servoRight,1,Odometry right
+Control Hub,servoMiddle,2,Odometry back middle 
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
+,,,
