@@ -3,7 +3,6 @@ package org.baylorschool.teamcode.otherbots;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 @TeleOp(name="CascadingLift", group="Test")
@@ -13,7 +12,7 @@ public class CascadingLift extends LinearOpMode {
     private final double ROTATION_COEFFICIENT = 0.8;
     private final double SLOWMODE_COEFFICIENT = 0.5;
     private final double liftPower = .4;
-    private final double rollerower = .4;
+    private final double rollerPower = .4;
 
     private DcMotor blMotor = null;
     private DcMotor flMotor = null;
@@ -88,7 +87,7 @@ public class CascadingLift extends LinearOpMode {
             frMotor.setPower(rightPower);
             leftCascade.setPower(motorPower);
             rightCascade.setPower(motorPower);
-
+            roller.setPower(gamepad1.x ? rollerPower : 0);
 
             slowMode = slowModeToggle(gamepad1, slowMode);
 
