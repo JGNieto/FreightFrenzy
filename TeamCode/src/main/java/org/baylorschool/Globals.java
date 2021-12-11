@@ -50,6 +50,8 @@ public class Globals {
     public static final String servoRightHw = "servoRight"; // (1)
     public static final String servoMiddleHw = "servoMiddle"; // (2)
 
+    public static final String webcamDeviceName = "Webcam 1";
+
     ///////////////////////////// IMU /////////////////////////////
     // Axis (may change depending on the orientation of the Control Hub)
     public static final IMU.Axis imuAxis = IMU.Axis.X;
@@ -135,6 +137,10 @@ public class Globals {
     public static final double carouselSingleSpeed = 0.5;
     public static final int carouselSinglePause = 2500;
 
-
+    ///////////////////////////// VUFORIA /////////////////////////////
+    // Physical position of the camera.
+    public static final float CAMERA_FORWARD_DISPLACEMENT = 192;
+    public static final float CAMERA_LEFT_DISPLACEMENT = -114;
+    public static final float CAMERA_VERTICAL_DISPLACEMENT = 124;
 
 }

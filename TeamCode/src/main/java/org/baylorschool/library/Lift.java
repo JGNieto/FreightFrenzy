@@ -60,6 +60,7 @@ public abstract class Lift {
 
     /**
      * Initializes the hardware for operation.
+     * MUST BE IDEMPOTENT.
      */
     public abstract void initialize();
 
