@@ -1,15 +1,10 @@
-package org.baylorschool.library;
+package org.baylorschool.library.lift;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.baylorschool.Globals;
-import org.baylorschool.Places;
-import org.baylorschool.library.math.CircleIntersect;
-
-import java.util.List;
+import org.baylorschool.library.Location;
 
 public class TwoBarLift extends Lift {
     private static final double ticksPerRevolution = 751.8;
@@ -34,11 +29,11 @@ public class TwoBarLift extends Lift {
     private static final double dropDistanceMiddle = 684;
     private static final double dropDistanceBottom = 621;
 
-    private static int releaseDelay = 2000;
+    private static final int releaseDelay = 2000;
 
     private int targetEncoderPosition = 0;
-    private DcMotor twoBarMotor;
-    private DcMotor rollerMotor;
+    private final DcMotor twoBarMotor;
+    private final DcMotor rollerMotor;
 
     // Keep track of whether we just stopped moving.
     private boolean wasMoving;
@@ -50,6 +45,7 @@ public class TwoBarLift extends Lift {
         rollerMotor = opMode.hardwareMap.get(DcMotor.class, Globals.rollerHw);
     }
 
+    @Override
     public void initialize() {
         twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -58,6 +54,7 @@ public class TwoBarLift extends Lift {
         twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    @Override
     public void loopIteration() {
         opMode.telemetry.addData("LiftMove", movement.toString());
         opMode.telemetry.addData("LiftPos", twoBarMotor.getCurrentPosition());
@@ -99,14 +96,17 @@ public class TwoBarLift extends Lift {
             rollerMotor.setPower(0);
     }
 
+    @Override
     public void retract() {
         this.targetEncoderPosition = 0;
     }
 
+    @Override
     public Location getScoringLocation(Location currentLocation, Hub hub, Globals.DropLevel dropLevel) {
         return super.getScoringLocation(currentLocation, hub, dropLevel, dropDistanceTop, dropDistanceMiddle, dropDistanceBottom);
     }
 
+    @Override
     public void moveToDropLevel(Globals.DropLevel dropLevel) {
         if (dropLevel == Globals.DropLevel.TOP)
             targetEncoderPosition = topLevelTSHEncoder;
@@ -118,6 +118,7 @@ public class TwoBarLift extends Lift {
             retract();
     }
 
+    @Override
     public void releaseItem() {
         this.rollerState = RollerState.RELEASING;
         opMode.sleep(releaseDelay);

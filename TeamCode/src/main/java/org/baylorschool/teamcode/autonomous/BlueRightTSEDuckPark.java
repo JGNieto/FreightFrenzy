@@ -11,7 +11,7 @@ import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Sensors;
 import org.baylorschool.library.TSEPipeline;
-import org.baylorschool.library.TwoBarLift;
+import org.baylorschool.library.lift.TwoBarLift;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.Arrays;

@@ -4,14 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.Carousel;
-import org.baylorschool.library.Lift;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
-import org.baylorschool.library.TwoBarLift;
+import org.baylorschool.library.lift.Lift;
 
 @TeleOp(name="MainTeleOP", group="Competition")
 public class MainTeleOP extends LinearOpMode {

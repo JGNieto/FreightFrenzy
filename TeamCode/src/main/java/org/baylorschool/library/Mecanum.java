@@ -1,8 +1,5 @@
 package org.baylorschool.library;
 
-import static com.qualcomm.robotcore.util.Range.scale;
-import static java.lang.Math.abs;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
