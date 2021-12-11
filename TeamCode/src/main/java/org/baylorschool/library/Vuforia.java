@@ -30,12 +30,7 @@ public class Vuforia {
     private static final float halfTile = 12 * mmPerInch;
     private static final float oneAndHalfTile = 36 * mmPerInch;
 
-    private static final String webcamDeviceName = "Webcam 1";
-
     // Physical webcam location
-    private static final float CAMERA_FORWARD_DISPLACEMENT = 192;
-    private static final float CAMERA_LEFT_DISPLACEMENT = -114;
-    private static final float CAMERA_VERTICAL_DISPLACEMENT = 124;
 
     private List<VuforiaTrackable> allTrackables = new ArrayList<>();
     private OpenGLMatrix cameraLocationOnRobot = null;
@@ -84,7 +79,7 @@ public class Vuforia {
     }
 
     public void initializeParamers(boolean streamFeed) {
-        webcamName = hardwareMap.get(WebcamName.class, webcamDeviceName);
+        webcamName = hardwareMap.get(WebcamName.class, Globals.webcamDeviceName);
         VuforiaLocalizer.Parameters parameters;
         if (streamFeed) {
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
@@ -110,9 +105,9 @@ public class Vuforia {
 
         cameraLocationOnRobot = OpenGLMatrix
                 .translation(
-                        CAMERA_FORWARD_DISPLACEMENT,
-                        CAMERA_LEFT_DISPLACEMENT,
-                        CAMERA_VERTICAL_DISPLACEMENT)
+                        Globals.CAMERA_FORWARD_DISPLACEMENT,
+                        Globals.CAMERA_LEFT_DISPLACEMENT,
+                        Globals.CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(
                         EXTRINSIC,
                         XZY,

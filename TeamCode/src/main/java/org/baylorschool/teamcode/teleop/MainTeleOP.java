@@ -6,7 +6,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.baylorschool.Globals;
 import org.baylorschool.library.Carousel;
+import org.baylorschool.library.Lift;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
 import org.baylorschool.library.TwoBarLift;
@@ -16,7 +18,7 @@ public class MainTeleOP extends LinearOpMode {
 
     private Mecanum mecanum;
     private Carousel carousel;
-    private TwoBarLift lift;
+    private Lift lift;
     private Odometry odometry;
 
     private final double SLOW_MODE_COEFFICIENT = 0.5;
@@ -35,7 +37,7 @@ public class MainTeleOP extends LinearOpMode {
         );
         mecanum = new Mecanum(hardwareMap);
         carousel = new Carousel(hardwareMap);
-        lift = new TwoBarLift(this);
+        lift = Globals.createNewLift(this);
 
         waitForStart();
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

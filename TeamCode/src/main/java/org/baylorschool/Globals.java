@@ -1,8 +1,12 @@
 package org.baylorschool;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import org.baylorschool.library.IMU;
+import org.baylorschool.library.Lift;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
+import org.baylorschool.library.TwoBarLift;
 import org.opencv.core.Scalar;
 
 public class Globals {
@@ -45,6 +49,8 @@ public class Globals {
     public static final String servoLeftHw = "servoLeft"; // (0)
     public static final String servoRightHw = "servoRight"; // (1)
     public static final String servoMiddleHw = "servoMiddle"; // (2)
+
+    public static final String webcamDeviceName = "Webcam 1";
 
     ///////////////////////////// IMU /////////////////////////////
     // Axis (may change depending on the orientation of the Control Hub)
@@ -111,8 +117,12 @@ public class Globals {
     public static Scalar greenDetectionLowerThreshold = new Scalar(36, 60, 60);
     public static Scalar greenDetectionUpperThreshold = new Scalar(86, 255, 255);
 
-    ///////////////////////////// TWO BAR LIFT /////////////////////////////
-    public static int releaseDelay = 2000; // Time (ms) during which the roller is active during release.
+    ///////////////////////////// LIFT /////////////////////////////
+    // The following method is called every time a lift is created.
+    // If using, say, a cascade lift, change TwoBarLift to CascadeLift.
+    public static Lift createNewLift(LinearOpMode opMode) {
+        return new TwoBarLift(opMode);
+    }
 
     ///////////////////////////// CAROUSEL SPEEDS /////////////////////////////
     // Speeds used during the autonomous three-part movement. First, slowSpeed is run, then medium
@@ -127,6 +137,10 @@ public class Globals {
     public static final double carouselSingleSpeed = 0.5;
     public static final int carouselSinglePause = 2500;
 
-
+    ///////////////////////////// VUFORIA /////////////////////////////
+    // Physical position of the camera.
+    public static final float CAMERA_FORWARD_DISPLACEMENT = 192;
+    public static final float CAMERA_LEFT_DISPLACEMENT = -114;
+    public static final float CAMERA_VERTICAL_DISPLACEMENT = 124;
 
 }
