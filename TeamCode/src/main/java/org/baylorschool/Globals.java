@@ -1,8 +1,12 @@
 package org.baylorschool;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import org.baylorschool.library.IMU;
+import org.baylorschool.library.Lift;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
+import org.baylorschool.library.TwoBarLift;
 import org.opencv.core.Scalar;
 
 public class Globals {
@@ -111,8 +115,12 @@ public class Globals {
     public static Scalar greenDetectionLowerThreshold = new Scalar(36, 60, 60);
     public static Scalar greenDetectionUpperThreshold = new Scalar(86, 255, 255);
 
-    ///////////////////////////// TWO BAR LIFT /////////////////////////////
-    public static int releaseDelay = 2000; // Time (ms) during which the roller is active during release.
+    ///////////////////////////// LIFT /////////////////////////////
+    // The following method is called every time a lift is created.
+    // If using, say, a cascade lift, change TwoBarLift to CascadeLift.
+    public static Lift createNewLift(LinearOpMode opMode) {
+        return new TwoBarLift(opMode);
+    }
 
     ///////////////////////////// CAROUSEL SPEEDS /////////////////////////////
     // Speeds used during the autonomous three-part movement. First, slowSpeed is run, then medium
