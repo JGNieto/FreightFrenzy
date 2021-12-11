@@ -87,7 +87,7 @@ public class CascadingLift extends LinearOpMode {
             frMotor.setPower(rightPower);
             leftCascade.setPower(motorPower);
             rightCascade.setPower(motorPower);
-            roller.setPower(gamepad1.x ? rollerPower : 0);
+            roller.setPower(gamepad1.dpad_up ? rollerPower : 0);
 
             slowMode = slowModeToggle(gamepad1, slowMode);
 
