@@ -11,9 +11,9 @@ import org.baylorschool.Globals;
 public class CascadingLift extends LinearOpMode {
 
     private org.baylorschool.library.Mecanum mecanum;
-    private final double ROTATION_COEFFICIENT = 0.8;
-    private final double SLOWMODE_COEFFICIENT = 0.5;
-    private final double liftPower = .4;
+    private final double ROTATION_COEFFICIENT = 1;
+    private final double SLOWMODE_COEFFICIENT = 0.4;
+    private final double liftPower = 0.4;
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = 0.5;
 
@@ -57,7 +57,7 @@ public class CascadingLift extends LinearOpMode {
         rightCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         boolean slowMode = false;
 
-        final double slowModeCoefficient = 0.6;
+        final double slowModeCoefficient = 0.5;
 
         while (opModeIsActive()) {
             double y = gamepad1.left_stick_y;
