@@ -31,13 +31,9 @@ public class LimitSwitch extends LinearOpMode {
             } else {
                 roller.setPower(0);
             }
+            telemetry.update();
+
         }
-
-
-
-
-
-
     }
 }
 
