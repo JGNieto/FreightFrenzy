@@ -1,5 +1,6 @@
 package org.baylorschool.library;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -7,10 +8,10 @@ import org.baylorschool.Globals;
 
 public class Mecanum {
 
-    private DcMotor frMotor;
-    private DcMotor brMotor;
-    private DcMotor flMotor;
-    private DcMotor blMotor;
+    private final DcMotor frMotor;
+    private final DcMotor brMotor;
+    private final DcMotor flMotor;
+    private final DcMotor blMotor;
 
     private double latestDeltaFr = 0;
     private double latestDeltaFl = 0;
@@ -101,7 +102,7 @@ public class Mecanum {
 
     /**
      * Sets the run mode of all motors
-     * @param mode
+     * @param mode such as encoders, etc.
      */
     public void setMode(DcMotor.RunMode mode) {
         if (mode == DcMotor.RunMode.STOP_AND_RESET_ENCODER) {
@@ -128,7 +129,7 @@ public class Mecanum {
     /**
      * Position to which wheels with encoders will move
      * @param targetPosition in ticks
-     * @param dcMotor
+     * @param dcMotor to change
      */
     public void setTargetPosition(int targetPosition, DcMotor dcMotor) {
         dcMotor.setTargetPosition(-(targetPosition + dcMotor.getCurrentPosition()));
@@ -148,7 +149,7 @@ public class Mecanum {
     /**
      * Position to which wheels with encoders will move
      * @param targetDistance in millimeters
-     * @param dcMotor
+     * @param dcMotor to change
      */
     public void setTargetDistance(double targetDistance, DcMotor dcMotor) {
         setTargetPosition(Math.round((float) (targetDistance * Globals.ticksPerMm)), dcMotor);
@@ -336,14 +337,14 @@ public class Mecanum {
         brMotor.setZeroPowerBehavior(zeroPowerBehavior);
     }
 
-    private double scaleInput(double x) {
-        /*
-        Squaring allows for finer adjustments when lower power.
-        Disabled for now as it causes slower movement during diagonal (ask Javier).
-        return x * x * (x > 0 ? 1 : -1);
-         */
-        return x;
-    }
+//    private double scaleInput(double x) {
+//        /*
+//        Squaring allows for finer adjustments when lower power.
+//        Disabled for now as it causes slower movement during diagonal (ask Javier).
+//        return x * x * (x > 0 ? 1 : -1);
+//         */
+//        return x;
+//    }
 
     public DcMotor getFrMotor() {
         return frMotor;
