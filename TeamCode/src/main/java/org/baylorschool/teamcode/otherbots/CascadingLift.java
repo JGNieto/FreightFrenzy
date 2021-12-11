@@ -73,10 +73,6 @@ public class CascadingLift extends LinearOpMode {
                 rightPower *= slowModeCoefficient;
             }
 
-            if (gamepad1.left_bumper) {
-                leftPower *= slowModeCoefficient;
-                rightPower *= slowModeCoefficient;
-            }
             if (gamepad1.dpad_left) {
                 roller.setPower(rollerGrabPower);
             } else if (gamepad1.dpad_right) {
