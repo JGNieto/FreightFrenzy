@@ -41,6 +41,7 @@ public class Globals {
     // Lift
     public static final String rollerHw = "roller"; // (0) Expansion Hub
     public static final String twoBarHw = "twobar"; // (1) Expansion Hub
+    public static final String rollerSwitch = "rollerSwitch"; // (Digital 0) Expansion Hub
 
     // Fly Wheel (for carousel).
     public static final String flyWheel = "flyWheel";
@@ -50,7 +51,7 @@ public class Globals {
     public static final String servoRightHw = "servoRight"; // (1)
     public static final String servoMiddleHw = "servoMiddle"; // (2)
 
-    public static final String webcamDeviceName = "Webcam 1";
+    public static final String webcamDeviceName = "Webcam 1"; // Generally don't need to change.
 
     ///////////////////////////// IMU /////////////////////////////
     // Axis (may change depending on the orientation of the Control Hub)
