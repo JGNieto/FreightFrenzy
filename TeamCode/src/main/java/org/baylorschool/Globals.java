@@ -3,10 +3,10 @@ package org.baylorschool;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.library.IMU;
-import org.baylorschool.library.Lift;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.TwoBarLift;
+import org.baylorschool.library.lift.Lift;
+import org.baylorschool.library.lift.TwoBarLift;
 import org.opencv.core.Scalar;
 
 public class Globals {

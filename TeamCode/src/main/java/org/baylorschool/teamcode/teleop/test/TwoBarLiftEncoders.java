@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.baylorschool.library.TwoBarLift;
+import org.baylorschool.library.lift.TwoBarLift;
 
 @TeleOp(name="TwoBarLiftEncoders", group="Test")
 @Disabled

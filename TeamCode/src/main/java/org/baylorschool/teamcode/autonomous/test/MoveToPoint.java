@@ -9,7 +9,6 @@ import org.baylorschool.actions.MovePurePursuit;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.Path;
 
 @Autonomous(name = "MoveToPointTest", group = "Test")
 public class MoveToPoint extends LinearOpMode {

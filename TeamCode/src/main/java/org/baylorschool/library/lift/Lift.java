@@ -1,9 +1,10 @@
-package org.baylorschool.library;
+package org.baylorschool.library.lift;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
+import org.baylorschool.library.Location;
 import org.baylorschool.library.math.CircleIntersect;
 
 import java.util.List;
@@ -44,7 +45,7 @@ public abstract class Lift {
 
     /**
      * Instructs the lift to move to the drop level. Does not interrupt thread.
-     * @param dropLevel
+     * @param dropLevel in the Shipping Hub (use BOTTOM for shared Hub).
      */
     public abstract void moveToDropLevel(Globals.DropLevel dropLevel);
 

@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.baylorschool.Globals;
 
 public class Carousel {
-    private DcMotor flyWheel;
+    private final DcMotor flyWheel;
 
 
     public enum CarouselSide {
