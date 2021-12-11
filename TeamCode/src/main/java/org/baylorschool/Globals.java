@@ -92,7 +92,7 @@ public class Globals {
     public static final double dPar = 100; // Distance between center of robot and parallel wheels.
     public static final double dPer = -70; // Distance between center of robot and perpendicular wheel.
 
-    // Servo position value for the respective positions.
+    // Servo position value for the respective servos and positions.
     public static final double positionWithdrawnRight = 0;
     public static final double positionWithdrawnLeft = 0;
     public static final double positionWithdrawnMiddle = 0;
