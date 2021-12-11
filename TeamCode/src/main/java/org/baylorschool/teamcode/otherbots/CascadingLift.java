@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.baylorschool.Globals;
+
 @TeleOp(name="CascadingLift", group="Test")
 public class CascadingLift extends LinearOpMode {
 
@@ -12,7 +14,8 @@ public class CascadingLift extends LinearOpMode {
     private final double ROTATION_COEFFICIENT = 0.8;
     private final double SLOWMODE_COEFFICIENT = 0.5;
     private final double liftPower = .4;
-    private final double rollerPower = .4;
+    private static final double rollerGrabPower = -1;
+    private static final double rollerReleasePower = 0.5;
 
     private DcMotor blMotor = null;
     private DcMotor flMotor = null;
@@ -33,7 +36,7 @@ public class CascadingLift extends LinearOpMode {
         flMotor = hardwareMap.get(DcMotor.class, "flMotor");
         brMotor = hardwareMap.get(DcMotor.class, "brMotor");
         frMotor = hardwareMap.get(DcMotor.class, "frMotor");
-        roller = hardwareMap.get(DcMotor.class, "grabber");
+        roller =  hardwareMap.get(DcMotor.class, Globals.rollerHw);
         leftCascade = hardwareMap.get(DcMotor.class, "leftCascade");
         rightCascade = hardwareMap.get(DcMotor.class, "rightCascade");
 
@@ -74,12 +77,20 @@ public class CascadingLift extends LinearOpMode {
                 leftPower *= slowModeCoefficient;
                 rightPower *= slowModeCoefficient;
             }
-
+            if (gamepad1.dpad_left) {
+                roller.setPower(rollerGrabPower);
+            } else if (gamepad1.dpad_right) {
+                roller.setPower(rollerReleasePower);
+            } else {
+                roller.setPower(0);
+            }
             if (gamepad1.y)
                 motorPower += liftPower;
 
             if (gamepad1.a)
                 motorPower -= liftPower;
+
+
 
             blMotor.setPower(leftPower);
             flMotor.setPower(leftPower);
@@ -87,7 +98,7 @@ public class CascadingLift extends LinearOpMode {
             frMotor.setPower(rightPower);
             leftCascade.setPower(motorPower);
             rightCascade.setPower(motorPower);
-            roller.setPower(gamepad1.dpad_up ? rollerPower : 0);
+
 
             slowMode = slowModeToggle(gamepad1, slowMode);
 
