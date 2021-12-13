@@ -42,9 +42,9 @@ public class Odometry {
         if (withdrawn) // Can't do much if wheels are up. Don't want to throw exception to avoid crash.
             return currentLocation;
 
-        int measureLeft = encoderLeft.getCurrentPosition();
-        int measureRight = encoderRight.getCurrentPosition();
-        int measureMid = encoderMid.getCurrentPosition();
+        int measureLeft = encoderLeft.getCurrentPosition() * Globals.leftOdometryCoefficient;
+        int measureRight = encoderRight.getCurrentPosition() * Globals.rightOdometryCoefficient;
+        int measureMid = encoderMid.getCurrentPosition() * Globals.middleOdometryCoefficient;
 
         int diffLeft = measureLeft - previousLeft;
         int diffRight = measureRight - previousRight;
@@ -95,4 +95,15 @@ public class Odometry {
             servo.setPosition(position);
     }
 
+    public int getPreviousLeft() {
+        return previousLeft;
+    }
+
+    public int getPreviousRight() {
+        return previousRight;
+    }
+
+    public int getPreviousMid() {
+        return previousMid;
+    }
 }

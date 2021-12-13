@@ -88,20 +88,26 @@ public class Globals {
 
     ///////////////////////////// ODOMETRY /////////////////////////////
     // FIXME: GET THESE VALUES CORRECT
-    public static final double odometryTicksPerRevolution = -1;
-    public static final double wheelRadius = 30;
-    public static final double dPar = 100; // Distance between center of robot and parallel wheels.
-    public static final double dPer = -70; // Distance between center of robot and perpendicular wheel.
+    public static final double odometryTicksPerRevolution = 1440; // FIXME THIS IS WRONG
+    public static final double wheelRadius = 23.5;
+    public static final double dPar = 150.5; // Distance between center of robot and parallel wheels.
+    public static final double dPer = -188; // Distance between center of robot and perpendicular wheel.
+
+    // Encoder readings for the odometry will be multiplied times the following coefficients.
+    // They are used to change the sign of the value.
+    public static final int leftOdometryCoefficient = -1;
+    public static final int rightOdometryCoefficient = -1;
+    public static final int middleOdometryCoefficient = 1;
 
     // Servo position value for the respective servos and positions.
     public static final double positionWithdrawnRight = 0;
-    public static final double positionWithdrawnLeft = 0;
+    public static final double positionWithdrawnLeft = 1;
     public static final double positionWithdrawnMiddle = 0;
-    public static final double positionOpenRight = 0.45;
+    public static final double positionOpenRight = 0.5;
     public static final double positionOpenLeft = 0.3;
-    public static final double positionOpenMiddle = 0.45;
+    public static final double positionOpenMiddle = 0.3;
 
-    public static final double mmPerTick = 2 * Math.PI * wheelRadius / ticksPerRevolution;
+    public static final double mmPerTick = 2 * Math.PI * wheelRadius / odometryTicksPerRevolution;
 
     ///////////////////////////// PATH /////////////////////////////
     // Default tolerance (for some movements, distance within which the robot must be of the target
