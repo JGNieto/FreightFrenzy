@@ -13,7 +13,7 @@ public class CascadingLift extends LinearOpMode {
     private org.baylorschool.library.Mecanum mecanum;
     private final double ROTATION_COEFFICIENT = 1;
     private final double SLOWMODE_COEFFICIENT = 0.4;
-    private final double liftPower = 0.5;
+    private final double liftPower = 0.7;
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = 0.5;
 
