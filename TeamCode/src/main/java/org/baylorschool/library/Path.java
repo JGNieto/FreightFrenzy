@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Path {
+    // The purpose of this class is to encapsulate the data of a path with multiple locations and provide some utils.
 
     private ArrayList<Location> locations;
     private Location tolerance;

@@ -1,6 +1,5 @@
 package org.baylorschool.library;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -240,6 +239,12 @@ public class Mecanum {
         return frMotor.isBusy() || flMotor.isBusy() || brMotor.isBusy() || blMotor.isBusy();
     }
 
+    /**
+     * Move the robot without caring about the autonomousSpeed global.
+     * @param y Y component of movement (forward+, backward-).
+     * @param x X component of movement (right+, left-).
+     * @param rotation Rotation component of the robot (positive is CW).
+     */
     public void moveNoScaling(double y, double x, double rotation) {
         moveGamepad(-y, -x, rotation, 1);
     }

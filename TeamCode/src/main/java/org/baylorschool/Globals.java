@@ -88,8 +88,8 @@ public class Globals {
 
     ///////////////////////////// ODOMETRY /////////////////////////////
     // FIXME: GET THESE VALUES CORRECT
-    public static final double odometryTicksPerRevolution = 1440; // FIXME THIS IS WRONG
-    public static final double wheelRadius = 23.5;
+    public static final double odometryTicksPerRevolution = 1440; // Javier originally measured this roughly and, surprisingly, correctly (we now know this is the exact number now because the part number is E8T-360 etc. and 360 * 4 = 1440).
+    public static final double wheelRadius = 37.3 / 2;
     public static final double dPar = 150.5; // Distance between center of robot and parallel wheels.
     public static final double dPer = -188; // Distance between center of robot and perpendicular wheel.
 

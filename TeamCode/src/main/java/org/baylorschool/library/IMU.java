@@ -46,8 +46,9 @@ public class IMU {
             return angles.firstAngle;
         else if (Globals.imuAxis == Axis.Y)
             return angles.secondAngle;
-        else
+        else if (Globals.imuAxis == Axis.Z)
             return angles.thirdAngle;
+        else throw new IllegalArgumentException("Globals.imuAxis must be X, Y or Z.");
     }
 
     public BNO055IMU getImu() {

@@ -50,7 +50,7 @@ public abstract class Lift {
     public abstract void moveToDropLevel(Globals.DropLevel dropLevel);
 
     /**
-     * Releases the item (interrupts thread from where it is called).
+     * Releases the item (interrupts opMode thread).
      */
     public abstract void releaseItem();
 
