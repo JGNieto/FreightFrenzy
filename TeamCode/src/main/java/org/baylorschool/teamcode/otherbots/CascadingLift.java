@@ -11,9 +11,9 @@ import org.baylorschool.Globals;
 public class CascadingLift extends LinearOpMode {
 
     private org.baylorschool.library.Mecanum mecanum;
-    private final double ROTATION_COEFFICIENT = 0.8;
-    private final double SLOWMODE_COEFFICIENT = 0.5;
-    private final double liftPower = .4;
+    private final double ROTATION_COEFFICIENT = 1;
+    private final double SLOWMODE_COEFFICIENT = 0.4;
+    private final double liftPower = 0.7;
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = 0.5;
 
@@ -57,7 +57,7 @@ public class CascadingLift extends LinearOpMode {
         rightCascade.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         boolean slowMode = false;
 
-        final double slowModeCoefficient = 0.6;
+        final double slowModeCoefficient = 0.4;
 
         while (opModeIsActive()) {
             double y = gamepad1.left_stick_y;
@@ -73,10 +73,6 @@ public class CascadingLift extends LinearOpMode {
                 rightPower *= slowModeCoefficient;
             }
 
-            if (gamepad1.left_bumper) {
-                leftPower *= slowModeCoefficient;
-                rightPower *= slowModeCoefficient;
-            }
             if (gamepad1.dpad_left) {
                 roller.setPower(rollerGrabPower);
             } else if (gamepad1.dpad_right) {
@@ -84,13 +80,12 @@ public class CascadingLift extends LinearOpMode {
             } else {
                 roller.setPower(0);
             }
+
             if (gamepad1.y)
                 motorPower += liftPower;
 
             if (gamepad1.a)
                 motorPower -= liftPower;
-
-
 
             blMotor.setPower(leftPower);
             flMotor.setPower(leftPower);
@@ -104,6 +99,7 @@ public class CascadingLift extends LinearOpMode {
 
             if (gamepad1.right_stick_button)
                 rotation = gamepad1.right_stick_x;
+
 
 
 
