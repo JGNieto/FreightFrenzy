@@ -15,6 +15,8 @@ public class IMU {
     private double adjustment = 0;
     private boolean backwards = false;
 
+    private Orientation allAngles;
+
     public enum Axis {
         X, Y, Z
     }
@@ -36,19 +38,18 @@ public class IMU {
     }
 
     public void updateOrientation() {
-        orientation = getAngle(
-                imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
-        );
+        allAngles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        orientation = getAngle(allAngles);
     }
 
     private double getAngle(Orientation angles) {
-        if (Globals.imuAxis == Axis.X)
+        if (Globals.imuRotationAxis == Axis.X)
             return angles.firstAngle;
-        else if (Globals.imuAxis == Axis.Y)
+        else if (Globals.imuRotationAxis == Axis.Y)
             return angles.secondAngle;
-        else if (Globals.imuAxis == Axis.Z)
+        else if (Globals.imuRotationAxis == Axis.Z)
             return angles.thirdAngle;
-        else throw new IllegalArgumentException("Globals.imuAxis must be X, Y or Z.");
+        else throw new IllegalArgumentException("Globals.imuRotationAxis must be X, Y or Z.");
     }
 
     public BNO055IMU getImu() {
@@ -57,6 +58,16 @@ public class IMU {
 
     public double getHeading() {
         return Location.angleBound(orientation + adjustment + (backwards ? 180 : 0));
+    }
+
+    public double getPitch() {
+        if (Globals.imuPitchAxis == Axis.X)
+            return allAngles.firstAngle;
+        else if (Globals.imuPitchAxis == Axis.Y)
+            return allAngles.secondAngle;
+        else if (Globals.imuPitchAxis == Axis.Z)
+            return allAngles.thirdAngle;
+        else throw new IllegalArgumentException("Globals.imuPitchAxis must be X, Y or Z.");
     }
 
     public boolean isBackwards() {

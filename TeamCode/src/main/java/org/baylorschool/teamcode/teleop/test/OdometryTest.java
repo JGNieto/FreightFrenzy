@@ -42,6 +42,8 @@ public class OdometryTest extends LinearOpMode {
         lift = Globals.createNewLift(this);
 
         waitForStart();
+        odometry.reset();
+        odometry.calculateNewLocation(currentLocation);
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.initialize();
 

@@ -62,17 +62,6 @@ public class TSEPipeline extends OpenCvPipeline {
         this.bottomRect = new Rect(0,Globals.screenHeight - Globals.rectHeight, Globals.rectWidth, Globals.rectHeight);
         this.middleRect = new Rect(Globals.screenWidth / 3,Globals.screenHeight - Globals.rectHeight, Globals.rectWidth, Globals.rectHeight);
         this.topRect = new Rect(2 * Globals.screenWidth / 3, Globals.screenHeight - Globals.rectHeight, Globals.rectWidth, Globals.rectHeight);
-        /*if (startLocation == Places.StartLocation.BLUE_LEFT) {
-
-        } else if (startLocation == Places.StartLocation.BLUE_RIGHT) {
-            this.bottomRect = new Rect(0,screenHeight - rectHeight, rectWidth, rectHeight);
-            this.middleRect = new Rect(screenWidth / 3,screenHeight - rectHeight, rectWidth, rectHeight);
-            this.topRect = new Rect(2 * screenWidth / 3, screenHeight - rectHeight, rectWidth, rectHeight);
-        } else if (startLocation == Places.StartLocation.RED_LEFT) {
-
-        } else if (startLocation == Places.StartLocation.RED_RIGHT) {
-
-        }*/
     }
 
     private void processChannel(Mat input) {
@@ -82,9 +71,9 @@ public class TSEPipeline extends OpenCvPipeline {
 
     // Dirty function to determine largest average of green.
     private void determineLargest() {
-        if (topAvg >= middleAvg && middleAvg >= bottomAvg) {
+        if (topAvg >= middleAvg && topAvg >= bottomAvg) {
             this.dropLevel = Globals.DropLevel.TOP;
-        } else if (middleAvg >= topAvg && topAvg >= bottomAvg) {
+        } else if (middleAvg >= topAvg && middleAvg >= bottomAvg) {
             this.dropLevel = Globals.DropLevel.MIDDLE;
         } else {
             this.dropLevel = Globals.DropLevel.BOTTOM;
@@ -106,29 +95,30 @@ public class TSEPipeline extends OpenCvPipeline {
     public Mat processFrame(Mat input) {
         processChannel(input);
 
-        this.topAvg = (int) Core.mean(topMat).val[0];
-        this.middleAvg = (int) Core.mean(middleMat).val[0];
-        this.bottomAvg = (int) Core.mean(bottomMat).val[0];
+        this.topMat = onlyGreen.submat(topRect);
+        this.middleMat = onlyGreen.submat(middleRect);
+        this.bottomMat = onlyGreen.submat(bottomRect);
+
+        this.topAvg = (int) Core.sumElems(topMat).val[0];
+        this.middleAvg = (int) Core.sumElems(middleMat).val[0];
+        this.bottomAvg = (int) Core.sumElems(bottomMat).val[0];
 
         determineLargest();
 
         opMode.telemetry.addData("Drop Level", dropLevel.name());
+        opMode.telemetry.addData("Top", topAvg);
+        opMode.telemetry.addData("Middle", middleAvg);
+        opMode.telemetry.addData("Bottom", bottomAvg);
         opMode.telemetry.update();
-        
-        /*Imgproc.rectangle(
-                input,
-                bottomRect,
-                (dropLevel == Globals.DropLevel.BOTTOM ? new Scalar(0, 255, 0) : new Scalar(0, 0, 255)), 4);
-        Imgproc.rectangle(
-                input,
-                middleRect,
-                (dropLevel == Globals.DropLevel.MIDDLE ? new Scalar(0, 255, 0) : new Scalar(0, 0, 255)), 4);
-        Imgproc.rectangle(
-                input,
-                topRect,
-                (dropLevel == Globals.DropLevel.TOP ? new Scalar(0, 255, 0) : new Scalar(0, 0, 255)), 4);*/
 
         return onlyGreen;
+    }
+
+    public static void stop(OpenCvWebcam webcam) {
+        try {
+            webcam.stopStreaming();
+            webcam.closeCameraDevice();
+        } catch (Exception e) {};
     }
 
     public Globals.DropLevel getDropLevel() {

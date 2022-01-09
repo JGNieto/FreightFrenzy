@@ -80,13 +80,15 @@ public class MovePurePursuit {
         double championDistance = -1;
 
         // To know where we are in the path, we calculate the shortest distance between the robot
-        // and each line, and use it.
+        // and each segment, and use it.
         // TODO: Instead of an infinite line, add check to use only the segments.
-        for (int i = 1; i < path.getLocations().size() - 1; i++) {
+
+        // for (int i = 1; i < path.getLocations().size() - 1; i++) {
+        for (int i = 0; i < path.getLocations().size() - 1; i++) {
             Location startLocation = path.getLocations().get(i);
             Location endLocation = path.getLocations().get(i + 1);
 
-            double distance = PerpendicularDistance.getShortestDistanceBetweenPointAndLine(startLocation, endLocation, currentLocation);
+            double distance = PerpendicularDistance.getShortestDistanceBetweenPointAndSegment(startLocation, endLocation, currentLocation);
             if (distance < championDistance || championDistance == -1) {
                 championStartLocation = startLocation;
                 championEndLocation = endLocation;

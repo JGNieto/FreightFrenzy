@@ -1,6 +1,7 @@
 package org.baylorschool.library;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.baylorschool.Globals;
@@ -15,7 +16,7 @@ public class Odometry {
 
     private Servo servoLeft;
     private Servo servoRight;
-    private Servo servoMid;
+    private Servo servoMiddle;
 
     private int previousLeft = 0;
     private int previousRight = 0;
@@ -23,19 +24,56 @@ public class Odometry {
 
     private boolean firstLoop = true;
 
-    public Odometry(DcMotor encoderLeft, DcMotor encoderRight, DcMotor encoderMid, Servo servoLeft, Servo servoRight, Servo servoMid, boolean withdrawn) {
+    public Odometry(DcMotor encoderLeft, DcMotor encoderRight, DcMotor encoderMid, Servo servoLeft, Servo servoRight, Servo servoMiddle, boolean withdrawn) {
         this.encoderLeft = encoderLeft;
         this.encoderRight = encoderRight;
         this.encoderMid = encoderMid;
 
         this.servoLeft = servoLeft;
         this.servoRight = servoRight;
-        this.servoMid = servoMid;
+        this.servoMiddle = servoMiddle;
 
         if (withdrawn)
             this.withdraw();
         else
             this.open();
+
+        this.reset();
+    }
+
+    public Odometry(HardwareMap hardwareMap, boolean withdrawn) {
+        this.encoderLeft = null;
+        this.encoderRight = null;
+        this.encoderMid = null;
+
+        this.servoLeft = hardwareMap.get(Servo.class, Globals.servoLeftHw);
+        this.servoRight = hardwareMap.get(Servo.class, Globals.servoRightHw);
+        this.servoMiddle = hardwareMap.get(Servo.class, Globals.servoMiddleHw);
+
+        if (withdrawn)
+            this.withdraw();
+        else
+            this.open();
+
+        this.reset();
+    }
+
+    public void reset() {
+        this.previousLeft = 0;
+        this.previousMid = 0;
+        this.previousRight = 0;
+
+        resetMotor(encoderLeft);
+        resetMotor(encoderMid);
+        resetMotor(encoderRight);
+    }
+
+    private void resetMotor(DcMotor dcMotor) {
+        if (dcMotor == null) return;
+        DcMotor.RunMode mode = dcMotor.getMode();
+
+        dcMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        dcMotor.setMode(mode);
     }
 
     public Location calculateNewLocation(Location currentLocation) {
@@ -79,14 +117,14 @@ public class Odometry {
         this.withdrawn = true;
         moveServoNullSafe(servoLeft, Globals.positionWithdrawnLeft);
         moveServoNullSafe(servoRight, Globals.positionWithdrawnRight);
-        moveServoNullSafe(servoMid, Globals.positionWithdrawnMiddle);
+        moveServoNullSafe(servoMiddle, Globals.positionWithdrawnMiddle);
     }
 
     public void open() {
         this.withdrawn = false;
         moveServoNullSafe(servoLeft, Globals.positionOpenLeft);
         moveServoNullSafe(servoRight, Globals.positionOpenRight);
-        moveServoNullSafe(servoMid, Globals.positionOpenMiddle);
+        moveServoNullSafe(servoMiddle, Globals.positionOpenMiddle);
     }
 
     // Moves servo if it is not null.

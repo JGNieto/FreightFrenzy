@@ -11,17 +11,7 @@ import org.opencv.core.Scalar;
 
 public class Globals {
 
-    /**
-     * READ ME: This class is here for IDE Intellisense purposes. The license should never be uploaded
-     * to the GitHub repo, only on the bot with OnBotJava, or placed here temporarily when not using any
-     * VCS, and deleted BEFORE committing. If the license is exposed to the GitHub by accident, warn
-     * Javier to revoke it and create a new one. The actual key is in the OneNote for programming.
-     */
-    /**
-     * TL;DR: Upload this class to the robot using OnBotJava and replace PLACEHOLDER with the key
-     * found on the OneNote.
-     */
-    public static final String VUFORIA_LICENSE = "PLACEHOLDER";
+    public static final String VUFORIA_LICENSE = "Aabb6tf/////AAABmSBibmY6dkQil4rqX+dxkG53PUPetQoaTQVeWGLB5Cxtk4A6GNd0SKK5jwv0FnTDZhZjf+eYQurmTMlGnwpYPBxfxK3KkXz1Z/COEs4VHhN6TJ/E/9TcOQ5kaG+mhkjfug+9qu+dqQknCEUDgx7GKyva9vCcpKs3BBTAsWMo5R+oo4fVkg7/vL2pbkUufMAVlGfzellijvJIZZJiwjGOnygNOjBSlG0TieG4I3P2kALOu2NqV7gp8GA6D2Mynb8t/a6pc1Dsgo1M0bVwRvmZCaINHEkDkZiSpceOsGngoyDRhsrvkQFiI5RcIY4RfygXXgHcbxQPi+syBt0UeWk1Gy3SCemDXlEj7b/tz9NnYs7U";
 
     public enum DropLevel {
         BOTTOM,
@@ -55,7 +45,8 @@ public class Globals {
 
     ///////////////////////////// IMU /////////////////////////////
     // Axis (may change depending on the orientation of the Control Hub)
-    public static final IMU.Axis imuAxis = IMU.Axis.X;
+    public static final IMU.Axis imuRotationAxis = IMU.Axis.X;
+    public static final IMU.Axis imuPitchAxis = IMU.Axis.Y;
 
     ///////////////////////////// LOCATION /////////////////////////////
     // Default values of the location
@@ -87,25 +78,24 @@ public class Globals {
     public static final double turningDiameter = 540;
 
     ///////////////////////////// ODOMETRY /////////////////////////////
-    // FIXME: GET THESE VALUES CORRECT
     public static final double odometryTicksPerRevolution = 1440; // Javier originally measured this roughly and, surprisingly, correctly (we now know this is the exact number now because the part number is E8T-360 etc. and 360 * 4 = 1440).
     public static final double wheelRadius = 37.3 / 2;
     public static final double dPar = 150.5; // Distance between center of robot and parallel wheels.
-    public static final double dPer = -188; // Distance between center of robot and perpendicular wheel.
+    public static final double dPer = -188; // Distance between center of robot and perpendicular wheel. Negative because it is at the back.
 
     // Encoder readings for the odometry will be multiplied times the following coefficients.
     // They are used to change the sign of the value.
     public static final int leftOdometryCoefficient = -1;
     public static final int rightOdometryCoefficient = -1;
-    public static final int middleOdometryCoefficient = 1;
+    public static final int middleOdometryCoefficient = -1;
 
     // Servo position value for the respective servos and positions.
     public static final double positionWithdrawnRight = 0;
     public static final double positionWithdrawnLeft = 1;
     public static final double positionWithdrawnMiddle = 0;
-    public static final double positionOpenRight = 0.5;
-    public static final double positionOpenLeft = 0.3;
-    public static final double positionOpenMiddle = 0.3;
+    public static final double positionOpenRight = 0.46;
+    public static final double positionOpenLeft = 0.29;
+    public static final double positionOpenMiddle = 0.29;
 
     public static final double mmPerTick = 2 * Math.PI * wheelRadius / odometryTicksPerRevolution;
 

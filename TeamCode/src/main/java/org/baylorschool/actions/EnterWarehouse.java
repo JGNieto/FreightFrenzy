@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.baylorschool.Places;
+import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
@@ -107,5 +108,53 @@ public class EnterWarehouse {
      */
     public static Location enterWarehouseOdometry(WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, LinearOpMode opMode) {
         return enterWarehouseOdometry(side, currentLocation, mecanum, odometry, new ArrayList<>(), opMode);
+    }
+
+    // Constants for the parkWarehouse function.
+    static final double timeToEnter = 3000; // The time during which the robot will be moving towards the warehouse.
+    static final double enterPower = 0.8; // Power of the motors entering the warehouse.
+    static final double timeToEnterAfterLiftedBack = 700; // Time of motion after the robot's back has been lifted.
+    static final double liftedThreshold = 5; // Degrees to consider lifted.
+
+    /**
+     * Enters the warehouse using full power over the bars.
+     * Only designed for parking, as the location after this operation cannot be determined.
+     * @param currentLocation Current location of the robot.
+     * @param sensors Sensors instance.
+     * @param opMode OpMode that the robot is running at this time.
+     */
+    public static void parkWarehouse(Location currentLocation, Sensors sensors, LinearOpMode opMode) {
+        // Pointers to use as shorthand.
+        Mecanum mecanum = sensors.getMecanum();
+        IMU imu = sensors.getImu();
+
+        // TODO: Turn towards warehouse.
+
+        double baselinePitch = sensors.getImu().getPitch();
+        double endTime = System.currentTimeMillis() + timeToEnter;
+
+        boolean hasLiftedFront = false;
+        boolean hasLiftedBack = false;
+        int liftedFrontSign = 1;
+
+        mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        mecanum.setPower(-enterPower);
+
+        while (System.currentTimeMillis() <= endTime) {
+            imu.updateOrientation();
+
+            double pitchDelta = imu.getPitch() - baselinePitch;
+            int sign = pitchDelta > 0 ? 1 : -1;
+
+            if (Math.abs(pitchDelta) > liftedFrontSign) {
+                if (!hasLiftedFront) {
+                    hasLiftedFront = true;
+                    liftedFrontSign = sign;
+                } else if (sign != liftedFrontSign && !hasLiftedBack) {
+                    hasLiftedBack = true;
+                    endTime = System.currentTimeMillis() + timeToEnterAfterLiftedBack;
+                }
+            }
+        }
     }
 }

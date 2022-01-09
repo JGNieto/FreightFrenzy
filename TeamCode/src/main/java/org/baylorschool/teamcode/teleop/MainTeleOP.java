@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.Carousel;
@@ -27,12 +28,7 @@ public class MainTeleOP extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        odometry = new Odometry(null, null, null,
-                null, // hardwareMap.get(Servo.class, "servoLeft"),
-                null, //hardwareMap.get(Servo.class, "servoRight"),
-                null, //hardwareMap.get(Servo.class, "servoMid"),
-                true
-        );
+        odometry = new Odometry(hardwareMap, true);
         mecanum = new Mecanum(hardwareMap);
         carousel = new Carousel(hardwareMap);
         lift = Globals.createNewLift(this);

@@ -9,6 +9,7 @@ import org.baylorschool.actions.DropDuck;
 import org.baylorschool.actions.MoveWaypoints;
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Location;
+import org.baylorschool.library.Odometry;
 import org.baylorschool.library.Sensors;
 import org.baylorschool.library.TSEPipeline;
 import org.baylorschool.library.lift.TwoBarLift;
@@ -27,11 +28,13 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
     private Location currentLocation = Places.blueRightStart;
     private Globals.DropLevel dropLevel;
     private Carousel carousel;
+    private Odometry odometry;
 
     @Override
     public void runOpMode() {
         telemetry.addData("Status", "Loading...");
         telemetry.update();
+        odometry = new Odometry(hardwareMap, true);
         twoBarLift = new TwoBarLift(this);
         sensors = new Sensors(hardwareMap, false);
         sensors.initialize(hardwareMap, currentLocation.getHeading());
