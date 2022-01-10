@@ -149,8 +149,7 @@ public class Places {
 
     // TODO: DO FOR OTHER POSITIONS
     public static final Location[] BlueLeftHubToWarehousePower = new Location[] {
-            //new Location(middle(-0.5), middle(3), 0),
-            new Location(-79.26, -1146.17,0),
+            new Location(298.74, 1152.27)
     };
 
     public static final Location[] BlueRightHubToWarehouse = new Location[] {

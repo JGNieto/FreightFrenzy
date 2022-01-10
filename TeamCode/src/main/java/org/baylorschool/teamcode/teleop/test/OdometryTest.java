@@ -72,7 +72,7 @@ public class OdometryTest extends LinearOpMode {
 
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, slowMode ? SLOW_MODE_COEFFICIENT : 1);
-            lift.loopIterationTeleOp();
+            lift.loopIterationTeleOp(gamepad2);
 
             // Report telemetry
             telemetry.addData("X Gamepad", x);

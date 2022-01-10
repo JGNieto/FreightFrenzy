@@ -46,7 +46,7 @@ public class Globals {
     ///////////////////////////// IMU /////////////////////////////
     // Axis (may change depending on the orientation of the Control Hub)
     public static final IMU.Axis imuRotationAxis = IMU.Axis.X;
-    public static final IMU.Axis imuPitchAxis = IMU.Axis.Y;
+    public static final IMU.Axis imuPitchAxis = IMU.Axis.Z;
 
     ///////////////////////////// LOCATION /////////////////////////////
     // Default values of the location

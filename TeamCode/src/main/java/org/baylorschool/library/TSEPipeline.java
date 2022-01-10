@@ -17,7 +17,6 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 public class TSEPipeline extends OpenCvPipeline {
     private volatile Globals.DropLevel dropLevel = Globals.DropLevel.TOP;
-    private Places.StartLocation startLocation;
     private Mat onlyGreen;
 
     private LinearOpMode opMode;
@@ -55,9 +54,8 @@ public class TSEPipeline extends OpenCvPipeline {
         return webcam;
     }
 
-    public TSEPipeline(Places.StartLocation startLocation, LinearOpMode opMode) {
+    public TSEPipeline(LinearOpMode opMode) {
         this.opMode = opMode;
-        this.startLocation = startLocation;
 
         this.bottomRect = new Rect(0,Globals.screenHeight - Globals.rectHeight, Globals.rectWidth, Globals.rectHeight);
         this.middleRect = new Rect(Globals.screenWidth / 3,Globals.screenHeight - Globals.rectHeight, Globals.rectWidth, Globals.rectHeight);
@@ -69,7 +67,7 @@ public class TSEPipeline extends OpenCvPipeline {
         Core.inRange(onlyGreen, Globals.greenDetectionLowerThreshold, Globals.greenDetectionUpperThreshold, onlyGreen);
     }
 
-    // Dirty function to determine largest average of green.
+    // Dirty function to determine where there is the largest amount of green.
     private void determineLargest() {
         if (topAvg >= middleAvg && topAvg >= bottomAvg) {
             this.dropLevel = Globals.DropLevel.TOP;

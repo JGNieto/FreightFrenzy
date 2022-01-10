@@ -77,4 +77,8 @@ public class IMU {
     public void setBackwards(boolean backwards) {
         this.backwards = backwards;
     }
+
+    public Orientation getAllAngles() {
+        return allAngles;
+    }
 }

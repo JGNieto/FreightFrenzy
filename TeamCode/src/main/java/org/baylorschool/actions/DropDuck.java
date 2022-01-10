@@ -57,7 +57,7 @@ public class DropDuck {
             mecanum.setPowerAutonomous();
 
             // Wait until movement is done.
-            while (mecanum.isBusy()) {}
+            while (opMode.opModeIsActive() && mecanum.isBusy()) { }
 
             // Return correct location based on side.
             return side == Carousel.CarouselSide.RED ? Places.redCarouselLocationAway : Places.blueCarouselLocationAway;

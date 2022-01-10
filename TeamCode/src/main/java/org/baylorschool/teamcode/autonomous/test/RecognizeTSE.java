@@ -17,7 +17,7 @@ public class RecognizeTSE extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT, this);
+        tsePipeline = new TSEPipeline(this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
 
         telemetry.addLine("Waiting for start");

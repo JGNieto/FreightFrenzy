@@ -1,6 +1,7 @@
 package org.baylorschool.library.lift;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
@@ -172,17 +173,17 @@ public abstract class Lift {
      * To be called every iteration of the loop in TeleOp.
      * Reads the state of the gamepad.
      */
-    public void loopIterationTeleOp() {
-        if (opMode.gamepad1.dpad_up)
+    public void loopIterationTeleOp(Gamepad gamepad) {
+        if (gamepad.dpad_up)
             movement = TwoBarLift.LiftMovement.UP;
-        else if (opMode.gamepad1.dpad_down)
+        else if (gamepad.dpad_down)
             movement = TwoBarLift.LiftMovement.DOWN;
         else
             movement = TwoBarLift.LiftMovement.HOLD;
 
-        if (opMode.gamepad1.left_bumper)
+        if (gamepad.left_bumper)
             rollerState = TwoBarLift.RollerState.RELEASING;
-        else if (opMode.gamepad1.right_bumper)
+        else if (gamepad.right_bumper)
             rollerState = TwoBarLift.RollerState.GRABBING;
         else
             rollerState = TwoBarLift.RollerState.STOP;

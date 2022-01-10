@@ -40,7 +40,7 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
         sensors.initialize(hardwareMap, currentLocation.getHeading());
         carousel = new Carousel(hardwareMap);
 
-        tsePipeline = new TSEPipeline(Places.StartLocation.BLUE_RIGHT, this);
+        tsePipeline = new TSEPipeline(this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
 
         telemetry.addData("Status", "Ready");

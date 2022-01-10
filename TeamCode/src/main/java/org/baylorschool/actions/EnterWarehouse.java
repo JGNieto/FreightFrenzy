@@ -111,15 +111,15 @@ public class EnterWarehouse {
     }
 
     // Constants for the parkWarehouse function.
-    static final double timeToEnter = 3000; // The time during which the robot will be moving towards the warehouse.
+    static final double timeToEnter = 2000; // The time during which the robot will be moving towards the warehouse.
     static final double enterPower = 0.8; // Power of the motors entering the warehouse.
-    static final double timeToEnterAfterLiftedBack = 700; // Time of motion after the robot's back has been lifted.
+    static final double timeToEnterAfterFlat = 200; // Time of motion after the robot's back has been lifted.
     static final double liftedThreshold = 5; // Degrees to consider lifted.
 
     /**
      * Enters the warehouse using full power over the bars.
      * Only designed for parking, as the location after this operation cannot be determined.
-     * @param currentLocation Current location of the robot.
+     * @param currentLocation Current location of the robot. Correct heading is not necessary.
      * @param sensors Sensors instance.
      * @param opMode OpMode that the robot is running at this time.
      */
@@ -128,14 +128,21 @@ public class EnterWarehouse {
         Mecanum mecanum = sensors.getMecanum();
         IMU imu = sensors.getImu();
 
-        // TODO: Turn towards warehouse.
+        // Turn robot if not alligned.
+        if (!currentLocation.rotationTolerance(0, 4)) {
+            Location targetLocation = new Location(currentLocation).setHeading(0);
+            MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(targetLocation), opMode);
+        }
 
+        sensors.getImu().updateOrientation();
         double baselinePitch = sensors.getImu().getPitch();
         double endTime = System.currentTimeMillis() + timeToEnter;
 
         boolean hasLiftedFront = false;
-        boolean hasLiftedBack = false;
         int liftedFrontSign = 1;
+
+        boolean hasLiftedBack = false;
+        boolean hasFlattened = false;
 
         mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         mecanum.setPower(-enterPower);
@@ -146,15 +153,25 @@ public class EnterWarehouse {
             double pitchDelta = imu.getPitch() - baselinePitch;
             int sign = pitchDelta > 0 ? 1 : -1;
 
-            if (Math.abs(pitchDelta) > liftedFrontSign) {
+            if (Math.abs(pitchDelta) > liftedThreshold) {
                 if (!hasLiftedFront) {
                     hasLiftedFront = true;
                     liftedFrontSign = sign;
                 } else if (sign != liftedFrontSign && !hasLiftedBack) {
                     hasLiftedBack = true;
-                    endTime = System.currentTimeMillis() + timeToEnterAfterLiftedBack;
                 }
+            } else if (hasLiftedBack && !hasFlattened) {
+                hasFlattened = true;
+                endTime = System.currentTimeMillis() + timeToEnterAfterFlat;
             }
+
+            opMode.telemetry.addData("Pitch", pitchDelta);
+            opMode.telemetry.addData("Front", hasLiftedFront);
+            opMode.telemetry.addData("Back", hasLiftedBack);
+            opMode.telemetry.addData("Flat", hasFlattened);
+            opMode.telemetry.update();
         }
+
+        mecanum.stop();
     }
 }

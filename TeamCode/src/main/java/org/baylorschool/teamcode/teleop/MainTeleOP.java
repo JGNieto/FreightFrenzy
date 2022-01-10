@@ -44,9 +44,9 @@ public class MainTeleOP extends LinearOpMode {
             double x = gamepad1.left_stick_x;
             double rotation = gamepad1.right_stick_x * ROTATION_COEFFICIENT;
 
-            if (gamepad1.x)
+            if (gamepad2.x)
                 carousel.dropDuck(Carousel.CarouselSide.BLUE, this);
-            else if (gamepad1.b)
+            else if (gamepad2.b)
                 carousel.dropDuck(Carousel.CarouselSide.RED, this);
             else
                 carousel.stop();
@@ -61,7 +61,7 @@ public class MainTeleOP extends LinearOpMode {
 
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, slowMode ? SLOW_MODE_COEFFICIENT : 1);
-            lift.loopIterationTeleOp();
+            lift.loopIterationTeleOp(gamepad2);
 
             // Report telemetry
             telemetry.addData("X Gamepad", x);
