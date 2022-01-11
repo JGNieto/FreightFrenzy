@@ -33,14 +33,16 @@ public class TwoBarLift extends Lift {
     private static final int releaseDelay = 2000;
     private static final int rollerThrottle = 2000; // Minimum milliseconds between limit switch becoming free and grabbing again.
 
-    private int targetEncoderPosition = 0;
+    private volatile int targetEncoderPosition = 0;
     private final DcMotor twoBarMotor;
     private final DcMotor rollerMotor;
     private final DigitalChannel limitSwitch;
 
     // Keep track of whether we just stopped moving.
-    private boolean wasMoving;
-    private long lastTimeLimitSwitch = 0;
+    private volatile boolean wasMoving;
+    private volatile long lastTimeLimitSwitch = 0;
+
+    private volatile boolean doingInitialization = false;
 
     public TwoBarLift(LinearOpMode opMode) {
         super(opMode);
@@ -52,6 +54,28 @@ public class TwoBarLift extends Lift {
 
     @Override
     public void initialize() {
+        /*new Thread(() -> {
+            try {
+                doingInitialization = true;
+                twoBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                twoBarMotor.setPower(liftPowerDown);
+                Thread.sleep(1000);
+                twoBarMotor.setPower(0);
+
+                twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+                twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                twoBarMotor.setTargetPosition(targetEncoderPosition);
+                twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                rollerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            } catch (InterruptedException e) {
+                twoBarMotor.setPower(0);
+            } finally {
+                doingInitialization = false;
+            }
+        }).start();*/
+
         twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -67,6 +91,10 @@ public class TwoBarLift extends Lift {
         opMode.telemetry.addData("LiftPos", twoBarMotor.getCurrentPosition());
         opMode.telemetry.addData("LiftTar", twoBarMotor.getTargetPosition());
         opMode.telemetry.addData("Limit Switch", limitSwitch.getState() ? "Empty" : "Full");
+        if (doingInitialization) {
+            opMode.telemetry.addData("Lift", "Initializing...");
+            return;
+        }
         if (movement == LiftMovement.UP) {
             wasMoving = true;
             twoBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

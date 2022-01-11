@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
 import org.baylorschool.library.Location;
+import org.baylorschool.library.ControlMap;
 import org.baylorschool.library.math.CircleIntersect;
 
 import java.util.List;
@@ -98,7 +99,7 @@ public abstract class Lift {
     }
 
     // Function to be used by children.
-    public Location getScoringLocation(Location currentLocation, Hub hub, Globals.DropLevel dropLevel, double dropDistanceTop, double dropDistanceMiddle, double dropDistanceBottom) {
+    protected Location getScoringLocation(Location currentLocation, Hub hub, Globals.DropLevel dropLevel, double dropDistanceTop, double dropDistanceMiddle, double dropDistanceBottom) {
         double radius;
         Location targetHubLocation;
         switch (hub) {
@@ -165,8 +166,10 @@ public abstract class Lift {
      * Indicates that the thread must stop.
      */
     public void closeThread() {
-        threadShouldStop = true;
-        thread.interrupt();
+        try {
+            thread.interrupt();
+            threadShouldStop = true;
+        } catch (NullPointerException e) { } // In case thread has already stopped.
     }
 
     /**
@@ -184,6 +187,28 @@ public abstract class Lift {
         if (gamepad.left_bumper)
             rollerState = TwoBarLift.RollerState.RELEASING;
         else if (gamepad.right_bumper)
+            rollerState = TwoBarLift.RollerState.GRABBING;
+        else
+            rollerState = TwoBarLift.RollerState.STOP;
+
+        loopIteration();
+    }
+
+    /**
+     * To be called every iteration of the loop in TeleOp.
+     * Reads the state of the Control Map.
+     */
+    public void loopIterationTeleOp(ControlMap controlMap) {
+        if (controlMap.liftUp())
+            movement = TwoBarLift.LiftMovement.UP;
+        else if (controlMap.liftDown())
+            movement = TwoBarLift.LiftMovement.DOWN;
+        else
+            movement = TwoBarLift.LiftMovement.HOLD;
+
+        if (controlMap.liftReleasing())
+            rollerState = TwoBarLift.RollerState.RELEASING;
+        else if (controlMap.liftGrabbing())
             rollerState = TwoBarLift.RollerState.GRABBING;
         else
             rollerState = TwoBarLift.RollerState.STOP;

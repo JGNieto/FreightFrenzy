@@ -10,6 +10,7 @@ import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
 import org.baylorschool.library.Path;
 import org.baylorschool.library.Sensors;
+import org.baylorschool.library.lift.Lift;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,9 +113,9 @@ public class EnterWarehouse {
 
     // Constants for the parkWarehouse function.
     static final double timeToEnter = 2000; // The time during which the robot will be moving towards the warehouse.
-    static final double enterPower = 0.8; // Power of the motors entering the warehouse.
+    static final double enterPower = -0.6; // Power of the motors entering the warehouse.
     static final double timeToEnterAfterFlat = 200; // Time of motion after the robot's back has been lifted.
-    static final double liftedThreshold = 5; // Degrees to consider lifted.
+    static final double liftedThreshold = 3; // Degrees to consider lifted.
 
     /**
      * Enters the warehouse using full power over the bars.
@@ -128,9 +129,9 @@ public class EnterWarehouse {
         Mecanum mecanum = sensors.getMecanum();
         IMU imu = sensors.getImu();
 
-        // Turn robot if not alligned.
+        // Turn robot if not aligned.
         if (!currentLocation.rotationTolerance(0, 4)) {
-            Location targetLocation = new Location(currentLocation).setHeading(0);
+            Location targetLocation = new Location(currentLocation).setHeading(180);
             MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(targetLocation), opMode);
         }
 
@@ -147,7 +148,7 @@ public class EnterWarehouse {
         mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         mecanum.setPower(-enterPower);
 
-        while (System.currentTimeMillis() <= endTime) {
+        while (System.currentTimeMillis() <= endTime && opMode.opModeIsActive()) {
             imu.updateOrientation();
 
             double pitchDelta = imu.getPitch() - baselinePitch;
@@ -171,7 +172,8 @@ public class EnterWarehouse {
             opMode.telemetry.addData("Flat", hasFlattened);
             opMode.telemetry.update();
         }
-
         mecanum.stop();
+
+        while (opMode.opModeIsActive()) {}
     }
 }

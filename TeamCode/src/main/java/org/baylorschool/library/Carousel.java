@@ -41,8 +41,14 @@ public class Carousel {
 
     public void dropDuckAsync(CarouselSide side, LinearOpMode opMode) {
         new Thread(() -> {
-            dropDuck(side, opMode);
-        });
+            try {
+                flyWheel.setPower(side == CarouselSide.BLUE ? Globals.carouselSingleSpeed : -Globals.carouselSingleSpeed);
+                Thread.sleep(Globals.carouselSinglePause);
+            } catch (Exception e) {
+            } finally {
+                this.stop();
+            }
+        }).start();
     }
 
     public void stop() {

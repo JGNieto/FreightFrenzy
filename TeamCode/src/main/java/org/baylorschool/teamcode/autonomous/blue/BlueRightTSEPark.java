@@ -1,4 +1,4 @@
-package org.baylorschool.teamcode.autonomous;
+package org.baylorschool.teamcode.autonomous.blue;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -17,7 +17,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import java.util.Arrays;
 import java.util.Collections;
 
-@Autonomous(name = "BlueRightTSEPark", group = "BlueRight")
+@Autonomous(name = "BlueRightTSEPark", group = "Blue")
 public class BlueRightTSEPark extends LinearOpMode {
 
     private TwoBarLift twoBarLift;
@@ -40,8 +40,9 @@ public class BlueRightTSEPark extends LinearOpMode {
 
         tsePipeline = new TSEPipeline(this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
+        twoBarLift.initialize();
 
-        telemetry.addData("Status", "Ready");
+        telemetry.addData("Status", "Waiting for vision...");
         telemetry.update();
 
         waitForStart();

@@ -1,6 +1,7 @@
-package org.baylorschool.teamcode.autonomous;
+package org.baylorschool.teamcode.autonomous.blue;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.actions.MoveWaypoints;
@@ -9,7 +10,8 @@ import org.baylorschool.library.Sensors;
 
 import java.util.Arrays;
 
-@Autonomous(name="Park Storage Unit BR", group ="BlueRight")
+@Disabled
+@Autonomous(name="Park Storage Unit BR", group ="Blue")
 public class ParkBlueRightStorageUnit extends LinearOpMode {
 
     private Location currentLocation = new Location(-609.6, 1608, -90);
