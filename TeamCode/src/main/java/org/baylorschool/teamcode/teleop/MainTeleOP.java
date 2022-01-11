@@ -12,7 +12,7 @@ import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
 import org.baylorschool.library.lift.Lift;
 
-@TeleOp(name="MainTeleOP", group="Competition")
+@TeleOp(name="MainTeleOP", group="Test")
 public class MainTeleOP extends LinearOpMode {
 
     private Mecanum mecanum;
@@ -32,10 +32,10 @@ public class MainTeleOP extends LinearOpMode {
         mecanum = new Mecanum(hardwareMap);
         carousel = new Carousel(hardwareMap);
         lift = Globals.createNewLift(this);
+        lift.initialize();
 
         waitForStart();
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        lift.initialize();
 
         boolean slowMode = false;
 
@@ -75,6 +75,8 @@ public class MainTeleOP extends LinearOpMode {
             telemetry.addData("EncoderBL", mecanum.getBlMotor().getCurrentPosition());
             telemetry.update();
         }
+
+        lift.closeThread();
     }
 
     private boolean slowModeToggle(Gamepad gamepad, boolean current) {
