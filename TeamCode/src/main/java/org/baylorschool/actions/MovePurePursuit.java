@@ -75,8 +75,7 @@ public class MovePurePursuit {
     public static Location getPurePursuitPoint(Path path, Location currentLocation) {
         if (path.getLocations().size() < 2) return null;
 
-        Location championStartLocation = null;
-        Location championEndLocation = null;
+        int championStartLocationIndex = 0;
         double championDistance = -1;
 
         // To know where we are in the path, we calculate the shortest distance between the robot
@@ -90,35 +89,52 @@ public class MovePurePursuit {
 
             double distance = PerpendicularDistance.getShortestDistanceBetweenPointAndSegment(startLocation, endLocation, currentLocation);
             if (distance < championDistance || championDistance == -1) {
-                championStartLocation = startLocation;
-                championEndLocation = endLocation;
+                championStartLocationIndex = i;
                 championDistance = distance;
             }
         }
 
-        // Get intersections for the optimal line.
-        List<Location> intersections = CircleIntersect.getCircleLineIntersectionLocation(championStartLocation, championEndLocation, currentLocation, championEndLocation.getPurePursuitRadius());
+        Location lastLocation = path.getLastLocation();
+        Location championEndLocation = path.getLocations().get(championStartLocationIndex + 1);
 
         // Edge case: if very close to final target, go straight to it.
         // We do this after loop to avoid cutting a corner we didn't want to.
-        Location lastLocation = path.getLastLocation();
-        if (championEndLocation == lastLocation && Location.distance(championEndLocation, lastLocation) < 100) {
+        if (championEndLocation == lastLocation && Location.distanceSquared(championEndLocation, lastLocation) < 100 * 100) {
             return lastLocation;
         }
 
-        // Get the most advanced point in the path (shortest distance to next point).
-
-        // We reuse the championDistance variable from before, since its initial value does not matter.
-
-        // Champion intersection is initialized as null so that null is returned if no intersections exist.
         Location championIntersection = null;
 
-        for (Location intersection : intersections) {
-            double distance = Location.distance(intersection, championEndLocation);
-            if (championIntersection == null || championDistance < distance) {
-                championIntersection = intersection;
-                championDistance = distance;
+        for (int i = championStartLocationIndex; i < path.getLocations().size() - 1; i++) {
+            // Get intersections for the optimal line.
+            Location startLocation = path.getLocations().get(i);
+            Location endLocation = path.getLocations().get(i + 1);
+
+            double smallX = Math.min(startLocation.getX(), endLocation.getX());
+            double bigX = Math.max(startLocation.getX(), endLocation.getX());
+            double smallY = Math.min(startLocation.getY(), endLocation.getY());
+            double bigY = Math.max(startLocation.getY(), endLocation.getY());
+
+
+            // Distance squared is used to avoid doing a square root, which is very expensive.
+            double distanceRobotToEndLocation = Location.distanceSquared(currentLocation, endLocation);
+
+            List<Location> intersections = CircleIntersect.getCircleLineIntersectionLocation(startLocation, endLocation, currentLocation, endLocation.getPurePursuitRadius());
+
+            for (Location intersection : intersections) {
+                if (intersection.getX() < smallX || intersection.getY() < smallY || intersection.getX() > bigX || intersection.getY() > bigY)
+                    continue;
+
+                double distance = Location.distanceSquared(intersection, championEndLocation);
+                if (distance > distanceRobotToEndLocation) continue;
+
+                if (championIntersection == null || championDistance < distance) {
+                    championIntersection = intersection;
+                    championDistance = distance;
+                }
             }
+
+            if (championIntersection != null) break;
         }
 
         return championIntersection;

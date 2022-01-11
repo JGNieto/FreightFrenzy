@@ -45,9 +45,9 @@ public class MainTeleOP extends LinearOpMode {
             double rotation = gamepad1.right_stick_x * ROTATION_COEFFICIENT;
 
             if (gamepad2.x)
-                carousel.dropDuck(Carousel.CarouselSide.BLUE, this);
+                carousel.dropDuckAsync(Carousel.CarouselSide.BLUE, this);
             else if (gamepad2.b)
-                carousel.dropDuck(Carousel.CarouselSide.RED, this);
+                carousel.dropDuckAsync(Carousel.CarouselSide.RED, this);
             else
                 carousel.stop();
 

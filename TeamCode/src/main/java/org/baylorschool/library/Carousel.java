@@ -39,6 +39,12 @@ public class Carousel {
         this.stop();
     }
 
+    public void dropDuckAsync(CarouselSide side, LinearOpMode opMode) {
+        new Thread(() -> {
+            dropDuck(side, opMode);
+        });
+    }
+
     public void stop() {
         flyWheel.setPower(0);
     }

@@ -272,6 +272,19 @@ public class Location {
         return Math.hypot(deltaX, deltaY);
     }
 
+    /**
+     * 2D distance squared between two locations to avoid SQRT.
+     * @param location1 The first location.
+     * @param location2 The second location.
+     * @return distance squared in mm^2
+     */
+    public static double distanceSquared(Location location1, Location location2) {
+        double deltaX = Math.abs(location1.getX() - location2.getX());
+        double deltaY = Math.abs(location1.getY() - location2.getY());
+
+        return deltaX * deltaX + deltaY * deltaY;
+    }
+
     // Setters return this so that method calls can be chained in a single line. For example:
     // Location location = new Location(50, 50).backwards().moveTurn(30, .5);
     //                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
