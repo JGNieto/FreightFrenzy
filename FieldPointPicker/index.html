@@ -9,11 +9,41 @@
   <link rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+  <!-- I know this  code is bad and I ask for forgiveness. I just didn't have time to do it well. -->
+  <style>
+    .row {
+      display: flex;
+      width: 830px;
+    }
+
+    .left {
+      flex: 600px;
+    }
+
+    .right {
+      margin-left: 10px;
+      flex: 200px;
+    }
+  </style>
   <script>
     // EVERYTHING MILLIMETERS
     const fieldLength = 3658;
     const imgSize = 600;
     let points = [];
+    let redo = [];
+
+    $(document).keydown(function(event) {
+      if (event.which === 90 && event.ctrlKey) {
+        if (event.shiftKey) {
+          if (redo.length > 0)
+            points.push(redo.pop());
+        } else {
+          if (points.length > 0)
+            redo.push(points.pop());
+        }
+      }
+      updateCode();
+    });
 
     $(document).ready(function() {
       $("#field").height(imgSize);
@@ -33,9 +63,9 @@
         updateCode();
       });
 
-      $("#clear-btn").click(function () {
-        points = [];
+      $("#clear-btn").click(function() {
         if (!confirm("Are you sure?")) return;
+        points = [];
         updateCode();
       });
 
@@ -63,11 +93,16 @@
   </script>
 </head>
 <body>
-  <img src="./field-cropped.png" style="margin:0px;" id="field">
-  <br/>
-  <button id="clear-btn">Clear</button>
-  <pre>
-    <code id="code" class="language-java" style="max-width: 300px;"></code>
-  </pre>
+  <div class="row">
+    <div class="left">
+      <img src="./field-cropped.png" width="600px" style="margin:0px;" id="field">
+    </div>
+    <div class="right">
+      <button id="clear-btn">Clear</button>
+      <pre>
+        <code id="code" class="language-java" style="max-width: 300px;"></code>
+      </pre>
+    </div>
+  </div>
 </body>
 </html>
