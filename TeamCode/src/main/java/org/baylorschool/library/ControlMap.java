@@ -1,21 +1,28 @@
 package org.baylorschool.library;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class ControlMap {
-    private Gamepad gamepad1;
-    private Gamepad gamepad2;
+    protected Gamepad gamepad1;
+    protected Gamepad gamepad2;
+
+    private final boolean oneGamePad;
 
     private boolean slowMode = false;
 
     public ControlMap(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
+
+        this.oneGamePad = false;
     }
 
     public ControlMap() {
+        this.oneGamePad = false;
+    }
 
+    public ControlMap(boolean oneGamePad) {
+        this.oneGamePad = oneGamePad;
     }
 
     // Movement
@@ -77,7 +84,7 @@ public class ControlMap {
     }
 
     // Tape Measurer
-    public double tapePower() {
+    public double tapeExtend() {
         if (gamepad2.y)
             return 1;
         else if (gamepad2.a)
@@ -93,9 +100,12 @@ public class ControlMap {
     // Setters
     public void setGamepad1(Gamepad gamepad1) {
         this.gamepad1 = gamepad1;
+        if (oneGamePad)
+            this.gamepad2 = gamepad1;
     }
 
     public void setGamepad2(Gamepad gamepad2) {
-        this.gamepad2 = gamepad2;
+        if (!oneGamePad) // OneGamePad is a shortcut for making all controls be on a single gamepad.
+            this.gamepad2 = gamepad2;
     }
 }

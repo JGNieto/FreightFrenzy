@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Globals;
-import org.baylorschool.Places;
 import org.baylorschool.library.TSEPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 

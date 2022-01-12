@@ -10,7 +10,6 @@ import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
 import org.baylorschool.library.Path;
 import org.baylorschool.library.Sensors;
-import org.baylorschool.library.lift.Lift;
 
 import java.util.ArrayList;
 import java.util.Arrays;

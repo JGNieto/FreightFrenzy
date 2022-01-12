@@ -14,5 +14,7 @@ public class DriverTeam2 extends TeleOpLogic {
 }
 
 class DriverTeam2Controls extends ControlMap {
-
+    public DriverTeam2Controls() {
+        super();
+    }
 }

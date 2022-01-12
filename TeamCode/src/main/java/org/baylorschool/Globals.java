@@ -41,6 +41,10 @@ public class Globals {
     public static final String servoRightHw = "servoRight"; // (1)
     public static final String servoMiddleHw = "servoMiddle"; // (2)
 
+    // Tape (capping)
+    public static final String tapeExtend = "tapeExtend";
+    public static final String tapeTilt = "tapeTilt";
+
     public static final String webcamDeviceName = "Webcam 1"; // Generally don't need to change.
 
     ///////////////////////////// IMU /////////////////////////////

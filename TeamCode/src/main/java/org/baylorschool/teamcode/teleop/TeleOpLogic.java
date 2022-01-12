@@ -2,22 +2,23 @@ package org.baylorschool.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.baylorschool.Globals;
+import org.baylorschool.library.Tape;
 import org.baylorschool.library.Carousel;
+import org.baylorschool.library.ControlMap;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
-import org.baylorschool.library.ControlMap;
 import org.baylorschool.library.lift.Lift;
 
-public abstract class TeleOpLogic extends LinearOpMode {
+public class TeleOpLogic extends LinearOpMode {
 
     private Mecanum mecanum;
     private Carousel carousel;
     private Lift lift;
     private Odometry odometry;
     private final ControlMap controlMap;
+    private Tape tape;
 
     private final double SLOW_MODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
@@ -35,6 +36,7 @@ public abstract class TeleOpLogic extends LinearOpMode {
         odometry = new Odometry(hardwareMap, true);
         mecanum = new Mecanum(hardwareMap);
         carousel = new Carousel(hardwareMap);
+        tape = new Tape(hardwareMap);
         lift = Globals.createNewLift(this);
         lift.initialize();
 
@@ -60,6 +62,9 @@ public abstract class TeleOpLogic extends LinearOpMode {
             if (controlMap.fullRotationPower())
                 rotation = controlMap.getRotation();
 
+            // Tape measure power.
+            tape.setTiltPower(controlMap.tapeTilt());
+            tape.setExtendPower(controlMap.tapeExtend());
 
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, controlMap.isSlowMode() ? SLOW_MODE_COEFFICIENT : 1);
@@ -71,6 +76,8 @@ public abstract class TeleOpLogic extends LinearOpMode {
             telemetry.addData("Speed", y);
             telemetry.addData("Strafe", x);
             telemetry.addData("Rotation", rotation);
+            telemetry.addData("Tape Tilt", controlMap.tapeTilt());
+            telemetry.addData("Tape Extend", controlMap.tapeExtend());
             telemetry.addData("EncoderFR", mecanum.getFrMotor().getCurrentPosition());
             telemetry.addData("EncoderBR", mecanum.getBrMotor().getCurrentPosition());
             telemetry.addData("EncoderFL", mecanum.getFlMotor().getCurrentPosition());

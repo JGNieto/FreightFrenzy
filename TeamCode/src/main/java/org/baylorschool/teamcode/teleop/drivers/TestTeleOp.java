@@ -9,6 +9,17 @@ import org.baylorschool.teamcode.teleop.TeleOpLogic;
 @TeleOp(name="TestTeleOp", group="Test")
 public class TestTeleOp extends TeleOpLogic {
     public TestTeleOp() {
-        super(new ControlMap());
+        super(new TestTeleOpControls());
+    }
+}
+
+class TestTeleOpControls extends ControlMap {
+    public TestTeleOpControls() {
+        super(true);
+    }
+
+    @Override
+    public double tapeTilt() {
+        return gamepad1.right_trigger - gamepad1.left_trigger;
     }
 }

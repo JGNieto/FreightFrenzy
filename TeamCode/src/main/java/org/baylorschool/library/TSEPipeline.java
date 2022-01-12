@@ -3,7 +3,6 @@ package org.baylorschool.library;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Globals;
-import org.baylorschool.Places;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;

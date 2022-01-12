@@ -278,12 +278,12 @@ public class Mecanum {
 
         //find the maximum of the powers
         double maxRawPower = Math.abs(flPowerRaw);
-        if(Math.abs(blPowerRaw) > maxRawPower){ maxRawPower = Math.abs(blPowerRaw);}
-        if(Math.abs(brPowerRaw) > maxRawPower){ maxRawPower = Math.abs(brPowerRaw);}
-        if(Math.abs(frPowerRaw) > maxRawPower){ maxRawPower = Math.abs(frPowerRaw);}
+        if (Math.abs(blPowerRaw) > maxRawPower) maxRawPower = Math.abs(blPowerRaw);
+        if (Math.abs(brPowerRaw) > maxRawPower) maxRawPower = Math.abs(brPowerRaw);
+        if (Math.abs(frPowerRaw) > maxRawPower) maxRawPower = Math.abs(frPowerRaw);
 
         double scaleDownAmount = 1.0;
-        if(maxRawPower > 1.0){
+        if (maxRawPower > 1.0) {
             //when max power is multiplied by this ratio, it will be 1.0, and others less
             scaleDownAmount = 1.0/maxRawPower;
         }

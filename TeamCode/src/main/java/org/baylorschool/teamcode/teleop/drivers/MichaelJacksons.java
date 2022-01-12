@@ -14,4 +14,7 @@ public class MichaelJacksons extends TeleOpLogic {
 }
 
 class MichaelJacksonsControls extends ControlMap {
+    public MichaelJacksonsControls() {
+        super();
+    }
 }

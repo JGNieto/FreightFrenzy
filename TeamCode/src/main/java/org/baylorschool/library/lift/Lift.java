@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
-import org.baylorschool.library.Location;
 import org.baylorschool.library.ControlMap;
+import org.baylorschool.library.Location;
 import org.baylorschool.library.math.CircleIntersect;
 
 import java.util.List;
