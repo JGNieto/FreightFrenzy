@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
-import org.baylorschool.actions.EnterWarehouse;
 import org.baylorschool.actions.MoveWaypoints;
+import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Odometry;
 import org.baylorschool.library.Sensors;
@@ -17,15 +17,16 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import java.util.Arrays;
 import java.util.Collections;
 
-@Autonomous(name = "RedRightTSEWarehousePark", group = "Red")
-public class RedRightTSEWarehousePark extends LinearOpMode {
+@Autonomous(name = "RedLeftTSEPark", group = "Red")
+public class RedLeftTSEPark extends LinearOpMode {
 
     private TwoBarLift twoBarLift;
     private Sensors sensors;
     private TSEPipeline tsePipeline;
     private OpenCvWebcam webcam;
-    private Location currentLocation = Places.redRightStart;
+    private Location currentLocation = Places.redLeftStart;
     private Globals.DropLevel dropLevel;
+    private Carousel carousel;
     private Odometry odometry;
 
     @Override
@@ -45,21 +46,20 @@ public class RedRightTSEWarehousePark extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-
+        sensors.getMecanum().updateEncoderReadings();
         dropLevel = tsePipeline.getDropLevel();
+
+        twoBarLift.startThread();
 
         // Remove if using vuforia:
         TSEPipeline.stop(webcam);
 
-        twoBarLift.startThread();
-
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedRightToHub), this);
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedLeftToHub), this);
         twoBarLift.moveToDropLevel(dropLevel);
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(twoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.RED, dropLevel)), this);
         twoBarLift.releaseItem();
         twoBarLift.retract(1500);
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedRightHubToWarehousePower), this);
-        EnterWarehouse.parkWarehouse(currentLocation, sensors, this);
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedLeftHubToPark), this);
         twoBarLift.closeThread();
     }
 }

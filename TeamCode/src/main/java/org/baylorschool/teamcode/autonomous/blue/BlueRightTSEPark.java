@@ -58,11 +58,10 @@ public class BlueRightTSEPark extends LinearOpMode {
         twoBarLift.moveToDropLevel(dropLevel);
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(twoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.BLUE, dropLevel)), this);
         twoBarLift.releaseItem();
-        //currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(Location.moveLocation(currentLocation, 0, -100).backwards()), this);
-        //currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueRightHubToPark), this);
         twoBarLift.retract(1500);
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(Places.BlueRightHubToPark[0].forward()), this);
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(Places.BlueRightHubToPark[1].forward()), this);
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueRightHubToPark), this);
+        // currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(Places.BlueRightHubToPark[0].forward()), this);
+        // currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(Places.BlueRightHubToPark[1].forward()), this);
         twoBarLift.closeThread();
     }
 }

@@ -61,11 +61,14 @@ public class BlueRightTSEDuckPark extends LinearOpMode {
         twoBarLift.moveToDropLevel(dropLevel);
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(twoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.BLUE, dropLevel)), this);
         twoBarLift.releaseItem();
-        Location newTarget = new Location(currentLocation.getX(), currentLocation.getY(), currentLocation.getHeading() - 50);
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(newTarget), this);
+
+        // Make sure to turn before dropping lift.
+        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(new Location(currentLocation).setHeading(180)), this);
         twoBarLift.retract();
+
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueRightHubToCarousel), this);
         DropDuck.dropTheDuck(Carousel.CarouselSide.BLUE, sensors.getMecanum(), this, carousel, false);
+        MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.CarouselToBluePark), this);
         twoBarLift.closeThread();
     }
 }
