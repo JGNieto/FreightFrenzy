@@ -40,7 +40,7 @@ public class RedLeftTSEPark extends LinearOpMode {
 
         tsePipeline = new TSEPipeline(this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
-        twoBarLift.initializeSync(this);
+        twoBarLift.initialize();
 
         telemetry.addData("Status", "Waiting for vision...");
         telemetry.update();
@@ -49,7 +49,7 @@ public class RedLeftTSEPark extends LinearOpMode {
         sensors.getMecanum().updateEncoderReadings();
         dropLevel = tsePipeline.getDropLevel();
 
-        //twoBarLift.startThread();
+        twoBarLift.startThread();
 
         // Remove if using vuforia:
         TSEPipeline.stop(webcam);

@@ -172,7 +172,5 @@ public class EnterWarehouse {
             opMode.telemetry.update();
         }
         mecanum.stop();
-
-        while (opMode.opModeIsActive()) {}
     }
 }

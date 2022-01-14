@@ -42,7 +42,7 @@ public class RedLeftTSEDuckPark extends LinearOpMode {
 
         tsePipeline = new TSEPipeline(this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
-        twoBarLift.initializeSync(this);
+        twoBarLift.initialize();
 
         telemetry.addData("Status", "Waiting for vision...");
 
@@ -55,7 +55,7 @@ public class RedLeftTSEDuckPark extends LinearOpMode {
         webcam.stopStreaming();
         webcam.closeCameraDevice();
 
-        //twoBarLift.startThread();
+        twoBarLift.startThread();
 
         currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedLeftToHub), this);
         twoBarLift.moveToDropLevel(dropLevel);
