@@ -16,9 +16,9 @@ public class TwoBarLift extends Lift {
     // use liftPowerUp or liftPowerDown, else use liftPowerHold.
     private static final int ticksDifferenceBeforeUsingMovementPower = (int) (ticksPerRevolution * 15 / 360);
 
-    public static final int bottomLevelTSHEncoder = 169;
-    public static final int middleLevelTSHEncoder = 260;
-    public static final int topLevelTSHEncoder = 360;
+    public static final int bottomLevelTSHEncoder = 224;
+    public static final int middleLevelTSHEncoder = 313;
+    public static final int topLevelTSHEncoder = 425;
 
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = 0.5;
@@ -53,8 +53,6 @@ public class TwoBarLift extends Lift {
     }
 
     public void moveDown() {
-        twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         twoBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         twoBarMotor.setPower(liftPowerDown);
@@ -64,6 +62,7 @@ public class TwoBarLift extends Lift {
     public void initialize() {
         twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         twoBarMotor.setTargetPosition(targetEncoderPosition);
         twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
