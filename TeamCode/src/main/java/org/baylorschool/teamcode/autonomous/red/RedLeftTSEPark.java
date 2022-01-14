@@ -24,7 +24,7 @@ public class RedLeftTSEPark extends LinearOpMode {
     private Sensors sensors;
     private TSEPipeline tsePipeline;
     private OpenCvWebcam webcam;
-    private Location currentLocation = Places.redLeftStart;
+    private Location currentLocation = new Location(Places.redLeftStart);
     private Globals.DropLevel dropLevel;
     private Carousel carousel;
     private Odometry odometry;

@@ -24,7 +24,7 @@ public class BlueLeftTSEWarehousePark extends LinearOpMode {
     private Sensors sensors;
     private TSEPipeline tsePipeline;
     private OpenCvWebcam webcam;
-    private Location currentLocation = Places.blueLeftStart;
+    private Location currentLocation = new Location(Places.blueLeftStart);
     private Globals.DropLevel dropLevel;
     private Odometry odometry;
 
