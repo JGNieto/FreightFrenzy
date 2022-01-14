@@ -64,14 +64,7 @@ public class CascadingLift extends LinearOpMode {
             double x = gamepad1.left_stick_x;
             double rotation = gamepad1.right_stick_x * ROTATION_COEFFICIENT;
 
-            double leftPower = gamepad1.left_stick_y;
-            double rightPower = gamepad1.right_stick_y;
             double motorPower = 0;
-
-            if (gamepad1.y) {
-                leftPower *= slowModeCoefficient;
-                rightPower *= slowModeCoefficient;
-            }
 
             if (gamepad2.left_bumper) {
                 roller.setPower(rollerGrabPower);
@@ -87,21 +80,13 @@ public class CascadingLift extends LinearOpMode {
             if (gamepad2.dpad_down)
                 motorPower -= liftPower;
 
-            blMotor.setPower(leftPower);
-            flMotor.setPower(leftPower);
-            brMotor.setPower(rightPower);
-            frMotor.setPower(rightPower);
             leftCascade.setPower(motorPower);
             rightCascade.setPower(motorPower);
-
 
             slowMode = slowModeToggle(gamepad1, slowMode);
 
             if (gamepad1.right_stick_button)
                 rotation = gamepad1.right_stick_x;
-
-
-
 
             mecanum.moveGamepad(y, x, rotation, slowMode ? SLOWMODE_COEFFICIENT : 1);
         }
@@ -109,11 +94,11 @@ public class CascadingLift extends LinearOpMode {
 
     private boolean slowModeToggle(Gamepad gamepad, boolean current) {
         // If the users presses one of the buttons, set slow mode to that value, otherwise keep as is.
-        if (gamepad1.y) {
+        if (gamepad.a) {
             return true;
         }
 
-        if (gamepad1.x) {
+        if (gamepad.y) {
             return false;
         }
 
