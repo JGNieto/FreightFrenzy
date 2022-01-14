@@ -1,6 +1,7 @@
 package org.baylorschool.teamcode.autonomous.red;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Globals;
@@ -18,6 +19,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import java.util.Arrays;
 import java.util.Collections;
 
+@Disabled
 @Autonomous(name = "RedLeftTSEDuckPark", group = "Red")
 public class RedLeftTSEDuckPark extends LinearOpMode {
 

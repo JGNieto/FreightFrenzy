@@ -1,10 +1,12 @@
 package org.baylorschool.teamcode.teleop.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.baylorschool.library.IMU;
 
+@Disabled
 @TeleOp(name="IMUTest", group="Test")
 public class IMUTest extends LinearOpMode {
 

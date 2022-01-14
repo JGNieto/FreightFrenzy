@@ -1,6 +1,7 @@
 package org.baylorschool.teamcode.autonomous.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Places;
@@ -10,6 +11,7 @@ import org.baylorschool.library.Sensors;
 
 import java.util.Arrays;
 
+@Disabled
 @Autonomous(name="Path Test", group ="Test")
 public class PathTest extends LinearOpMode {
 

@@ -1,6 +1,7 @@
 package org.baylorschool.teamcode.autonomous.test.vuforia;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -10,6 +11,7 @@ import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 
+@Disabled
 @Autonomous(name="Duck", group ="Test")
 public class Duck extends LinearOpMode {
 

@@ -2,6 +2,7 @@ package org.baylorschool.teamcode.autonomous.test;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Places;
@@ -10,6 +11,7 @@ import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 
+@Disabled
 @Autonomous(name = "MoveToPointTest", group = "Test")
 public class MoveToPoint extends LinearOpMode {
 

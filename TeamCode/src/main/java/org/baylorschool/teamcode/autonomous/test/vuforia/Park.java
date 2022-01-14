@@ -1,6 +1,7 @@
 package org.baylorschool.teamcode.autonomous.test.vuforia;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -12,6 +13,7 @@ import org.baylorschool.library.Vuforia;
 
 import java.util.Arrays;
 
+@Disabled
 @Autonomous(name="Park", group ="VuforiaTest")
 public class Park extends LinearOpMode {
 

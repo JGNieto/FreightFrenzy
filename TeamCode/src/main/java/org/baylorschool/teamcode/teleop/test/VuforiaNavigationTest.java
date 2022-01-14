@@ -1,9 +1,11 @@
 package org.baylorschool.teamcode.teleop.test;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.baylorschool.library.Vuforia;
+@Disabled
 @TeleOp(name="VuforiaNavigationTest", group ="Test")
 public class VuforiaNavigationTest extends LinearOpMode {
 

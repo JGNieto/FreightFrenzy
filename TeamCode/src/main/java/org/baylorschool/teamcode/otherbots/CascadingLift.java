@@ -1,5 +1,6 @@
 package org.baylorschool.teamcode.otherbots;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,6 +8,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.baylorschool.Globals;
 
+@Disabled
 @TeleOp(name="CascadingLift", group="Test")
 public class CascadingLift extends LinearOpMode {
 

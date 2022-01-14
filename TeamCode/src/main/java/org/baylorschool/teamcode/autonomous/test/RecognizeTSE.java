@@ -1,6 +1,7 @@
 package org.baylorschool.teamcode.autonomous.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Globals;
@@ -8,6 +9,7 @@ import org.baylorschool.library.TSEPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 // TSE = Team Shipping Element
+@Disabled
 @Autonomous(name="RecognizeTSE", group ="Test")
 public class RecognizeTSE extends LinearOpMode {
     OpenCvWebcam webcam;
