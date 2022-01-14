@@ -1,4 +1,4 @@
-package org.baylorschool.teamcode.autonomous.blue;
+package org.baylorschool.teamcode.autonomous.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
