@@ -200,8 +200,8 @@ public class Places {
     };
 
     public static final Location[] BlueRightHubToCarousel = new Location[] {
-            new Location(middle(-2.5), middle(1.5)),
-            new Location(middle(-2.5), middle(2.5), -90).backwards(),
+            new Location(middle(-2.5), middle(1.5)).backwards(),
+            new Location(middle(-2.5), middle(2.5), 90).backwards(),
     };
 
     public static final Location[] BlueLeftHubToCarousel = new Location[] {

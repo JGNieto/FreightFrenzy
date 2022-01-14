@@ -23,6 +23,8 @@ public class DropDuck {
      * @return Our best guess of the current location of the robot.
      */
     public static Location dropTheDuck(Carousel.CarouselSide side, Mecanum mecanum, LinearOpMode opMode, Carousel carousel, boolean clearCarousel) {
+        mecanum.setBackwards(false);
+
         // Set wheels to without encoder so that they don't modify their power levels if they detect more resistance.
         // This is so that they don't change behaviour when the robot touches the wall.
         mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
