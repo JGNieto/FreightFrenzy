@@ -52,9 +52,11 @@ public class TeleOpLogic extends LinearOpMode {
             double rotation = controlMap.getRotation() * ROTATION_COEFFICIENT;
 
             if (controlMap.carouselBlue())
-                carousel.dropDuckAsync(Carousel.CarouselSide.BLUE, this);
+                //carousel.dropDuckAsync(Carousel.CarouselSide.BLUE);
+                carousel.setDropPower(Carousel.CarouselSide.BLUE);
             else if (controlMap.carouselRed())
-                carousel.dropDuckAsync(Carousel.CarouselSide.RED, this);
+                //carousel.dropDuckAsync(Carousel.CarouselSide.RED);
+                carousel.setDropPower(Carousel.CarouselSide.RED);
             else
                 carousel.stop();
 
@@ -76,7 +78,8 @@ public class TeleOpLogic extends LinearOpMode {
             telemetry.addData("Speed", y);
             telemetry.addData("Strafe", x);
             telemetry.addData("Rotation", rotation);
-            telemetry.addData("Tape Tilt", controlMap.tapeTilt());
+            telemetry.addData("Tape Tilt Power", controlMap.tapeTilt());
+            telemetry.addData("Tape Tilt", tape.getCurrentTilt());
             telemetry.addData("Tape Extend", controlMap.tapeExtend());
             telemetry.addData("EncoderFR", mecanum.getFrMotor().getCurrentPosition());
             telemetry.addData("EncoderBR", mecanum.getBrMotor().getCurrentPosition());

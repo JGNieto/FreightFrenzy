@@ -94,7 +94,9 @@ public class ControlMap {
     }
 
     public double tapeTilt() {
-        return gamepad2.left_stick_y;
+        double power = gamepad2.left_stick_y;
+        int sign = power < 0 ? -1 : 1;
+        return power * power * sign;
     }
 
     // Setters

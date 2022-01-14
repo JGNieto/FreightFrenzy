@@ -1,6 +1,7 @@
 package org.baylorschool.library.lift;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.baylorschool.Globals;
@@ -63,9 +64,15 @@ public abstract class Lift {
 
     /**
      * Initializes the hardware for operation.
-     * MUST BE IDEMPOTENT.
      */
     public abstract void initialize();
+
+
+    /**
+     * Initializes the hardware for operation interrupting OpMode thread.
+     * @param opMode OpMode instance for sleep.
+     */
+    public abstract void initializeSync(LinearOpMode opMode);
 
     /**
      * To be executed every loop iteration.

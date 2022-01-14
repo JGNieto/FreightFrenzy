@@ -8,7 +8,7 @@ import org.baylorschool.Globals;
 
 public class Carousel {
     private final DcMotor flyWheel;
-
+    private volatile CarouselSide asyncMovementRunning = null;
 
     public enum CarouselSide {
         RED, BLUE
@@ -33,19 +33,27 @@ public class Carousel {
         this.stop();
     }
      */
-    public void dropDuck(CarouselSide side, LinearOpMode opMode) {
+
+    public void setDropPower(CarouselSide side) {
         flyWheel.setPower(side == CarouselSide.BLUE ? Globals.carouselSingleSpeed : -Globals.carouselSingleSpeed);
+    }
+
+    public void dropDuck(CarouselSide side, LinearOpMode opMode) {
+        setDropPower(side);
         opMode.sleep(Globals.carouselSinglePause);
         this.stop();
     }
 
-    public void dropDuckAsync(CarouselSide side, LinearOpMode opMode) {
+    public void dropDuckAsync(CarouselSide side) {
+        if (side == asyncMovementRunning) return;
+        asyncMovementRunning = side;
         new Thread(() -> {
             try {
-                flyWheel.setPower(side == CarouselSide.BLUE ? Globals.carouselSingleSpeed : -Globals.carouselSingleSpeed);
+                setDropPower(side);
                 Thread.sleep(Globals.carouselSinglePause);
             } catch (Exception e) {
             } finally {
+                asyncMovementRunning = null;
                 this.stop();
             }
         }).start();

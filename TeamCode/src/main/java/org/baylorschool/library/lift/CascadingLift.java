@@ -1,6 +1,7 @@
 package org.baylorschool.library.lift;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.Location;
@@ -30,6 +31,10 @@ public class CascadingLift extends Lift {
     @Override
     public void initialize() {
 
+    }
+
+    @Override
+    public void initializeSync(LinearOpMode opMode) {
     }
 
     @Override

@@ -11,8 +11,12 @@ public class Tape {
     Servo servoTilt;
 
     long lastTiltUpdate = 0;
-    final double tiltMultiplier = 0.7;
-    double currentTilt = 0;
+    final double tiltMultiplier = 1;
+
+    final double minTilt = 0.34;
+    final double maxTilt = 0.85;
+    double currentTilt = minTilt;
+
 
     public Tape(CRServo servoExtend, Servo servoTilt) {
         this.servoExtend = servoExtend;
@@ -34,7 +38,12 @@ public class Tape {
         if (lastTiltUpdate != 0) {
             currentTilt += power * tiltMultiplier * (lastTiltUpdate - thisTime) / 1000;
         }
+        currentTilt = currentTilt < minTilt ? minTilt : (currentTilt > maxTilt ? maxTilt : currentTilt);
         lastTiltUpdate = thisTime;
         servoTilt.setPosition(currentTilt);
+    }
+
+    public double getCurrentTilt() {
+        return currentTilt;
     }
 }

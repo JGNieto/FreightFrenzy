@@ -1,11 +1,13 @@
 package org.baylorschool.library.lift;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.Location;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class TwoBarLift extends Lift {
     private static final double ticksPerRevolution = 751.8;
@@ -54,17 +56,17 @@ public class TwoBarLift extends Lift {
 
     @Override
     public void initialize() {
-        /*new Thread(() -> {
+        new Thread(() -> {
             try {
-                doingInitialization = true;
-                twoBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                rollerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+                twoBarMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 twoBarMotor.setPower(liftPowerDown);
                 Thread.sleep(1000);
                 twoBarMotor.setPower(0);
 
-                twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
                 twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                targetEncoderPosition = twoBarMotor.getCurrentPosition();
                 twoBarMotor.setTargetPosition(targetEncoderPosition);
                 twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
@@ -72,29 +74,48 @@ public class TwoBarLift extends Lift {
             } catch (InterruptedException e) {
                 twoBarMotor.setPower(0);
             } finally {
-                doingInitialization = false;
+                startThread();
             }
-        }).start();*/
-
+        }).start();
+/*
         twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         twoBarMotor.setTargetPosition(targetEncoderPosition);
         twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+        rollerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);*/
+    }
+
+    @Override
+    public void initializeSync(LinearOpMode opMode) {
+
         rollerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        twoBarMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        twoBarMotor.setPower(liftPowerDown);
+        opMode.sleep(1000);
+        twoBarMotor.setPower(0);
+
+        twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        targetEncoderPosition = twoBarMotor.getCurrentPosition();
+        twoBarMotor.setTargetPosition(targetEncoderPosition);
+        twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        rollerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        startThread();
     }
 
     @Override
     public void loopIteration() {
-        opMode.telemetry.addData("LiftMove", movement.toString());
-        opMode.telemetry.addData("LiftPos", twoBarMotor.getCurrentPosition());
-        opMode.telemetry.addData("LiftTar", twoBarMotor.getTargetPosition());
-        opMode.telemetry.addData("Limit Switch", limitSwitch.getState() ? "Empty" : "Full");
         if (doingInitialization) {
             opMode.telemetry.addData("Lift", "Initializing...");
             return;
         }
+        opMode.telemetry.addData("LiftMove", movement.toString());
+        opMode.telemetry.addData("LiftPos", twoBarMotor.getCurrentPosition());
+        opMode.telemetry.addData("LiftTar", twoBarMotor.getTargetPosition());
+        opMode.telemetry.addData("Limit Switch", limitSwitch.getState() ? "Empty" : "Full");
         if (movement == LiftMovement.UP) {
             wasMoving = true;
             twoBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
