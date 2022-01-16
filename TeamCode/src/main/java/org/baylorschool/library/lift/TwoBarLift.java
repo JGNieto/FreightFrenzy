@@ -16,9 +16,9 @@ public class TwoBarLift extends Lift {
     // use liftPowerUp or liftPowerDown, else use liftPowerHold.
     private static final int ticksDifferenceBeforeUsingMovementPower = (int) (ticksPerRevolution * 15 / 360);
 
-    public static final int bottomLevelTSHEncoder = 224;
-    public static final int middleLevelTSHEncoder = 313;
-    public static final int topLevelTSHEncoder = 425;
+    public static final int bottomLevelTSHEncoder = 234;
+    public static final int middleLevelTSHEncoder = 333;
+    public static final int topLevelTSHEncoder = 435;
 
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = 0.5;
@@ -28,9 +28,9 @@ public class TwoBarLift extends Lift {
     private static final double liftPowerHold = .2;
 
     // Distance away from the CENTER of the Team Shipping Hub to drop on each level.
-    private static final double dropDistanceTop = 561;
-    private static final double dropDistanceMiddle = 664;
-    private static final double dropDistanceBottom = 621;
+    private static final double dropDistanceTop = 541;
+    private static final double dropDistanceMiddle = 654;
+    private static final double dropDistanceBottom = 611;
 
     private static final int releaseDelay = 2000;
     private static final int rollerThrottle = 2000; // Minimum milliseconds between limit switch becoming free and grabbing again.
@@ -52,10 +52,12 @@ public class TwoBarLift extends Lift {
         limitSwitch = opMode.hardwareMap.get(DigitalChannel.class, Globals.rollerSwitch);
     }
 
-    public void moveDown() {
+    public void moveDown(LinearOpMode opMode) {
         twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         twoBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         twoBarMotor.setPower(liftPowerDown);
+        opMode.sleep(500);
+        twoBarMotor.setPower(0);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class BlueLeftTSEWarehousePark extends LinearOpMode {
 
         tsePipeline = new TSEPipeline(this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
-        twoBarLift.moveDown();
+        twoBarLift.moveDown(this);
 
         telemetry.addData("Status", "Waiting for vision...");
         telemetry.update();

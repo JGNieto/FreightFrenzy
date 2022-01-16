@@ -36,7 +36,7 @@ public class RedRightTSEWarehousePark extends LinearOpMode {
         twoBarLift = new TwoBarLift(this);
         sensors = new Sensors(hardwareMap, false);
         sensors.initialize(hardwareMap, currentLocation.getHeading());
-        twoBarLift.moveDown();
+        twoBarLift.moveDown(this);
 
         tsePipeline = new TSEPipeline(this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
