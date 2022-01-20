@@ -7,12 +7,13 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.baylorschool.Globals;
 
 public class Odometry {
-
     private DcMotor encoderLeft;
     private DcMotor encoderRight;
     private DcMotor encoderMid;
 
     private boolean withdrawn = true;
+    private long previousTime = 0;
+    private long previousTimeDiff = 0; // For computing how frequently this code is ran.
 
     private Servo servoLeft;
     private Servo servoRight;
@@ -23,6 +24,7 @@ public class Odometry {
     private int previousMid = 0;
 
     private boolean firstLoop = true;
+    private static final int diffMidThreshold = 5;
 
     public Odometry(DcMotor encoderLeft, DcMotor encoderRight, DcMotor encoderMid, Servo servoLeft, Servo servoRight, Servo servoMiddle, boolean withdrawn) {
         this.encoderLeft = encoderLeft;
@@ -83,20 +85,27 @@ public class Odometry {
         int measureLeft = encoderLeft.getCurrentPosition() * Globals.leftOdometryCoefficient;
         int measureRight = encoderRight.getCurrentPosition() * Globals.rightOdometryCoefficient;
         int measureMid = encoderMid.getCurrentPosition() * Globals.middleOdometryCoefficient;
+        long measuredTime = System.nanoTime();
 
         int diffLeft = measureLeft - previousLeft;
         int diffRight = measureRight - previousRight;
         int diffMid = measureMid - previousMid;
+        long timeDiff = measuredTime - previousTime;
 
         previousLeft = measureLeft;
         previousRight = measureRight;
         previousMid = measureMid;
+        previousTime = measuredTime;
+        previousTimeDiff = timeDiff;
 
         // First time it's called, we can't do much.
         if (firstLoop) {
             firstLoop = false;
             return currentLocation;
         }
+
+        // Threshold
+        if (1000000.0 * diffMid / timeDiff < diffMidThreshold) diffMid = 0;
 
         double dTheta = Globals.mmPerTick * (diffRight - diffLeft) / Globals.dPar;
         double dX = Globals.mmPerTick * (diffRight + diffLeft) / 2.0;
@@ -143,5 +152,9 @@ public class Odometry {
 
     public int getPreviousMid() {
         return previousMid;
+    }
+
+    public long getPreviousTimeDiff() {
+        return previousTimeDiff;
     }
 }

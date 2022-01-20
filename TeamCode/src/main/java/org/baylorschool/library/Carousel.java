@@ -8,6 +8,8 @@ import org.baylorschool.Globals;
 
 public class Carousel {
     private final DcMotor flyWheel;
+
+    // Stored as volatile so that it can be used by different threads.
     private volatile CarouselSide asyncMovementRunning = null;
 
     public enum CarouselSide {

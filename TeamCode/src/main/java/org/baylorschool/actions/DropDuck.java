@@ -37,7 +37,7 @@ public class DropDuck {
         mecanum.moveNoScaling(-.18, 0, 0);
         opMode.sleep(1500);
 
-        // Separate very slightly from the robot.
+        // Separate very slightly from the carousel.
         mecanum.moveNoScaling(.045, 0, 0);
         opMode.sleep(150);
 
