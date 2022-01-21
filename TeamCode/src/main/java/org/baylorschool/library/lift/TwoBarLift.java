@@ -1,13 +1,12 @@
 package org.baylorschool.library.lift;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.LED;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.Location;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class TwoBarLift extends Lift {
     private static final double ticksPerRevolution = 751.8;
@@ -40,6 +39,9 @@ public class TwoBarLift extends Lift {
     private final DcMotor rollerMotor;
     private final DigitalChannel limitSwitch;
 
+    private final LED ledFull;
+    private final LED ledEmpty;
+
     // Keep track of whether we just stopped moving.
     private volatile boolean wasMoving;
     private volatile long lastTimeLimitSwitch = 0;
@@ -50,6 +52,9 @@ public class TwoBarLift extends Lift {
         twoBarMotor = opMode.hardwareMap.get(DcMotor.class, Globals.twoBarHw);
         rollerMotor = opMode.hardwareMap.get(DcMotor.class, Globals.rollerHw);
         limitSwitch = opMode.hardwareMap.get(DigitalChannel.class, Globals.rollerSwitch);
+
+        ledFull = opMode.hardwareMap.get(LED.class, Globals.ledIntakeFull);
+        ledEmpty = opMode.hardwareMap.get(LED.class, Globals.ledIntakeEmpty);
     }
 
     public void moveDown(LinearOpMode opMode) {
@@ -62,6 +67,8 @@ public class TwoBarLift extends Lift {
 
     @Override
     public void initialize() {
+        setLedState(true); // LED On to indicate lift is not working.
+
         twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         twoBarMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -73,6 +80,8 @@ public class TwoBarLift extends Lift {
 
     @Override
     public void initializeSync(LinearOpMode opMode) {
+        setLedState(true); // LED On to indicate lift is not working.
+
         rollerMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         twoBarMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -125,9 +134,13 @@ public class TwoBarLift extends Lift {
                 }
             }
         }
-        if (!limitSwitch.getState()) {
-             lastTimeLimitSwitch = System.currentTimeMillis();
+
+        boolean intakeFull = !limitSwitch.getState();
+        if (intakeFull) {
+            lastTimeLimitSwitch = System.currentTimeMillis();
         }
+
+        setLedState(intakeFull);
 
         if (rollerState == RollerState.RELEASING)
             rollerMotor.setPower(rollerReleasePower);
@@ -135,6 +148,16 @@ public class TwoBarLift extends Lift {
             rollerMotor.setPower(rollerGrabPower);
         else
             rollerMotor.setPower(0);
+    }
+
+    private void setLedState(boolean intakeFull) {
+        if (intakeFull) {
+            ledFull.enable(true);
+            ledEmpty.enable(false);
+        } else {
+            ledFull.enable(false);
+            ledEmpty.enable(true);
+        }
     }
 
     @Override

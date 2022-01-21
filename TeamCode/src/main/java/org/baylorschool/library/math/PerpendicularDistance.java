@@ -43,7 +43,6 @@ public class PerpendicularDistance {
         double x3 = point.getX();
         double y3 = point.getY();
 
-        // I don't know how this works, but it does.
         double px=x2-x1;
         double py=y2-y1;
         double temp=(px*px)+(py*py);

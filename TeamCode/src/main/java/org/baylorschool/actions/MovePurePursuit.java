@@ -14,14 +14,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.List;
 
 public class MovePurePursuit {
-
-    // Each movement has three phases: Full speed, slipping with brakes on, and refinement.
-    enum MovementState {
-        FULL,
-        SLIP,
-        REFINE,
-    }
-
     /**
      * Move the robot following a path of waypoints using the Pure Pursuit algorithm.
      * @param currentLocation Current location of the robot.
@@ -80,7 +72,7 @@ public class MovePurePursuit {
 
         // To know where we are in the path, we calculate the shortest distance between the robot
         // and each segment, and use it.
-        // TODO: Instead of an infinite line, add check to use only the segments.
+        // TODO: Improve edge case checking.
 
         // for (int i = 1; i < path.getLocations().size() - 1; i++) {
         for (int i = 0; i < path.getLocations().size() - 1; i++) {

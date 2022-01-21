@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.baylorschool.Globals;
-import org.baylorschool.library.Tape;
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.ControlMap;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
+import org.baylorschool.library.Tape;
 import org.baylorschool.library.lift.Lift;
 
 public class TeleOpLogic extends LinearOpMode {

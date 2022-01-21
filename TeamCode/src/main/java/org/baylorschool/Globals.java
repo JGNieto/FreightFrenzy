@@ -33,6 +33,10 @@ public class Globals {
     public static final String twoBarHw = "twobar"; // (1) Expansion Hub
     public static final String rollerSwitch = "rollerSwitch"; // (Digital 0) Expansion Hub
 
+    // Lift LEDs
+    public static final String ledIntakeFull = "ledRed"; // (Digital 3) Expansion Hub
+    public static final String ledIntakeEmpty = "ledBlue"; // (Digital 5) Expansion Hub
+
     // Fly Wheel (for carousel).
     public static final String flyWheel = "flyWheel";
 
