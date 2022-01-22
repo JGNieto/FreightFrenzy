@@ -42,6 +42,11 @@ public class CascadingLift extends Lift {
     }
 
     @Override
+    public int getCapturedElements() {
+        return 0;
+    }
+
+    @Override
     public Location getScoringLocation(Location currentLocation, Hub hub, Globals.DropLevel dropLevel) {
         return null;
     }

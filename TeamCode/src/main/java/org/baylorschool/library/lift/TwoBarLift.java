@@ -20,7 +20,7 @@ public class TwoBarLift extends Lift {
     public static final int topLevelTSHEncoder = 435;
 
     private static final double rollerGrabPower = -1;
-    private static final double rollerReleasePower = 0.5;
+    private static final double rollerReleasePower = 0.65;
 
     private static final double liftPowerUp = .4;
     private static final double liftPowerDown = -.2;
@@ -41,6 +41,8 @@ public class TwoBarLift extends Lift {
 
     private final LED ledFull;
     private final LED ledEmpty;
+
+    private volatile int capturedElements = 0;
 
     // Keep track of whether we just stopped moving.
     private volatile boolean wasMoving;
@@ -108,7 +110,7 @@ public class TwoBarLift extends Lift {
         opMode.telemetry.addData("Limit Switch", limitSwitch.getState() ? "Empty" : "Full");
         if (movement == LiftMovement.UP) {
             wasMoving = true;
-            twoBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            twoBarMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             twoBarMotor.setPower(liftPowerUp);
         } else if (movement == LiftMovement.DOWN) {
             wasMoving = true;
@@ -135,12 +137,12 @@ public class TwoBarLift extends Lift {
             }
         }
 
-        boolean intakeFull = !limitSwitch.getState();
-        if (intakeFull) {
+        capturedElements = !limitSwitch.getState() ? 1 : 0; // Limit switch is active LOW.
+        if (capturedElements > 0) {
             lastTimeLimitSwitch = System.currentTimeMillis();
         }
 
-        setLedState(intakeFull);
+        setLedState(capturedElements > 0);
 
         if (rollerState == RollerState.RELEASING)
             rollerMotor.setPower(rollerReleasePower);
@@ -148,6 +150,11 @@ public class TwoBarLift extends Lift {
             rollerMotor.setPower(rollerGrabPower);
         else
             rollerMotor.setPower(0);
+    }
+
+    @Override
+    public int getCapturedElements() {
+        return capturedElements;
     }
 
     private void setLedState(boolean intakeFull) {

@@ -66,7 +66,6 @@ public abstract class Lift {
      */
     public abstract void initialize();
 
-
     /**
      * Initializes the hardware for operation interrupting OpMode thread.
      * @param opMode OpMode instance for sleep.
@@ -77,6 +76,15 @@ public abstract class Lift {
      * To be executed every loop iteration.
      */
     public abstract void loopIteration();
+
+    /**
+     * Returns the program's best guess of how many elements have been captured.
+     * Note: in Freight Frenzy, the result will either be 0 or 1. An integer is used for flexibility
+     * moving forward into other seasons where it may be the case that an intake can have more than
+     * one item. However, this season could have been implemented with a boolean.
+     * @return number of items estimation.
+     */
+    public abstract int getCapturedElements();
 
     /**
      * Location for scoring taking into account desired TSH level and current location.

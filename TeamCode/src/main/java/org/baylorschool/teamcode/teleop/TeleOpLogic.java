@@ -1,5 +1,6 @@
 package org.baylorschool.teamcode.teleop;
 
+import com.qualcomm.ftccommon.SoundPlayer;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -8,8 +9,10 @@ import org.baylorschool.library.Carousel;
 import org.baylorschool.library.ControlMap;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
+import org.baylorschool.library.Sounds;
 import org.baylorschool.library.Tape;
 import org.baylorschool.library.lift.Lift;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class TeleOpLogic extends LinearOpMode {
 
@@ -19,6 +22,7 @@ public class TeleOpLogic extends LinearOpMode {
     private Odometry odometry;
     private final ControlMap controlMap;
     private Tape tape;
+    private Sounds sounds;
 
     private final double SLOW_MODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
@@ -36,6 +40,12 @@ public class TeleOpLogic extends LinearOpMode {
         odometry = new Odometry(hardwareMap, true);
         mecanum = new Mecanum(hardwareMap);
         carousel = new Carousel(hardwareMap);
+        try {
+            sounds = new Sounds(hardwareMap);
+        } catch (Exception e) {
+            telemetry.addData("ERROR", "NO SOUNDS");
+            telemetry.update();
+        }
         tape = new Tape(hardwareMap);
         lift = Globals.createNewLift(this);
         lift.initialize();
@@ -45,6 +55,8 @@ public class TeleOpLogic extends LinearOpMode {
 
         controlMap.setGamepad1(gamepad1);
         controlMap.setGamepad2(gamepad2);
+
+        boolean capturedFreight = false;
 
         while (opModeIsActive()) {
             double y = controlMap.getY();
@@ -64,6 +76,15 @@ public class TeleOpLogic extends LinearOpMode {
             if (controlMap.fullRotationPower())
                 rotation = controlMap.getRotation();
 
+            if (lift.getCapturedElements() > 0) {
+                if (!capturedFreight) {
+                    capturedFreight = true;
+                    sounds.playSuccess();
+                }
+            } else {
+                capturedFreight = false;
+            }
+
             // Tape measure power.
             tape.setTiltPower(controlMap.tapeTilt());
             tape.setExtendPower(controlMap.tapeExtend());
@@ -71,7 +92,6 @@ public class TeleOpLogic extends LinearOpMode {
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, controlMap.isSlowMode() ? SLOW_MODE_COEFFICIENT : 1);
             lift.loopIterationTeleOp(controlMap);
-
             // Report telemetry
             telemetry.addData("X Gamepad", x);
             telemetry.addData("Y Gamepad", y);
@@ -85,6 +105,8 @@ public class TeleOpLogic extends LinearOpMode {
             telemetry.addData("EncoderBR", mecanum.getBrMotor().getCurrentPosition());
             telemetry.addData("EncoderFL", mecanum.getFlMotor().getCurrentPosition());
             telemetry.addData("EncoderBL", mecanum.getBlMotor().getCurrentPosition());
+            telemetry.addData("Carousel Blue", controlMap.carouselBlue());
+            telemetry.addData("Carousel Red", controlMap.carouselRed());
             telemetry.update();
         }
 
