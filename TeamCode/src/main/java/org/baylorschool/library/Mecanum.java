@@ -249,6 +249,17 @@ public class Mecanum {
         moveGamepad(-y, -x, rotation, 1);
     }
 
+    /**
+     * Move the robot with a custom coefficient.
+     * @param y Y component of movement (forward+, backward-).
+     * @param x X component of movement (right+, left-).
+     * @param rotation Rotation component of the robot (positive is CW).
+     * @param coefficient Coefficient to multiply the final motor value.
+     */
+    public void moveCustomScaling(double y, double x, double rotation, double coefficient) {
+        moveGamepad(-y, -x, rotation, coefficient);
+    }
+
     public void moveMecanum(double y, double x, double rotation) {
         moveGamepad(-y, -x, rotation, Globals.autonomousSpeed);
     }

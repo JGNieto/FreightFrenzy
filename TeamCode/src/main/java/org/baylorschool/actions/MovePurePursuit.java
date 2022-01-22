@@ -30,6 +30,7 @@ public class MovePurePursuit {
         while (opMode.opModeIsActive()) {
             // Calculate the next location using the Pure Pursuit algorithm.
             currentLocation = odometry.calculateNewLocation(currentLocation);
+            currentLocation.reportTelemetry(opMode.telemetry);
 
             // Check whether we are within an acceptable distance to the final location. If so, movement is done.
             if (Location.withinTolerance(currentLocation, path.getLastLocation(), path.getTolerance()))
@@ -42,8 +43,10 @@ public class MovePurePursuit {
             if (purePursuitTarget == null) {
                 moveTowardPosition(mecanum, currentLocation, path.getLocations().get(0), 0, 1);
             } else {
-                moveTowardPositionAngle(mecanum, currentLocation, purePursuitTarget, purePursuitTarget.getHeading(), purePursuitTarget.getPurePursuitTurnSpeed());
+                moveTowardPositionAngle(mecanum, currentLocation, purePursuitTarget, purePursuitTarget.getHeading(), purePursuitTarget.getPurePursuitTurnSpeed(), opMode.telemetry);
+                purePursuitTarget.reportTelemetry(opMode.telemetry);
             }
+            opMode.telemetry.update();
         }
 
         // Perfect angle.
@@ -107,7 +110,6 @@ public class MovePurePursuit {
             double smallY = Math.min(startLocation.getY(), endLocation.getY());
             double bigY = Math.max(startLocation.getY(), endLocation.getY());
 
-
             // Distance squared is used to avoid doing a square root, which is very expensive.
             double distanceRobotToEndLocation = Location.distanceSquared(currentLocation, endLocation);
 
@@ -139,11 +141,12 @@ public class MovePurePursuit {
         double absoluteAngleDiff = Location.angleLocations(currentLocation, target); // Angle between points.
         double relativeAngleDiff = Location.angleBound(absoluteAngleDiff - currentLocation.getHeading()); // Angle for the robot to turn.
 
-        double relativeXDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
-        double relativeYDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
+        double relativeXDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
+        double relativeYDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
 
-        double xPower = relativeXDiff / (Math.abs(relativeXDiff) + Math.abs(relativeYDiff));
-        double yPower = relativeYDiff / (Math.abs(relativeXDiff) + Math.abs(relativeYDiff));
+        double divisor = Math.abs(relativeXDiff) + Math.abs(relativeYDiff);
+        double xPower = relativeXDiff / divisor;
+        double yPower = relativeYDiff / divisor;
 
         double rotPower = 0;
 
@@ -159,22 +162,19 @@ public class MovePurePursuit {
         double relativeAngleDiff = Location.angleBound(absoluteAngleDiff - currentLocation.getHeading()); // Angle for the robot to turn.
 
         // Original:
-        // double relativeXDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
-        // double relativeYDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
+        double relativeXDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
+        double relativeYDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
 
-        // Testing
-        double relativeXDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
-        double relativeYDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
-
-        double xPower = relativeXDiff / (Math.abs(relativeXDiff) + Math.abs(relativeYDiff));
-        double yPower = relativeYDiff / (Math.abs(relativeXDiff) + Math.abs(relativeYDiff));
+        double divisor = Math.abs(relativeXDiff) + Math.abs(relativeYDiff);
+        double xPower = relativeXDiff / divisor;
+        double yPower = relativeYDiff / divisor;
 
         double rotPower = 0;
 
         // Don't turn when very close.
         if (distanceToTarget > 50) rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
 
-        mecanum.moveMecanum(yPower, xPower, rotPower);
+        mecanum.moveCustomScaling(yPower, xPower, rotPower, 0.7);
 
         telemetry.addData("Dist", distanceToTarget);
         telemetry.addData("Abs Ang", absoluteAngleDiff);
@@ -183,6 +183,7 @@ public class MovePurePursuit {
         telemetry.addData("Y Diff", relativeYDiff);
         telemetry.addData("X Power", xPower);
         telemetry.addData("Y Power", yPower);
+        telemetry.addData("Rot Power", rotPower);
     }
 
 
@@ -202,7 +203,7 @@ public class MovePurePursuit {
     public static double getAngleTurnPower(double currentAngle, double targetAngle, double turnSpeed) {
         // If the angle difference is more than 15º, maximum power will be applied.
         // When it gets closer, the power will be gradually reduced.
-        double angleTurnMagnitude = Location.angleTurn(currentAngle, targetAngle) / 15;
+        double angleTurnMagnitude = Location.angleTurn(currentAngle, targetAngle) / 15.0;
         return Range.clip(angleTurnMagnitude, -1, 1) * turnSpeed;
     }
 }
