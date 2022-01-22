@@ -7,26 +7,29 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.baylorschool.Globals;
 
 public class Odometry {
-    private DcMotor encoderLeft;
-    private DcMotor encoderRight;
-    private DcMotor encoderMid;
+    private final DcMotor encoderLeft;
+    private final DcMotor encoderRight;
+    private final DcMotor encoderMid;
+
+    private final IMU imu;
 
     private boolean withdrawn = true;
     private long previousTime = 0;
     private long previousTimeDiff = 0; // For computing how frequently this code is ran.
 
-    private Servo servoLeft;
-    private Servo servoRight;
-    private Servo servoMiddle;
+    private final Servo servoLeft;
+    private final Servo servoRight;
+    private final Servo servoMiddle;
 
     private int previousLeft = 0;
     private int previousRight = 0;
     private int previousMid = 0;
+    private double previousImu = 0;
 
     private boolean firstLoop = true;
     private static final int diffMidThreshold = 5;
 
-    public Odometry(DcMotor encoderLeft, DcMotor encoderRight, DcMotor encoderMid, Servo servoLeft, Servo servoRight, Servo servoMiddle, boolean withdrawn) {
+    public Odometry(DcMotor encoderLeft, DcMotor encoderRight, DcMotor encoderMid, Servo servoLeft, Servo servoRight, Servo servoMiddle, IMU imu, boolean withdrawn) {
         this.encoderLeft = encoderLeft;
         this.encoderRight = encoderRight;
         this.encoderMid = encoderMid;
@@ -34,6 +37,8 @@ public class Odometry {
         this.servoLeft = servoLeft;
         this.servoRight = servoRight;
         this.servoMiddle = servoMiddle;
+
+        this.imu = imu;
 
         if (withdrawn)
             this.withdraw();
@@ -47,6 +52,8 @@ public class Odometry {
         this.encoderLeft = null;
         this.encoderRight = null;
         this.encoderMid = null;
+
+        this.imu = null;
 
         this.servoLeft = hardwareMap.get(Servo.class, Globals.servoLeftHw);
         this.servoRight = hardwareMap.get(Servo.class, Globals.servoRightHw);
@@ -81,6 +88,15 @@ public class Odometry {
     public Location calculateNewLocation(Location currentLocation) {
         if (withdrawn) // Can't do much if wheels are up. Don't want to throw exception to avoid crash.
             return currentLocation;
+        imu.updateOrientation();
+
+        double measureImu;
+        double diffImu = 0;
+        if (imu != null) {
+            measureImu = imu.getHeading();
+            diffImu = measureImu - previousImu;
+            previousImu = measureImu;
+        }
 
         int measureLeft = encoderLeft.getCurrentPosition() * Globals.leftOdometryCoefficient;
         int measureRight = encoderRight.getCurrentPosition() * Globals.rightOdometryCoefficient;
@@ -105,11 +121,17 @@ public class Odometry {
         }
 
         // Threshold
-        if (1000000.0 * diffMid / timeDiff < diffMidThreshold) diffMid = 0;
+        //if (1000000.0 * diffMid / timeDiff < diffMidThreshold) diffMid = 0;
 
-        double dTheta = Globals.mmPerTick * (diffRight - diffLeft) / Globals.dPar;
+        double dTheta;
         double dX = Globals.mmPerTick * (diffRight + diffLeft) / 2.0;
         double dY = Globals.mmPerTick * (diffMid - (diffRight - diffLeft) * Globals.dPer / Globals.dPar);
+
+        if (imu != null) {
+            dTheta = Math.toRadians(diffImu);
+        } else {
+            dTheta = Globals.mmPerTick * (diffRight - diffLeft) / Globals.dPar;
+        }
 
         double thetaAvg = Math.toRadians(currentLocation.getHeading()) + (dTheta / 2);
         double cosTheta = Math.cos(thetaAvg);

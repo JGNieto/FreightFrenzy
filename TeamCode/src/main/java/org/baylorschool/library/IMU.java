@@ -17,6 +17,12 @@ public class IMU {
 
     private Orientation allAngles;
 
+    public IMU() {}
+
+    public IMU(HardwareMap hardwareMap) {
+        this.initializeImu(hardwareMap);
+    }
+
     public enum Axis {
         X, Y, Z
     }

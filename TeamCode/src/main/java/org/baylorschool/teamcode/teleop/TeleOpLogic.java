@@ -40,12 +40,6 @@ public class TeleOpLogic extends LinearOpMode {
         odometry = new Odometry(hardwareMap, true);
         mecanum = new Mecanum(hardwareMap);
         carousel = new Carousel(hardwareMap);
-        try {
-            sounds = new Sounds(hardwareMap);
-        } catch (Exception e) {
-            telemetry.addData("ERROR", "NO SOUNDS");
-            telemetry.update();
-        }
         tape = new Tape(hardwareMap);
         lift = Globals.createNewLift(this);
         lift.initialize();
@@ -55,8 +49,6 @@ public class TeleOpLogic extends LinearOpMode {
 
         controlMap.setGamepad1(gamepad1);
         controlMap.setGamepad2(gamepad2);
-
-        boolean capturedFreight = false;
 
         while (opModeIsActive()) {
             double y = controlMap.getY();
@@ -75,15 +67,6 @@ public class TeleOpLogic extends LinearOpMode {
             // If driver wants full power, give it to them.
             if (controlMap.fullRotationPower())
                 rotation = controlMap.getRotation();
-
-            if (lift.getCapturedElements() > 0) {
-                if (!capturedFreight) {
-                    capturedFreight = true;
-                    sounds.playSuccess();
-                }
-            } else {
-                capturedFreight = false;
-            }
 
             // Tape measure power.
             tape.setTiltPower(controlMap.tapeTilt());

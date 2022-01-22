@@ -1,6 +1,5 @@
 package org.baylorschool.teamcode.teleop.test;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,12 +8,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.Carousel;
+import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
 import org.baylorschool.library.lift.Lift;
 
-@Disabled
 @TeleOp(name="OdometryTest", group="Test")
 public class OdometryTest extends LinearOpMode {
 
@@ -22,6 +21,7 @@ public class OdometryTest extends LinearOpMode {
     private Carousel carousel;
     private Lift lift;
     private Odometry odometry;
+    private IMU imu;
 
     private final double SLOW_MODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
@@ -33,11 +33,13 @@ public class OdometryTest extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
+        imu = new IMU(hardwareMap);
         mecanum = new Mecanum(hardwareMap);
         odometry = new Odometry(mecanum.getFlMotor(), mecanum.getFrMotor(), mecanum.getBlMotor(),
                 hardwareMap.get(Servo.class, Globals.servoLeftHw),
                 hardwareMap.get(Servo.class, Globals.servoRightHw),
                 hardwareMap.get(Servo.class, Globals.servoMiddleHw),
+                imu,
                 false
         );
         carousel = new Carousel(hardwareMap);
@@ -74,20 +76,20 @@ public class OdometryTest extends LinearOpMode {
 
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, slowMode ? SLOW_MODE_COEFFICIENT : 1);
-            lift.loopIterationTeleOp(gamepad2);
+            lift.loopIterationTeleOp(gamepad1);
 
             // Report telemetry
-            telemetry.addData("X Gamepad", x);
-            telemetry.addData("Y Gamepad", y);
-            telemetry.addData("Speed", y);
-            telemetry.addData("Strafe", x);
-            telemetry.addData("Rotation", rotation);
             telemetry.addData("Odo Left", odometry.getPreviousLeft());
             telemetry.addData("Odo Right", odometry.getPreviousRight());
             telemetry.addData("Odo Mid", odometry.getPreviousMid());
             telemetry.addData("Loc X", currentLocation.getX());
             telemetry.addData("Loc Y", currentLocation.getY());
             telemetry.addData("Loc Head", currentLocation.getHeading());
+            telemetry.addData("X Gamepad", x);
+            telemetry.addData("Y Gamepad", y);
+            telemetry.addData("Speed", y);
+            telemetry.addData("Strafe", x);
+            telemetry.addData("Rotation", rotation);
             telemetry.update();
         }
     }
