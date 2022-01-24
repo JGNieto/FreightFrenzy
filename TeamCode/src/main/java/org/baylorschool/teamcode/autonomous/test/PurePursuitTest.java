@@ -22,15 +22,14 @@ public class PurePursuitTest extends LinearOpMode {
     Mecanum mecanum;
     IMU imu;
     Path path = new Path(new Location[]{
-            new Location(-951.08, 1383.94),
-            new Location(-938.89, 999.85),
-            new Location(-1103.5, 566.99),
-            new Location(-1255.91, 237.77),
-            new Location(-1091.3, -274.35),
-            new Location(-719.41, -121.93),
-            new Location(-493.83, 12.19),
-            new Location(-292.64, 6.1),
-            new Location(91.45, 0),
+            new Location(-1225.43, 1219.33),
+            new Location(-1554.65, 609.67),
+            new Location(-1243.72, -6.1),
+            new Location(-634.05, 0),
+            new Location(-18.29, -6.1),
+            new Location(292.64, 371.9),
+            new Location(298.74, 920.6),
+
     });
 
     @Override

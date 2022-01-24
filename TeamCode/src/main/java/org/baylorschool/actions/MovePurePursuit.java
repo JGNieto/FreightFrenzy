@@ -14,6 +14,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import java.util.List;
 
 public class MovePurePursuit {
+    private static final double MOVEMENT_COEFFICIENT = .8;
+
     /**
      * Move the robot following a path of waypoints using the Pure Pursuit algorithm.
      * @param currentLocation Current location of the robot.
@@ -55,7 +57,7 @@ public class MovePurePursuit {
             if (Location.angleWithinTolerance(currentLocation, path.getLastLocation(), path.getTolerance()))
                 break;
             // Move towards correct angle.
-            mecanum.moveMecanum(0, 0, getAngleTurnPower(currentLocation.getHeading(), path.getLastLocation().getHeading(), 1));
+            mecanum.moveCustomScaling(0, 0, getAngleTurnPower(currentLocation.getHeading(), path.getLastLocation().getHeading(), 1), MOVEMENT_COEFFICIENT);
         }
 
         return currentLocation;
@@ -89,6 +91,13 @@ public class MovePurePursuit {
             }
         }
 
+        // To avoid going back and redoing previous paths, we remove waypoints we have already passed.
+        // This is inefficient if we remove more than one because of the way ArrayList is implemented.
+        // However, removing more than one is very rare, so we accept this inefficiency.
+        for (int i = 0; i < championStartLocationIndex; i++) {
+            path.getLocations().remove(i);
+        }
+
         Location lastLocation = path.getLastLocation();
         Location championEndLocation = path.getLocations().get(championStartLocationIndex + 1);
 
@@ -119,18 +128,28 @@ public class MovePurePursuit {
                 if (intersection.getX() < smallX || intersection.getY() < smallY || intersection.getX() > bigX || intersection.getY() > bigY)
                     continue;
 
-                double distance = Location.distanceSquared(intersection, championEndLocation);
+                double distance = Location.distanceSquared(intersection, endLocation);
                 if (distance > distanceRobotToEndLocation) continue;
 
                 if (championIntersection == null || championDistance < distance) {
                     championIntersection = intersection;
                     championDistance = distance;
+                    championEndLocation = endLocation;
                 }
             }
 
             if (championIntersection != null) break;
         }
 
+        if (championIntersection != null) {
+            championIntersection.setHeading(Location.angleLocations(currentLocation, championEndLocation));
+
+            // Do not turn when very close.
+            if (Location.distanceSquared(currentLocation, championEndLocation) < 2500)
+                championIntersection.setPurePursuitTurnSpeed(0);
+            else
+                championIntersection.setPurePursuitTurnSpeed(championEndLocation.getPurePursuitTurnSpeed());
+        }
         return championIntersection;
     }
 
@@ -148,12 +167,9 @@ public class MovePurePursuit {
         double xPower = relativeXDiff / divisor;
         double yPower = relativeYDiff / divisor;
 
-        double rotPower = 0;
+        double rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
 
-        // Don't turn when very close.
-        if (distanceToTarget > 50) rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
-
-        mecanum.moveMecanum(yPower, xPower, rotPower);
+        mecanum.moveCustomScaling(yPower, xPower, rotPower, MOVEMENT_COEFFICIENT);
     }
 
     public static void moveTowardPositionAngle(Mecanum mecanum, Location currentLocation, Location target, double targetAngle, double turnSpeed, Telemetry telemetry) {
@@ -169,14 +185,12 @@ public class MovePurePursuit {
         double xPower = relativeXDiff / divisor;
         double yPower = relativeYDiff / divisor;
 
-        double rotPower = 0;
-
-        // Don't turn when very close.
-        if (distanceToTarget > 50) rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
+        double rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
 
         mecanum.moveCustomScaling(yPower, xPower, rotPower, 0.7);
 
         telemetry.addData("Dist", distanceToTarget);
+        telemetry.addData("Target Ang", targetAngle);
         telemetry.addData("Abs Ang", absoluteAngleDiff);
         telemetry.addData("Rel Ang", relativeAngleDiff);
         telemetry.addData("X Diff", relativeXDiff);
@@ -188,11 +202,11 @@ public class MovePurePursuit {
 
 
     public static void moveTowardPosition(Mecanum mecanum, Location currentLocation, Location target, double preferredAngle, double turnSpeed) {
-        double distanceToTarget = Location.distance(currentLocation, target);
+        double distanceToTarget = Location.distanceSquared(currentLocation, target);
         double targetAngle; // Angle between points
 
         // Don't turn when very close.
-        if (distanceToTarget < 50)
+        if (distanceToTarget < 2500)
             targetAngle = currentLocation.getHeading();
         else
             targetAngle = Location.angleBound(Location.angleLocations(currentLocation, target) + preferredAngle);

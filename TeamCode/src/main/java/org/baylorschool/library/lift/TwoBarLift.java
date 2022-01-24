@@ -45,7 +45,7 @@ public class TwoBarLift extends Lift {
     private volatile int capturedElements = 0;
 
     // Keep track of whether we just stopped moving.
-    private volatile boolean wasMoving;
+    private volatile boolean wasMoving = true;
     private volatile long lastTimeLimitSwitch = 0;
 
     public TwoBarLift(LinearOpMode opMode) {
