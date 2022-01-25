@@ -5,10 +5,9 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Freight Frenzy selector</title>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+  <script src="jquery.min.js"></script>
+  <link rel="stylesheet" href="atom-one-dark.min.css">
+  <script src="highlight.min.js"></script>
   <!-- I know this  code is bad and I ask for forgiveness. I just didn't have time to do it well. -->
   <style>
     .row {
@@ -82,6 +81,8 @@
       for (const [x, y] of points) {
         text += `\n\tnew Location(${x}, ${y}),`
       }
+      if (points.length === 0)
+        text += "\n\t// No points yet. Click on the image!"
       text += "\n};";
       $("#code").html(text);
       hljs.highlightAll();
