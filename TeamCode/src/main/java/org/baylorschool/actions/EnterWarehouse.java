@@ -3,6 +3,7 @@ package org.baylorschool.actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.baylorschool.Globals;
 import org.baylorschool.Places;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
@@ -16,10 +17,6 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class EnterWarehouse {
-    public enum WarehouseSide {
-        RED, BLUE
-    }
-
     // Locations to go to before actually entering the warehouse.
     static Location redEntryPoint = new Location(Places.middle(0.5), Places.awayPerpendicular(3), 0);
     static Location blueEntryPoint = new Location(Places.middle(0.5), Places.awayPerpendicular(-3), 0);
@@ -36,17 +33,17 @@ public class EnterWarehouse {
      * @param opMode OpMode instance.
      * @return New location of the robot.
      */
-    public static Location enterWarehouse(WarehouseSide side, Location currentLocation, Sensors sensors, LinearOpMode opMode) {
+    public static Location enterWarehouse(Globals.WarehouseSide side, Location currentLocation, Sensors sensors, LinearOpMode opMode) {
         // Set wheels to without encoder so that they don't modify their power levels if they detect more resistance.
         // This is so that they don't change behaviour when the robot touches the wall.
         sensors.getMecanum().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         // Move the robot toward the wall to align it.
-        sensors.getMecanum().moveMecanum(0, (side == WarehouseSide.RED ? -1 : 1) * .5, 0);
+        sensors.getMecanum().moveMecanum(0, (side == Globals.WarehouseSide.RED ? -1 : 1) * .5, 0);
         opMode.sleep(1500);
 
         // Y Value of the location when the robot is next to the wall.
-        double yValue = Places.awayPerpendicular(3 * (side == WarehouseSide.RED ? -1 : 1));
+        double yValue = Places.awayPerpendicular(3 * (side == Globals.WarehouseSide.RED ? -1 : 1));
 
         // The heading that the robot has after the alignment.
         double headingAlign = Math.abs(currentLocation.getHeading()) < 90 ? 0 : 180;
@@ -73,13 +70,13 @@ public class EnterWarehouse {
      * @param currentLocation Current location of the robot
      * @param mecanum For movement
      * @param odometry For localization
-     * @param locations A list of locations (which can be empty) that the robot will follow with Pure Pursuit before going to the entry point. E.g to avoid obstacles.
+     * @param locations A list of locations (which can be empty) that the robot will follow with Pure Pursuit before going to the entry point. E.g to avoid obstacles. This list will be mutated.
      * @param opMode OpMode that the robot is running at this time.
      * @return Current Location.
      */
-    public static Location enterWarehouseOdometry(WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, ArrayList<Location> locations, LinearOpMode opMode) {
+    public static Location enterWarehouseOdometry(Globals.WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, ArrayList<Location> locations, LinearOpMode opMode) {
         // Add entry location to the end of the list of waypoints that Pure Pursuit will follow.
-        locations.add(side == WarehouseSide.BLUE ? blueEntryPoint : redEntryPoint);
+        locations.add(side == Globals.WarehouseSide.BLUE ? blueEntryPoint : redEntryPoint);
 
         // Create path instance from the locations list.
         Path path = new Path(locations);
@@ -88,7 +85,7 @@ public class EnterWarehouse {
         currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
 
         // Create path to move into the warehouse. Although Pure Pursuit is technically used, it will not affect much.
-        path = new Path(Collections.singletonList(side == WarehouseSide.BLUE ? blueInsidePoint : redInsidePoint));
+        path = new Path(Collections.singletonList(side == Globals.WarehouseSide.BLUE ? blueInsidePoint : redInsidePoint));
 
         // Enter the warehouse.
         currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
@@ -106,7 +103,7 @@ public class EnterWarehouse {
      * @param opMode OpMode that the robot is running at this time.
      * @return Current Location.
      */
-    public static Location enterWarehouseOdometry(WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, LinearOpMode opMode) {
+    public static Location enterWarehouseOdometry(Globals.WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, LinearOpMode opMode) {
         return enterWarehouseOdometry(side, currentLocation, mecanum, odometry, new ArrayList<>(), opMode);
     }
 

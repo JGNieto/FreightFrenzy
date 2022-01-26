@@ -1,6 +1,8 @@
-package org.baylorschool.teamcode.teleop;
+package org.baylorschool.teamcode.teleop.drivers.scenarios;
+
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.baylorschool.Globals;
@@ -11,24 +13,23 @@ import org.baylorschool.library.Odometry;
 import org.baylorschool.library.Sounds;
 import org.baylorschool.library.Tape;
 import org.baylorschool.library.lift.Lift;
+import org.baylorschool.teamcode.teleop.drivers.controls.MichaelJacksonsControls;
 
-public class TeleOpLogic extends LinearOpMode {
+@TeleOp(name="Scenario1", group="Scenario")
+public class TemporarilyOff extends LinearOpMode {
+    // In this scenario designed to train drivers, the robot stops working for 8 seconds after 1 minute.
+    // All changes compared to the normal TeleOpLogic are market with a SCENARIO comment.
 
     private Mecanum mecanum;
     private Carousel carousel;
     private Lift lift;
     private Odometry odometry;
-    private final ControlMap controlMap;
+    private ControlMap controlMap = new MichaelJacksonsControls();
     private Tape tape;
     private Sounds sounds;
 
     private final double SLOW_MODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
-
-    public TeleOpLogic(ControlMap controlMap) {
-        super();
-        this.controlMap = controlMap;
-    }
 
     @Override
     public void runOpMode() {
@@ -41,6 +42,10 @@ public class TeleOpLogic extends LinearOpMode {
         tape = new Tape(hardwareMap);
         lift = Globals.createNewLift(this);
         lift.initialize();
+
+        // SCENARIO
+        long startTime = System.currentTimeMillis();
+        boolean hasDoneScenario = false;
 
         waitForStart();
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -70,9 +75,17 @@ public class TeleOpLogic extends LinearOpMode {
             tape.setTiltPower(controlMap.tapeTilt());
             tape.setExtendPower(controlMap.tapeExtend());
 
+            // SCENARIO
+            if (System.currentTimeMillis() - startTime > 45 * 1000 && !hasDoneScenario) {
+                hasDoneScenario = true;
+                sleep(8000);
+            }
+
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, controlMap.isSlowMode() ? SLOW_MODE_COEFFICIENT : 1);
+
             lift.loopIterationTeleOp(controlMap);
+
             // Report telemetry
             telemetry.addData("X Gamepad", x);
             telemetry.addData("Y Gamepad", y);
@@ -90,7 +103,6 @@ public class TeleOpLogic extends LinearOpMode {
             telemetry.addData("Carousel Red", controlMap.carouselRed());
             telemetry.update();
         }
-
         lift.closeThread();
     }
 }

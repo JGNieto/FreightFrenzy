@@ -119,7 +119,6 @@ public class TwoBarLift extends Lift {
         } else {
             if (wasMoving) {
                 wasMoving = false;
-                twoBarMotor.setPower(liftPowerHold);
                 targetEncoderPosition = twoBarMotor.getCurrentPosition();
             }
             if (!twoBarMotor.isBusy()) {

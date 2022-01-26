@@ -21,7 +21,11 @@
 
     .right {
       margin-left: 10px;
-      flex: 200px;
+      flex: 500px;
+    }
+
+    code {
+      max-width: 500px;
     }
   </style>
   <script>
@@ -89,7 +93,7 @@
     }
 
     function roundCoordinate(value) {
-      return Math.round(value * 100) / 100;
+      return Math.round(value);
     }
   </script>
 </head>
@@ -101,7 +105,7 @@
     <div class="right">
       <button id="clear-btn">Clear</button>
       <pre>
-        <code id="code" class="language-java" style="max-width: 300px;"></code>
+        <code id="code" class="language-java"></code>
       </pre>
     </div>
   </div>

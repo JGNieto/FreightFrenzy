@@ -2,8 +2,8 @@ package org.baylorschool.teamcode.teleop.drivers;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.baylorschool.library.ControlMap;
 import org.baylorschool.teamcode.teleop.TeleOpLogic;
+import org.baylorschool.teamcode.teleop.drivers.controls.DriverTeam2Controls;
 
 
 @TeleOp(name="DriverTeam2", group="Drivers")
@@ -13,8 +13,3 @@ public class DriverTeam2 extends TeleOpLogic {
     }
 }
 
-class DriverTeam2Controls extends ControlMap {
-    public DriverTeam2Controls() {
-        super();
-    }
-}

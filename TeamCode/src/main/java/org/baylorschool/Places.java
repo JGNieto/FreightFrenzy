@@ -3,9 +3,6 @@ package org.baylorschool;
 import org.baylorschool.library.Location;
 
 public class Places {
-    // MILLIMETERS
-    static final double robotLength = 433;
-    static final double robotWidth = 337;
 
     static final double tileLength = 609.6;
 
@@ -40,7 +37,7 @@ public class Places {
      */
     public static double closePerpendicular(double tile) {
         int sign = tile < 0 ? -1 : +1;
-        return sign * (Math.abs(tile * tileLength) - robotWidth / 2);
+        return sign * (Math.abs(tile * tileLength) - Globals.robotWidth / 2);
     }
 
     /**
@@ -51,7 +48,7 @@ public class Places {
      */
     public static double awayPerpendicular(double tile) {
         int sign = tile < 0 ? -1 : +1;
-        return sign * (Math.abs(tile * tileLength) + robotWidth / 2);
+        return sign * (Math.abs(tile * tileLength) + Globals.robotWidth / 2);
     }
 
     /**
@@ -62,7 +59,7 @@ public class Places {
      */
     public static double closeParallel(double tile) {
         int sign = tile < 0 ? -1 : +1;
-        return sign * (Math.abs(tile * tileLength) - robotLength / 2);
+        return sign * (Math.abs(tile * tileLength) - Globals.robotLength / 2);
     }
 
     /**
@@ -73,7 +70,7 @@ public class Places {
      */
     public static double awayParallel(double tile) {
         int sign = tile < 0 ? -1 : +1;
-        return sign * (Math.abs(tile * tileLength) + robotLength / 2);
+        return sign * (Math.abs(tile * tileLength) + Globals.robotLength / 2);
     }
 
     /**

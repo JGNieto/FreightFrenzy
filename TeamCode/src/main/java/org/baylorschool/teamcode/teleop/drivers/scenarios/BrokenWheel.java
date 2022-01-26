@@ -1,6 +1,8 @@
-package org.baylorschool.teamcode.teleop;
+package org.baylorschool.teamcode.teleop.drivers.scenarios;
+
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.baylorschool.Globals;
@@ -11,24 +13,23 @@ import org.baylorschool.library.Odometry;
 import org.baylorschool.library.Sounds;
 import org.baylorschool.library.Tape;
 import org.baylorschool.library.lift.Lift;
+import org.baylorschool.teamcode.teleop.drivers.controls.MichaelJacksonsControls;
 
-public class TeleOpLogic extends LinearOpMode {
+@TeleOp(name="Scenario4", group="Scenario")
+public class BrokenWheel extends LinearOpMode {
+    // In this scenario designed to train drivers, one motor has broken down for whatever reason.
+    // All changes compared to the normal TeleOpLogic are market with a SCENARIO comment.
 
     private Mecanum mecanum;
     private Carousel carousel;
     private Lift lift;
     private Odometry odometry;
-    private final ControlMap controlMap;
+    private ControlMap controlMap = new MichaelJacksonsControls();
     private Tape tape;
     private Sounds sounds;
 
     private final double SLOW_MODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
-
-    public TeleOpLogic(ControlMap controlMap) {
-        super();
-        this.controlMap = controlMap;
-    }
 
     @Override
     public void runOpMode() {
@@ -44,6 +45,9 @@ public class TeleOpLogic extends LinearOpMode {
 
         waitForStart();
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // SCENARIO
+        mecanum.getFrMotor().setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         controlMap.setGamepad1(gamepad1);
         controlMap.setGamepad2(gamepad2);
@@ -72,6 +76,10 @@ public class TeleOpLogic extends LinearOpMode {
 
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, controlMap.isSlowMode() ? SLOW_MODE_COEFFICIENT : 1);
+
+            // SCENARIO
+            mecanum.getFrMotor().setPower(0);
+
             lift.loopIterationTeleOp(controlMap);
             // Report telemetry
             telemetry.addData("X Gamepad", x);

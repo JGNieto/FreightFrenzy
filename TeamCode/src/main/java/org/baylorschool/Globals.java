@@ -19,6 +19,15 @@
             TOP,
         }
 
+        public enum WarehouseSide {
+            RED, BLUE
+        }
+
+        ///////////////////////////// ROBOT SIZE /////////////////////////////
+        // MILLIMETERS
+        public static final double robotLength = 433;
+        public static final double robotWidth = 337;
+
         ///////////////////////////// HARDWARE CONFIG /////////////////////////////
         // Names of the config MUST match these values
         // Motors (in parentheses the preferred port number on the control hub)

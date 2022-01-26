@@ -39,7 +39,7 @@ public class MovePurePursuit {
                 break;
 
             // Compute target "lookahead" location according to Pure Pursuit.
-            Location purePursuitTarget = getPurePursuitPoint(path, currentLocation);
+            Location purePursuitTarget = getPurePursuitPoint(path, currentLocation, opMode.telemetry);
 
             // If we are not near any path, go towards the first point of the path.
             if (purePursuitTarget == null) {
@@ -69,8 +69,8 @@ public class MovePurePursuit {
      * @param currentLocation Current location of the robot.
      * @return Computed location or null if the robot is not near any segments.
      */
-    public static Location getPurePursuitPoint(Path path, Location currentLocation) {
-        if (path.getLocations().size() < 2) return null;
+    public static Location getPurePursuitPoint(Path path, Location currentLocation, Telemetry telemetry) {
+        if (path.getLocations().size() <= 2) return null;
 
         int championStartLocationIndex = 0;
         double championDistance = -1;
@@ -91,10 +91,14 @@ public class MovePurePursuit {
             }
         }
 
+        telemetry.addData("Locations Left", path.getLocations().size());
+        telemetry.addData("Ch Start Location", championStartLocationIndex);
+
         // To avoid going back and redoing previous paths, we remove waypoints we have already passed.
         // This is inefficient if we remove more than one because of the way ArrayList is implemented.
         // However, removing more than one is very rare, so we accept this inefficiency.
         for (int i = 0; i < championStartLocationIndex; i++) {
+            telemetry.log().add("Removing location");
             path.getLocations().remove(i);
         }
 
@@ -138,7 +142,10 @@ public class MovePurePursuit {
                 }
             }
 
-            if (championIntersection != null) break;
+            if (championIntersection != null) {
+                telemetry.addData("Champ Int", i);
+                break;
+            }
         }
 
         if (championIntersection != null) {
@@ -160,6 +167,7 @@ public class MovePurePursuit {
         double absoluteAngleDiff = Location.angleLocations(currentLocation, target); // Angle between points.
         double relativeAngleDiff = Location.angleBound(absoluteAngleDiff - currentLocation.getHeading()); // Angle for the robot to turn.
 
+        // Original:
         double relativeXDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
         double relativeYDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
 
@@ -187,7 +195,7 @@ public class MovePurePursuit {
 
         double rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
 
-        mecanum.moveCustomScaling(yPower, xPower, rotPower, 0.7);
+        mecanum.moveCustomScaling(yPower, xPower, rotPower, MOVEMENT_COEFFICIENT);
 
         telemetry.addData("Dist", distanceToTarget);
         telemetry.addData("Target Ang", targetAngle);
