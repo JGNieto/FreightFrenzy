@@ -22,6 +22,8 @@ public abstract class Lift {
     protected LiftMovement movement = LiftMovement.HOLD;
     protected RollerState rollerState = RollerState.STOP;
 
+    protected boolean telemetryEnabled = false;
+
     protected LinearOpMode opMode;
 
     public enum RollerState {
@@ -154,6 +156,11 @@ public abstract class Lift {
             }
         }
 
+        if (closestLocation == null) // Should be mathematically impossible, but just in case.
+            throw new RuntimeException("Could not find closest location to lift");
+
+        closestLocation.setHeading(Location.angleLocations(currentLocation, closestLocation));
+
         return closestLocation;
     }
 
@@ -236,5 +243,13 @@ public abstract class Lift {
 
     public void setRollerState(RollerState rollerState) {
         this.rollerState = rollerState;
+    }
+
+    public boolean isTelemetryEnabled() {
+        return telemetryEnabled;
+    }
+
+    public void setTelemetryEnabled(boolean telemetryEnabled) {
+        this.telemetryEnabled = telemetryEnabled;
     }
 }

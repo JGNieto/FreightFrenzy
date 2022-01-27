@@ -69,6 +69,7 @@
         // Default values of the location
         public static final double defaultPurePursuitRadius = 250; // TODO: Placeholder
         public static final double defaultPurePursuitTurnSpeed = 1; // TODO: Placeholder
+        public static final double defaultPurePursuitDistanceStopTurning = 500;
 
         ///////////////////////////// MECANUM /////////////////////////////
         // Which side of the chassis' wheels are reverse.

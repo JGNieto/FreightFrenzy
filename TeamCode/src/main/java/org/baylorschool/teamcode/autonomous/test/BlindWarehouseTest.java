@@ -1,6 +1,5 @@
 package org.baylorschool.teamcode.autonomous.test;
 
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,33 +7,27 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
-import org.baylorschool.actions.MovePurePursuit;
+import org.baylorschool.actions.GrabFreightBlindly;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Odometry;
-import org.baylorschool.library.Path;
+import org.baylorschool.library.lift.TwoBarLift;
 
 @Autonomous(name = "BlindWarehouseTest", group = "Test")
 public class BlindWarehouseTest extends LinearOpMode {
-    Location currentLocation = new Location(Places.blueRightStart);
+
+    Globals.WarehouseSide warehouseSide = Globals.WarehouseSide.RED;
+    Location currentLocation = new Location(Places.middle(1), Places.closePerpendicular(warehouseSide == Globals.WarehouseSide.BLUE ? 3 : -3));
     Odometry odometry;
     Mecanum mecanum;
     IMU imu;
-    Path path = new Path(new Location[]{
-            new Location(-1579.04, 951.08),
-            new Location(-1219.33, 585.28),
-            new Location(-987.66, 335.32),
-            new Location(-1219.33, -18.29),
-            new Location(-1536.36, -298.74),
-            new Location(-1231.53, -627.96),
-            new Location(-1572.94, -902.31),
-            new Location(-896.21, -1560.75),
-            new Location(-24.39, -1225.43),
-    });
+    TwoBarLift lift;
 
     @Override
     public void runOpMode() {
+        telemetry.addData("Status", "Loading...");
+        telemetry.update();
 
         imu = new IMU(hardwareMap);
         mecanum = new Mecanum(hardwareMap);
@@ -45,12 +38,24 @@ public class BlindWarehouseTest extends LinearOpMode {
                 imu,
                 false
         );
+        lift = new TwoBarLift(this);
+        lift.moveDown(this);
+
+        telemetry.addData("Status", "Ready");
+        telemetry.update();
 
         waitForStart();
+
+        lift.initialize();
+        lift.setTelemetryEnabled(false);
+        lift.startThread();
 
         odometry.reset();
         odometry.calculateNewLocation(currentLocation);
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        MovePurePursuit.movePurePursuit(currentLocation, path, this, odometry, mecanum);
+
+        GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, warehouseSide);
+
+        lift.closeThread();
     }
 }

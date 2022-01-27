@@ -90,7 +90,7 @@ public class ExecutionFrequency {
         } else {
             int diff = (int) (time - lastExecution);
             lastExecution = time;
-            return 1_000_000f / diff;
+            return (1_000_000f / diff) * 1000f;
         }
     }
 

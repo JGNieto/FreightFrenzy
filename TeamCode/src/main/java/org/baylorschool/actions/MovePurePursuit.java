@@ -99,8 +99,15 @@ public class MovePurePursuit {
         // However, removing more than one is very rare, so we accept this inefficiency.
         for (int i = 0; i < championStartLocationIndex; i++) {
             telemetry.log().add("Removing location");
+
+            Runnable runnable = path.getLocations().get(i).getRunnable();
+            if (runnable != null)
+                runnable.run();
+
             path.getLocations().remove(i);
         }
+
+        if (path.getLocations().size() <= 2) return null;
 
         Location lastLocation = path.getLastLocation();
         Location championEndLocation = path.getLocations().get(championStartLocationIndex + 1);
@@ -152,7 +159,7 @@ public class MovePurePursuit {
             championIntersection.setHeading(Location.angleLocations(currentLocation, championEndLocation));
 
             // Do not turn when very close.
-            if (Location.distanceSquared(currentLocation, championEndLocation) < 2500)
+            if (Location.distanceSquared(currentLocation, championEndLocation) < championEndLocation.getPurePursuitDistanceStopTurning2())
                 championIntersection.setPurePursuitTurnSpeed(0);
             else
                 championIntersection.setPurePursuitTurnSpeed(championEndLocation.getPurePursuitTurnSpeed());
@@ -214,7 +221,7 @@ public class MovePurePursuit {
         double targetAngle; // Angle between points
 
         // Don't turn when very close.
-        if (distanceToTarget < 2500)
+        if (distanceToTarget < target.getPurePursuitDistanceStopTurning2())
             targetAngle = currentLocation.getHeading();
         else
             targetAngle = Location.angleBound(Location.angleLocations(currentLocation, target) + preferredAngle);

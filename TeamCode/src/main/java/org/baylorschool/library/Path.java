@@ -23,6 +23,12 @@ public class Path {
         this.tolerance = Globals.defaultTolerance;
     }
 
+    public Path(Location location) {
+        this.locations = new ArrayList<Location>();
+        locations.add(location);
+        this.tolerance = Globals.defaultTolerance;
+    }
+
     public Path(List<Location> locations, Location tolerance) {
         this.locations = new ArrayList<>(locations);
         this.tolerance = tolerance;
@@ -38,6 +44,8 @@ public class Path {
         Location difference = Location.difference(currentGoal(), robotLocation);
         if (difference.getX() < tolerance.getX() && difference.getY() < tolerance.getY()) {
             previousLocation = locations.get(0);
+            if (previousLocation.getRunnable() != null)
+                previousLocation.getRunnable().run();
             locations.remove(0);
         }
     }
@@ -56,6 +64,14 @@ public class Path {
             return locations.get(0);
         else
             return null;
+    }
+
+    /**
+     * Sets the runnable for a location in the path.
+     * @param i Index of the location in the path.
+     */
+    public void setRunnable(int i, Runnable runnable) {
+        locations.get(i).setRunnable(runnable);
     }
 
     public Location getTolerance() {

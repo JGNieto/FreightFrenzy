@@ -48,6 +48,25 @@ public class Odometry {
         this.reset();
     }
 
+    public Odometry(Mecanum mecanum, HardwareMap hardwareMap, IMU imu, boolean withdrawn) {
+        this.encoderLeft = mecanum.getFlMotor();
+        this.encoderRight = mecanum.getFrMotor();
+        this.encoderMid = mecanum.getBlMotor();
+
+        this.servoLeft = hardwareMap.get(Servo.class, Globals.servoLeftHw);
+        this.servoRight = hardwareMap.get(Servo.class, Globals.servoRightHw);
+        this.servoMiddle = hardwareMap.get(Servo.class, Globals.servoMiddleHw);
+
+        this.imu = imu;
+
+        if (withdrawn)
+            this.withdraw();
+        else
+            this.open();
+
+        this.reset();
+    }
+
     public Odometry(HardwareMap hardwareMap, boolean withdrawn) {
         this.encoderLeft = null;
         this.encoderRight = null;

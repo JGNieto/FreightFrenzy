@@ -103,11 +103,13 @@ public class TwoBarLift extends Lift {
 
     @Override
     public void loopIteration() {
-        opMode.telemetry.addData("LiftMove", movement.toString());
-        opMode.telemetry.addData("LiftPos", twoBarMotor.getCurrentPosition());
-        opMode.telemetry.addData("LiftTar", twoBarMotor.getTargetPosition());
-        opMode.telemetry.addData("Lift Power", twoBarMotor.getPower());
-        opMode.telemetry.addData("Limit Switch", limitSwitch.getState() ? "Empty" : "Full");
+        if (telemetryEnabled) {
+            opMode.telemetry.addData("LiftMove", movement.toString());
+            opMode.telemetry.addData("LiftPos", twoBarMotor.getCurrentPosition());
+            opMode.telemetry.addData("LiftTar", twoBarMotor.getTargetPosition());
+            opMode.telemetry.addData("Lift Power", twoBarMotor.getPower());
+            opMode.telemetry.addData("Limit Switch", limitSwitch.getState() ? "Empty" : "Full");
+        }
         if (movement == LiftMovement.UP) {
             wasMoving = true;
             twoBarMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -169,6 +171,19 @@ public class TwoBarLift extends Lift {
     @Override
     public void retract() {
         this.targetEncoderPosition = 0;
+    }
+
+    /**
+     * Indicates that the thread must stop.
+     */
+    @Override
+    public void closeThread() {
+        try {
+            rollerMotor.setPower(0);
+            twoBarMotor.setPower(0);
+            thread.interrupt();
+            threadShouldStop = true;
+        } catch (NullPointerException e) { } // In case thread has already stopped.
     }
 
     @Override

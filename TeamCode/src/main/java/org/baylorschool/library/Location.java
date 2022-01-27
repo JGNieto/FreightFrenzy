@@ -17,6 +17,9 @@ public class Location {
 
     private double purePursuitRadius = Globals.defaultPurePursuitRadius;
     private double purePursuitTurnSpeed = Globals.defaultPurePursuitTurnSpeed;
+    private double purePursuitDistanceStopTurning = Globals.defaultPurePursuitDistanceStopTurning;
+
+    private Runnable runnable = null;
 
     private boolean backwards = false;
 
@@ -387,6 +390,32 @@ public class Location {
         this.purePursuitTurnSpeed = 1;
         this.heading = angle;
 
+        return this;
+    }
+
+    public Runnable getRunnable() {
+        return runnable;
+    }
+
+    public void setRunnable(Runnable runnable) {
+        this.runnable = runnable;
+    }
+
+    /**
+     * You probably want to use getPurePursuitDistanceStopTurning2(), with a "2" at the end.
+     */
+    @Deprecated
+    public double getPurePursuitDistanceStopTurning() {
+        return purePursuitDistanceStopTurning;
+    }
+
+    // Same value, squared
+    public double getPurePursuitDistanceStopTurning2() {
+        return purePursuitDistanceStopTurning * purePursuitDistanceStopTurning;
+    }
+
+    public Location setPurePursuitDistanceStopTurning(double purePursuitDistanceStopTurning) {
+        this.purePursuitDistanceStopTurning = purePursuitDistanceStopTurning;
         return this;
     }
 }
