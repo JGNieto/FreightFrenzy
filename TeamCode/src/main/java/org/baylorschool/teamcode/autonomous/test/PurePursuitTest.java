@@ -11,7 +11,7 @@ import org.baylorschool.actions.MovePurePursuit;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.Odometry;
+import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.Path;
 
 @Autonomous(name = "PurePursuitTest", group = "Test")

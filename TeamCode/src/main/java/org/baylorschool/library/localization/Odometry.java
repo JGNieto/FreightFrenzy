@@ -1,12 +1,15 @@
-package org.baylorschool.library;
+package org.baylorschool.library.localization;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.baylorschool.Globals;
+import org.baylorschool.library.IMU;
+import org.baylorschool.library.Location;
+import org.baylorschool.library.Mecanum;
 
-public class Odometry {
+public class Odometry implements Localization {
     private final DcMotor encoderLeft;
     private final DcMotor encoderRight;
     private final DcMotor encoderMid;

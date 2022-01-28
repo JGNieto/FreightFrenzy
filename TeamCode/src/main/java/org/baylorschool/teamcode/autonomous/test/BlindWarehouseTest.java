@@ -11,7 +11,7 @@ import org.baylorschool.actions.GrabFreightBlindly;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.Odometry;
+import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.lift.TwoBarLift;
 
 @Autonomous(name = "BlindWarehouseTest", group = "Test")

@@ -11,7 +11,7 @@ import org.baylorschool.library.Carousel;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.Odometry;
+import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.lift.Lift;
 
 @TeleOp(name="OdometryTest", group="Test")

@@ -8,7 +8,7 @@ import org.baylorschool.Places;
 import org.baylorschool.actions.MoveWaypoints;
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Location;
-import org.baylorschool.library.Odometry;
+import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.Sensors;
 import org.baylorschool.library.TSEPipeline;
 import org.baylorschool.library.lift.TwoBarLift;

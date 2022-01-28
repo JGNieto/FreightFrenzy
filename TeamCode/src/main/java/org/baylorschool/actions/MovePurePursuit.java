@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.Odometry;
+import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.Path;
 import org.baylorschool.library.math.CircleIntersect;
 import org.baylorschool.library.math.PerpendicularDistance;
@@ -44,6 +44,7 @@ public class MovePurePursuit {
             // If we are not near any path, go towards the first point of the path.
             if (purePursuitTarget == null) {
                 moveTowardPosition(mecanum, currentLocation, path.getLocations().get(0), 0, 1);
+                opMode.telemetry.addLine("Null Target");
             } else {
                 moveTowardPositionAngle(mecanum, currentLocation, purePursuitTarget, purePursuitTarget.getHeading(), purePursuitTarget.getPurePursuitTurnSpeed(), opMode.telemetry);
                 purePursuitTarget.reportTelemetry(opMode.telemetry);
