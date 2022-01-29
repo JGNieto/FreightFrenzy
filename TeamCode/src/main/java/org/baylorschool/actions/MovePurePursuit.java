@@ -171,21 +171,7 @@ public class MovePurePursuit {
     // The purpose of this function is to move the robot towards the desired position, regardless
     // of the path algorithm (i.e. regardless of Pure Pursuit or others).
     public static void moveTowardPositionAngle(Mecanum mecanum, Location currentLocation, Location target, double targetAngle, double turnSpeed) {
-        double distanceToTarget = Location.distance(currentLocation, target);
-        double absoluteAngleDiff = Location.angleLocations(currentLocation, target); // Angle between points.
-        double relativeAngleDiff = Location.angleBound(absoluteAngleDiff - currentLocation.getHeading()); // Angle for the robot to turn.
-
-        // Original:
-        double relativeXDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
-        double relativeYDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
-
-        double divisor = Math.abs(relativeXDiff) + Math.abs(relativeYDiff);
-        double xPower = relativeXDiff / divisor;
-        double yPower = relativeYDiff / divisor;
-
-        double rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
-
-        mecanum.moveCustomScaling(yPower, xPower, rotPower, MOVEMENT_COEFFICIENT);
+        moveTowardPositionAngle(mecanum, currentLocation, target, targetAngle, turnSpeed, null);
     }
 
     public static void moveTowardPositionAngle(Mecanum mecanum, Location currentLocation, Location target, double targetAngle, double turnSpeed, Telemetry telemetry) {
@@ -193,7 +179,6 @@ public class MovePurePursuit {
         double absoluteAngleDiff = Location.angleLocations(currentLocation, target); // Angle between points.
         double relativeAngleDiff = Location.angleBound(absoluteAngleDiff - currentLocation.getHeading()); // Angle for the robot to turn.
 
-        // Original:
         double relativeXDiff = Math.sin(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
         double relativeYDiff = Math.cos(Math.toRadians(relativeAngleDiff)) * distanceToTarget;
 
@@ -205,19 +190,24 @@ public class MovePurePursuit {
 
         mecanum.moveCustomScaling(yPower, xPower, rotPower, MOVEMENT_COEFFICIENT);
 
-        telemetry.addData("Dist", distanceToTarget);
-        telemetry.addData("Target Ang", targetAngle);
-        telemetry.addData("Abs Ang", absoluteAngleDiff);
-        telemetry.addData("Rel Ang", relativeAngleDiff);
-        telemetry.addData("X Diff", relativeXDiff);
-        telemetry.addData("Y Diff", relativeYDiff);
-        telemetry.addData("X Power", xPower);
-        telemetry.addData("Y Power", yPower);
-        telemetry.addData("Rot Power", rotPower);
+        if (telemetry != null) {
+            telemetry.addData("Dist", distanceToTarget);
+            telemetry.addData("Target Ang", targetAngle);
+            telemetry.addData("Abs Ang", absoluteAngleDiff);
+            telemetry.addData("Rel Ang", relativeAngleDiff);
+            telemetry.addData("X Diff", relativeXDiff);
+            telemetry.addData("Y Diff", relativeYDiff);
+            telemetry.addData("X Power", xPower);
+            telemetry.addData("Y Power", yPower);
+            telemetry.addData("Rot Power", rotPower);
+        }
     }
 
-
     public static void moveTowardPosition(Mecanum mecanum, Location currentLocation, Location target, double preferredAngle, double turnSpeed) {
+        moveTowardPosition(mecanum, currentLocation, target, preferredAngle, turnSpeed, null);
+    }
+
+    public static void moveTowardPosition(Mecanum mecanum, Location currentLocation, Location target, double preferredAngle, double turnSpeed, Telemetry telemetry) {
         double distanceToTarget = Location.distanceSquared(currentLocation, target);
         double targetAngle; // Angle between points
 
@@ -227,7 +217,7 @@ public class MovePurePursuit {
         else
             targetAngle = Location.angleBound(Location.angleLocations(currentLocation, target) + preferredAngle);
 
-        moveTowardPositionAngle(mecanum, currentLocation, target, targetAngle, turnSpeed);
+        moveTowardPositionAngle(mecanum, currentLocation, target, targetAngle, turnSpeed, telemetry);
     }
 
     public static double getAngleTurnPower(double currentAngle, double targetAngle, double turnSpeed) {

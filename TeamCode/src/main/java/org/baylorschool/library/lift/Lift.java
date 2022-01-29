@@ -54,6 +54,11 @@ public abstract class Lift {
     public abstract void moveToDropLevel(Globals.DropLevel dropLevel);
 
     /**
+     * Moves the lift down to calibrate. To be used only during the initialization.
+     */
+    public abstract void moveDown(LinearOpMode opMode);
+
+    /**
      * Releases the item (interrupts opMode thread).
      */
     public abstract void releaseItem();
@@ -222,6 +227,8 @@ public abstract class Lift {
     public void loopIterationTeleOp(ControlMap controlMap) {
         if (controlMap.liftDropLevel() != null) {
             moveToDropLevel(controlMap.liftDropLevel());
+        } else if (controlMap.liftRetract()) {
+            retract();
         } else {
             if (controlMap.liftUp())
                 movement = TwoBarLift.LiftMovement.UP;

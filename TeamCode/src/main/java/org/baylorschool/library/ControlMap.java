@@ -76,6 +76,10 @@ public class ControlMap {
         return gamepad2.right_bumper;
     }
 
+    public boolean liftRetract() {
+        return false;
+    }
+
     public Globals.DropLevel liftDropLevel() {
         return null;
     }

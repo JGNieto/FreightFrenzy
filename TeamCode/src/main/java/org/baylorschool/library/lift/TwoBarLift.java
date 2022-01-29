@@ -108,6 +108,7 @@ public class TwoBarLift extends Lift {
             opMode.telemetry.addData("LiftPos", twoBarMotor.getCurrentPosition());
             opMode.telemetry.addData("LiftTar", twoBarMotor.getTargetPosition());
             opMode.telemetry.addData("Lift Power", twoBarMotor.getPower());
+            opMode.telemetry.addData("Lift WasMoving", wasMoving);
             opMode.telemetry.addData("Limit Switch", limitSwitch.getState() ? "Empty" : "Full");
         }
         if (movement == LiftMovement.UP) {
@@ -123,7 +124,8 @@ public class TwoBarLift extends Lift {
                 wasMoving = false;
                 targetEncoderPosition = twoBarMotor.getCurrentPosition();
             }
-            if (!twoBarMotor.isBusy()) {
+
+            if (!twoBarMotor.isBusy() || twoBarMotor.getTargetPosition() != targetEncoderPosition) {
                 twoBarMotor.setTargetPosition(targetEncoderPosition);
                 twoBarMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 if (Math.abs(twoBarMotor.getCurrentPosition() - targetEncoderPosition) > ticksDifferenceBeforeUsingMovementPower) {

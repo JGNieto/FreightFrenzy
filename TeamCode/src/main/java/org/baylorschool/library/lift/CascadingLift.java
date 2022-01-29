@@ -47,6 +47,11 @@ public class CascadingLift extends Lift {
     }
 
     @Override
+    public void moveDown(LinearOpMode opMode) {
+
+    }
+
+    @Override
     public Location getScoringLocation(Location currentLocation, Hub hub, Globals.DropLevel dropLevel) {
         return null;
     }

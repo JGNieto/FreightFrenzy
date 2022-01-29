@@ -40,6 +40,8 @@ public class TeleOpLogic extends LinearOpMode {
         carousel = new Carousel(hardwareMap);
         tape = new Tape(hardwareMap);
         lift = Globals.createNewLift(this);
+        lift.setTelemetryEnabled(true);
+        lift.moveDown(this);
         lift.initialize();
 
         waitForStart();
@@ -73,6 +75,7 @@ public class TeleOpLogic extends LinearOpMode {
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, controlMap.isSlowMode() ? SLOW_MODE_COEFFICIENT : 1);
             lift.loopIterationTeleOp(controlMap);
+
             // Report telemetry
             telemetry.addData("X Gamepad", x);
             telemetry.addData("Y Gamepad", y);
