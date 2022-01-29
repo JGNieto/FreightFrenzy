@@ -8,9 +8,9 @@ import org.baylorschool.Places;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.Path;
 import org.baylorschool.library.Sensors;
+import org.baylorschool.library.localization.Odometry;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +61,7 @@ public class EnterWarehouse {
         };
 
         // Execute movement and return the new currentLocation that moveToWaypoints also returns.
-        return MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(locations), opMode);
+        return MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Arrays.asList(locations), opMode);
     }
 
     /**
@@ -128,7 +128,7 @@ public class EnterWarehouse {
         // Turn robot if not aligned.
         if (!currentLocation.rotationTolerance(0, 4)) {
             Location targetLocation = new Location(currentLocation).setHeading(180);
-            MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(targetLocation), opMode);
+            MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Collections.singletonList(targetLocation), opMode);
         }
 
         sensors.getImu().updateOrientation();

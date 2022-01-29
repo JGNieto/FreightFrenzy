@@ -11,8 +11,8 @@ import org.baylorschool.library.Carousel;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.lift.Lift;
+import org.baylorschool.library.localization.Odometry;
 
 @TeleOp(name="OdometryTest", group="Test")
 public class OdometryTest extends LinearOpMode {

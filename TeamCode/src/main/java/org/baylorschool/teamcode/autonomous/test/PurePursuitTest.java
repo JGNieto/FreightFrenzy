@@ -11,8 +11,8 @@ import org.baylorschool.actions.MovePurePursuit;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.Path;
+import org.baylorschool.library.localization.Odometry;
 
 @Autonomous(name = "PurePursuitTest", group = "Test")
 public class PurePursuitTest extends LinearOpMode {

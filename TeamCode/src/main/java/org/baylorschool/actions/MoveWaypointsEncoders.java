@@ -1,7 +1,5 @@
-package org.baylorschool.teamcode.autonomous.test.vuforia;
+package org.baylorschool.actions;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -9,64 +7,26 @@ import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Path;
+import org.baylorschool.library.Sensors;
 import org.baylorschool.library.Vuforia;
+import org.baylorschool.library.localization.Localization;
 import org.baylorschool.library.localization.MotorEncoders;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
-import java.util.Arrays;
+import java.util.List;
 
-@Disabled
-@Autonomous(name="Park", group ="VuforiaTest")
-public class Park extends LinearOpMode {
+public class MoveWaypointsEncoders {
 
-    private Vuforia vuforia;
-    private Location currentLocation = new Location(0, 0, 0, 0, 0, 90);
-    private Mecanum mecanum;
-    private Path path;
-    private IMU imu;
-    private MotorEncoders motorEncoders;
-
-    @Override
-    public void runOpMode() {
-        telemetry.addData("Status", "Getting ready");
-        telemetry.update();
-        vuforia = new Vuforia(hardwareMap);
-        vuforia.initializeParamers(false);
-
-        Location[] locations = new Location[]{
-                new Location(-609.6, 1219.2, 0, 0, 0, 0),
-                new Location(-1219.2, 0, 0, 0, 0, 0)
-        };
-
-        mecanum = new Mecanum(hardwareMap);
-        path = new Path(Arrays.asList(locations), new Location(100,100,-1,-1,-1,3));
-        imu = new IMU();
-
-        motorEncoders = new MotorEncoders(mecanum, imu, telemetry, vuforia);
-
-        imu.initializeImu(hardwareMap);
-        imu.forceValue(currentLocation.getHeading());
-
-        vuforia.startTracking();
-
-        telemetry.addData("Status", "Ready!");
-        telemetry.update();
-
-        waitForStart();
-        mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        mecanum.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        mecanum.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        boolean wasBusy = false;
-
-        while (opModeIsActive()) {
-            mecanum.updateEncoderReadings();
-            currentLocation = motorEncoders.calculateNewLocation(currentLocation);
+    public static Location moveToWaypoints(Location currentLocation, Localization localization, List<Location> locations, Telemetry telemetry, Mecanum mecanum, LinearOpMode opMode, double finalAngle) {
+        Path path = new Path(locations);
+        boolean wasBusy = false; // TODO Test without "wasBusy" feature.
+        while (opMode.opModeIsActive()) {
+            currentLocation = localization.calculateNewLocation(currentLocation);
             path.checkGoal(currentLocation);
             Location currentGoal = path.currentGoal();
 
             if (currentGoal == null) {
-                requestOpModeStop();
-                continue;
+                break;
             }
 
             double targetAngle = Location.angleLocations(currentLocation, currentGoal);
@@ -74,7 +34,14 @@ public class Park extends LinearOpMode {
             telemetry.addData("Locations Left", path.getLocations().size());
             if (!mecanum.isBusy()) {
                 if (wasBusy) {
-                    sleep(500);
+                    if (currentGoal.isBackwards()) {
+                        mecanum.setBackwards(true);
+                        localization.setBackwards(true);
+                    } else {
+                        mecanum.setBackwards(false);
+                        localization.setBackwards(false);
+                    }
+                    opMode.sleep(500);
                     wasBusy = false;
                     continue;
                 }
@@ -91,6 +58,8 @@ public class Park extends LinearOpMode {
 
             currentLocation.reportTelemetry(telemetry);
 
+            telemetry.addData("Target...", "%.0f, %.0f, %.0f", currentGoal.getX(), currentGoal.getY(), currentGoal.getHeading());
+
             telemetry.addData("Encoders Delta", "{FR, FL, BR, BL} = %.0f, %.0f, %.0f, %.0f",
                     mecanum.getLatestDeltaFr(),
                     mecanum.getLatestDeltaFl(),
@@ -106,8 +75,22 @@ public class Park extends LinearOpMode {
             telemetry.addData("Target", mecanum.getBlMotor().getTargetPosition());
             telemetry.update();
         }
-
-        vuforia.stopTracking();
+        mecanum.setBackwards(false);
+        localization.setBackwards(false);
+        if (finalAngle != -1) {
+            mecanum.rotate(Location.angleTurn(currentLocation.getHeading(), finalAngle));
+            while (mecanum.isBusy()) {
+            }
+        }
+        return currentLocation;
     }
 
+    public static Location moveToWaypoints(Location currentLocation, Vuforia vuforia, IMU imu, List<Location> locations, Telemetry telemetry, Mecanum mecanum, LinearOpMode opMode) {
+        MotorEncoders motorEncoders = new MotorEncoders(mecanum, imu, telemetry, vuforia);
+        return moveToWaypoints(currentLocation, motorEncoders, locations, telemetry, mecanum, opMode, locations.get(locations.size() - 1).getHeading());
+    }
+
+    public static Location moveToWaypoints(Location currentLocation, Sensors sensors, List<Location> locations, LinearOpMode opMode) {
+        return moveToWaypoints(currentLocation, sensors.getVuforia(), sensors.getImu(), locations, opMode.telemetry, sensors.getMecanum(), opMode);
+    }
 }

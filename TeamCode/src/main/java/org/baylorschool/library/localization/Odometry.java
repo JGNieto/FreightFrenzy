@@ -9,6 +9,8 @@ import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 
+import java.security.InvalidParameterException;
+
 public class Odometry implements Localization {
     private final DcMotor encoderLeft;
     private final DcMotor encoderRight;
@@ -164,6 +166,18 @@ public class Odometry implements Localization {
         currentLocation.setHeading(Location.angleBound(currentLocation.getHeading() + Math.toDegrees(dTheta)));
 
         return currentLocation;
+    }
+
+    @Override
+    public void setBackwards(boolean backwards) {
+        if (backwards == true) {
+            throw new InvalidParameterException("Cannot setBackwards to tru on class Odometry.");
+        }
+    }
+
+    @Override
+    public boolean isBackwards() {
+        return false;
     }
 
     public void withdraw() {

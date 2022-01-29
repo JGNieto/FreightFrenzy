@@ -9,10 +9,10 @@ import org.baylorschool.Globals;
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.ControlMap;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.Sounds;
 import org.baylorschool.library.Tape;
 import org.baylorschool.library.lift.Lift;
+import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.teamcode.teleop.drivers.controls.MichaelJacksonsControls;
 
 @TeleOp(name="Scenario3", group="Scenario")

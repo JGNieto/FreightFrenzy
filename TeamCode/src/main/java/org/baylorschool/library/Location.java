@@ -138,51 +138,6 @@ public class Location {
     }
 
     /**
-     * Uses available sensors to make best guess of current location
-     * @param currentLocation from previous iteration.
-     * @param vuforia if available; if not, use null
-     * @param imu for heading
-     * @param telemetry for vuforia (can be null if vuforia is too).
-     * @param mecanum for encoders
-     * @return best guess of location
-     */
-    public static Location updateLocation(Location currentLocation, Vuforia vuforia, IMU imu, Telemetry telemetry, Mecanum mecanum) {
-        // Update IMU first to make it be as close as possible in time to the data from the encoders.
-        imu.updateOrientation();
-
-        // Use vuforia if available
-        Location vuforiaLocation = vuforia == null ? null : vuforia.lookForTargets(telemetry);
-
-        // Reset current location if vuforia has target in sight
-        if (vuforiaLocation != null) {
-            imu.forceValue(vuforiaLocation.heading);
-            return vuforiaLocation;
-        }
-
-        // Get heading from IMU.
-        currentLocation.setHeading(imu.getHeading());
-
-        // Compute movement from wheel encoders.
-        // Movement is a vector, which we break down into x and y components with math.
-        double movementModulus = (
-                mecanum.getLatestDeltaBl() +
-                mecanum.getLatestDeltaBr() +
-                mecanum.getLatestDeltaFl() +
-                mecanum.getLatestDeltaFr()
-        ) / 4;
-
-        double headingRadians = Math.toRadians(currentLocation.getHeading());
-
-        double movementX = movementModulus * Math.cos(headingRadians);
-        double movementY = movementModulus * Math.sin(headingRadians);
-
-        currentLocation.setX(currentLocation.getX() + movementX);
-        currentLocation.setY(currentLocation.getY() + movementY);
-
-        return currentLocation;
-    }
-
-    /**
      * Check whether the robot is pointing in the right direction (uses heading of this instance).
      * @param expectedValue in degrees
      * @param tolerance in degrees

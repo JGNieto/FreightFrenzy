@@ -6,12 +6,12 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
 import org.baylorschool.actions.EnterWarehouse;
-import org.baylorschool.actions.MoveWaypoints;
+import org.baylorschool.actions.MoveWaypointsEncoders;
 import org.baylorschool.library.Location;
-import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.Sensors;
 import org.baylorschool.library.TSEPipeline;
 import org.baylorschool.library.lift.TwoBarLift;
+import org.baylorschool.library.localization.Odometry;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.Arrays;
@@ -54,12 +54,12 @@ public class BlueLeftTSEWarehousePark extends LinearOpMode {
         twoBarLift.initialize();
         twoBarLift.startThread();
 
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueLeftToHub), this);
+        currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueLeftToHub), this);
         twoBarLift.moveToDropLevel(dropLevel);
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(twoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.BLUE, dropLevel)), this);
+        currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Collections.singletonList(twoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.BLUE, dropLevel)), this);
         twoBarLift.releaseItem();
         twoBarLift.retract(1500);
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueLeftHubToWarehousePower), this);
+        currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.BlueLeftHubToWarehousePower), this);
         EnterWarehouse.parkWarehouse(currentLocation, sensors, this);
         twoBarLift.closeThread();
     }

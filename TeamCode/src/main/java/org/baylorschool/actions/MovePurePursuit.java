@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.Path;
+import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.math.CircleIntersect;
 import org.baylorschool.library.math.PerpendicularDistance;
 import org.firstinspires.ftc.robotcore.external.Telemetry;

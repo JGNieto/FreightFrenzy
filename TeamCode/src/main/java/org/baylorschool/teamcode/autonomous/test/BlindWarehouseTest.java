@@ -11,8 +11,8 @@ import org.baylorschool.actions.GrabFreightBlindly;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.lift.TwoBarLift;
+import org.baylorschool.library.localization.Odometry;
 
 @Autonomous(name = "BlindWarehouseTest", group = "Test")
 public class BlindWarehouseTest extends LinearOpMode {

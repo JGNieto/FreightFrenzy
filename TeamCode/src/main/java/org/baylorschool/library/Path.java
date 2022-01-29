@@ -39,15 +39,18 @@ public class Path {
         this.tolerance = tolerance;
     }
 
-    public void checkGoal(Location robotLocation) {
+    public boolean checkGoal(Location robotLocation) {
         // TODO: Check for goals in the future, to cut corners.
         Location difference = Location.difference(currentGoal(), robotLocation);
+        boolean hasRemoved = false;
         if (difference.getX() < tolerance.getX() && difference.getY() < tolerance.getY()) {
             previousLocation = locations.get(0);
             if (previousLocation.getRunnable() != null)
                 previousLocation.getRunnable().run();
             locations.remove(0);
+            hasRemoved = true;
         }
+        return hasRemoved;
     }
 
     public Location getLastLocation() {
@@ -70,8 +73,9 @@ public class Path {
      * Sets the runnable for a location in the path.
      * @param i Index of the location in the path.
      */
-    public void setRunnable(int i, Runnable runnable) {
+    public Path setRunnable(int i, Runnable runnable) {
         locations.get(i).setRunnable(runnable);
+        return this;
     }
 
     public Location getTolerance() {

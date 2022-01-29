@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.baylorschool.actions.MoveWaypoints;
+import org.baylorschool.actions.MoveWaypointsEncoders;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Sensors;
 
@@ -37,7 +37,7 @@ public class ParkBlueRightStorageUnit extends LinearOpMode {
         waitForStart();
         sensors.getMecanum().resetEncoders();
 
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors.getVuforia(), sensors.getImu(), Arrays.asList(locations), telemetry, sensors.getMecanum(), this);
+        currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors.getVuforia(), sensors.getImu(), Arrays.asList(locations), telemetry, sensors.getMecanum(), this);
 
         sensors.end();
     }

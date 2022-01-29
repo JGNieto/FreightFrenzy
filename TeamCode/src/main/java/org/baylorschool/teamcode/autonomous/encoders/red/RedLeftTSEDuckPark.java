@@ -7,13 +7,13 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
 import org.baylorschool.actions.DropDuck;
-import org.baylorschool.actions.MoveWaypoints;
+import org.baylorschool.actions.MoveWaypointsEncoders;
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Location;
-import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.Sensors;
 import org.baylorschool.library.TSEPipeline;
 import org.baylorschool.library.lift.TwoBarLift;
+import org.baylorschool.library.localization.Odometry;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.Arrays;
@@ -60,19 +60,19 @@ public class RedLeftTSEDuckPark extends LinearOpMode {
         twoBarLift.initialize();
         twoBarLift.startThread();
 
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedLeftToHub), this);
+        currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedLeftToHub), this);
         twoBarLift.moveToDropLevel(dropLevel);
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(twoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.RED, dropLevel)), this);
+        currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Collections.singletonList(twoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.RED, dropLevel)), this);
         twoBarLift.releaseItem();
 
         // Make sure to turn before dropping lift.
 //        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(new Location(currentLocation).setHeading(180)), this);
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Collections.singletonList(new Location(currentLocation).setHeading(0)), this);
+        currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Collections.singletonList(new Location(currentLocation).setHeading(0)), this);
         twoBarLift.retract();
 
-        currentLocation = MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedLeftHubToCarousel), this);
+        currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedLeftHubToCarousel), this);
         DropDuck.dropTheDuck(Carousel.CarouselSide.RED, sensors.getMecanum(), this, carousel, false);
-        MoveWaypoints.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.CarouselToRedPark), this);
+        MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.CarouselToRedPark), this);
         twoBarLift.closeThread();
     }
 }

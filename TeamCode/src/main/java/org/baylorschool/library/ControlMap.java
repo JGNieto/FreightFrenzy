@@ -2,6 +2,8 @@ package org.baylorschool.library;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.baylorschool.Globals;
+
 public class ControlMap {
     protected Gamepad gamepad1;
     protected Gamepad gamepad2;
@@ -72,6 +74,10 @@ public class ControlMap {
 
     public boolean liftGrabbing() {
         return gamepad2.right_bumper;
+    }
+
+    public Globals.DropLevel liftDropLevel() {
+        return null;
     }
 
     // Carousel

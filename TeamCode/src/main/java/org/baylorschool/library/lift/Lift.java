@@ -220,12 +220,16 @@ public abstract class Lift {
      * Reads the state of the Control Map.
      */
     public void loopIterationTeleOp(ControlMap controlMap) {
-        if (controlMap.liftUp())
-            movement = TwoBarLift.LiftMovement.UP;
-        else if (controlMap.liftDown())
-            movement = TwoBarLift.LiftMovement.DOWN;
-        else
-            movement = TwoBarLift.LiftMovement.HOLD;
+        if (controlMap.liftDropLevel() != null) {
+            moveToDropLevel(controlMap.liftDropLevel());
+        } else {
+            if (controlMap.liftUp())
+                movement = TwoBarLift.LiftMovement.UP;
+            else if (controlMap.liftDown())
+                movement = TwoBarLift.LiftMovement.DOWN;
+            else
+                movement = TwoBarLift.LiftMovement.HOLD;
+        }
 
         if (controlMap.liftReleasing())
             rollerState = TwoBarLift.RollerState.RELEASING;

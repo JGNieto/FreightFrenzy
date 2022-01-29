@@ -7,8 +7,8 @@ import org.baylorschool.Places;
 import org.baylorschool.library.ExecutionFrequency;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.lift.Lift;
+import org.baylorschool.library.localization.Odometry;
 
 public class GrabFreightBlindly {
     // When grabbing freight blindly, the robot first moves forward to try to grab. If it doesn't,
