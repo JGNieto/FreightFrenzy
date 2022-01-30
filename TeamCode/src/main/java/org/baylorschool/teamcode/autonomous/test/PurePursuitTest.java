@@ -21,7 +21,7 @@ public class PurePursuitTest extends LinearOpMode {
     Mecanum mecanum;
     IMU imu;
     Path path = new Path(new Location[]{
-            new Location(-1579.04, 951.08),
+            /*new Location(-1579.04, 951.08),
             new Location(-1219.33, 585.28),
             new Location(-987.66, 335.32),
             new Location(-1219.33, -18.29),
@@ -29,7 +29,19 @@ public class PurePursuitTest extends LinearOpMode {
             new Location(-1231.53, -627.96),
             new Location(-1572.94, -902.31),
             new Location(-896.21, -1560.75),
-            new Location(Places.middle(2), Places.middle(-1), 180),
+            new Location(Places.middle(2), Places.middle(-1), 180),*/
+            new Location(-1512, 915),
+            new Location(-1524, -890),
+            new Location(-841, -1177),
+            new Location(-317, -1390),
+            new Location(91, -1146),
+            new Location(250, -921),
+            new Location(268, 256),
+            new Location(299, 969),
+            new Location(146, 1451),
+            new Location(-329, 1396),
+            new Location(-902, 1536),
+
     });
 
     @Override
@@ -50,7 +62,9 @@ public class PurePursuitTest extends LinearOpMode {
         odometry.reset();
         odometry.calculateNewLocation(currentLocation);
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        MovePurePursuit.movePurePursuit(currentLocation, path, this, odometry, mecanum);
+        while (opModeIsActive())
+            MovePurePursuit.movePurePursuit(currentLocation, path, this, odometry, mecanum);
+        mecanum.stop();
     }
 }
 

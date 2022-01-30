@@ -21,7 +21,7 @@ public class Carousel {
     }
 
     public void move(CarouselSide side) {
-        flyWheel.setPower(side == CarouselSide.BLUE ? 1 : -1);
+        flyWheel.setPower(side == CarouselSide.BLUE ? -1 : 1);
     }
 
     /*
@@ -37,7 +37,7 @@ public class Carousel {
      */
 
     public void setDropPower(CarouselSide side) {
-        flyWheel.setPower(side == CarouselSide.BLUE ? Globals.carouselSingleSpeed : -Globals.carouselSingleSpeed);
+        flyWheel.setPower(side == CarouselSide.BLUE ? -Globals.carouselSingleSpeed : Globals.carouselSingleSpeed);
     }
 
     public void dropDuck(CarouselSide side, LinearOpMode opMode) {

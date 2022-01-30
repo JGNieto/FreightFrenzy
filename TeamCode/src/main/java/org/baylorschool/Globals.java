@@ -5,6 +5,7 @@
     import org.baylorschool.library.IMU;
     import org.baylorschool.library.Location;
     import org.baylorschool.library.Mecanum;
+    import org.baylorschool.library.ftclib.PIDFController;
     import org.baylorschool.library.lift.Lift;
     import org.baylorschool.library.lift.TwoBarLift;
     import org.opencv.core.Scalar;
@@ -59,6 +60,21 @@
         public static final String tapeTilt = "tapeTilt";
 
         public static final String webcamDeviceName = "Webcam 1"; // Generally don't need to change.
+
+        ///////////////////////////// PID /////////////////////////////
+        public static PIDFController rotationPIDFController() {
+            return new PIDFController(0.8, 5, 0, 0);
+        }
+
+        public static final double rotationPIDFMinPower = 0.2;
+        public static final double rotationPIDFCoefficient = 1.0 / 60.0;
+
+        public static PIDFController movementPIDFController() {
+            return new PIDFController(1.7, .7, 0, 0);
+        }
+
+        public static final double movementPIDFMinPower = 0.2;
+        public static final double movementPIDFCoefficient = 1.0 / 800.0;
 
         ///////////////////////////// IMU /////////////////////////////
         // Axis (may change depending on the orientation of the Control Hub)

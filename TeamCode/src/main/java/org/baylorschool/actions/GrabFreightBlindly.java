@@ -51,7 +51,7 @@ public class GrabFreightBlindly {
         // to execute the desired movement.
 
         // Retract lift and make it grab.
-        lift.retract();
+        lift.setMovement(Lift.LiftMovement.DOWN);
         lift.setRollerState(Lift.RollerState.GRABBING);
 
         // If we get too close to one side of the warehouse, we will simply start to move in the opposite
@@ -100,6 +100,7 @@ public class GrabFreightBlindly {
             opMode.telemetry.addData("Distance", distanceToWall);
             opMode.telemetry.addData("Time", currentTime - stageStartTime);
             opMode.telemetry.addData("Side moves", sidewaysMovements);
+            opMode.telemetry.addData("Direction", sidewaysDirection);
 
             switch (movementStage) {
                 case FORWARD:
@@ -115,6 +116,10 @@ public class GrabFreightBlindly {
                         stageStartTime = currentTime;
                         movementStage = MovementStage.SIDEWAYS;
                         previousY = currentLocation.getY();
+
+                        // If, for whatever reason, the robot has rotated too much, rotate back.
+                        if (Math.abs(currentLocation.getHeading()) > 30)
+                            currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, opMode);
 
                         // Check whether he have hit the side.
                         // Max of sideways movements should do the trick
@@ -132,7 +137,7 @@ public class GrabFreightBlindly {
                             sidewaysMovements = 0;
                         }
 
-                        mecanum.moveNoScaling(0, sidewaysSpeed * sidewaysDirection, 0);
+                        mecanum.moveNoScaling(0, - sidewaysSpeed * sidewaysDirection, 0);
                     }
                     break;
                 case SIDEWAYS:
@@ -149,6 +154,8 @@ public class GrabFreightBlindly {
             executionFrequency.execution(currentTime);
             opMode.telemetry.update();
         }
+        lift.setMovement(Lift.LiftMovement.HOLD);
+        lift.retract();
         return currentLocation;
     }
 }

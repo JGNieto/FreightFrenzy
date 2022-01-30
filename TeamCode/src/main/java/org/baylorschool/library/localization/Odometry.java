@@ -110,8 +110,6 @@ public class Odometry implements Localization {
     }
 
     public Location calculateNewLocation(Location currentLocation) {
-        if (withdrawn) // Can't do much if wheels are up. Don't want to throw exception to avoid crash.
-            return currentLocation;
         imu.updateOrientation();
 
         double measureImu;
@@ -161,9 +159,12 @@ public class Odometry implements Localization {
         double cosTheta = Math.cos(thetaAvg);
         double sinTheta = Math.sin(thetaAvg);
 
+        // https://en.wikipedia.org/wiki/Rotation_of_axes
         currentLocation.setX(currentLocation.getX() + dX * cosTheta - dY * sinTheta);
         currentLocation.setY(currentLocation.getY() + dX * sinTheta + dY * cosTheta);
         currentLocation.setHeading(Location.angleBound(currentLocation.getHeading() + Math.toDegrees(dTheta)));
+
+
 
         return currentLocation;
     }

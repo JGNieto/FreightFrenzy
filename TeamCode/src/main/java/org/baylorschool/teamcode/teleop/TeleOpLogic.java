@@ -20,7 +20,6 @@ public class TeleOpLogic extends LinearOpMode {
     private Odometry odometry;
     private final ControlMap controlMap;
     private Tape tape;
-    private Sounds sounds;
 
     private final double SLOW_MODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
