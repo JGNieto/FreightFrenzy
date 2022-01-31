@@ -137,7 +137,12 @@ public class MovePurePursuit {
             List<Location> intersections = CircleIntersect.getCircleLineIntersectionLocation(startLocation, endLocation, currentLocation, endLocation.getPurePursuitRadius());
 
             for (Location intersection : intersections) {
-                if (intersection.getX() < smallX || intersection.getY() < smallY || intersection.getX() > bigX || intersection.getY() > bigY)
+                // Testing code. Original:
+                // if (intersection.getX() < smallX || intersection.getY() < smallY || intersection.getX() > bigX || intersection.getY() > bigY)
+                //  continue;
+
+                // Testing:
+                if ((intersection.getX() < smallX || intersection.getY() < smallY) && (intersection.getX() > bigX || intersection.getY() > bigY))
                     continue;
 
                 double distance = Location.distanceSquared(intersection, endLocation);
