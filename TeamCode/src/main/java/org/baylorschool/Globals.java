@@ -85,7 +85,8 @@
         // Default values of the location
         public static final double defaultPurePursuitRadius = 250; // TODO: Placeholder
         public static final double defaultPurePursuitTurnSpeed = 1; // TODO: Placeholder
-        public static final double defaultPurePursuitDistanceStopTurning = 500;
+        public static final double defaultPurePursuitDistanceStopTurning = 200;
+        public static final double defaultPurePursuitAngle = 0; // By default, the robot tries to drive forward.
 
         ///////////////////////////// MECANUM /////////////////////////////
         // Which side of the chassis' wheels are reverse.

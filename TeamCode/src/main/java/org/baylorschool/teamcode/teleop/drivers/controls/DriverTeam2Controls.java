@@ -6,12 +6,12 @@ import org.baylorschool.library.ControlMap;
 public class DriverTeam2Controls extends ControlMap {
     @Override
     public boolean liftDown() {
-        return false;
+        return gamepad2.dpad_left;
     }
 
     @Override
     public boolean liftUp() {
-        return false;
+        return gamepad2.dpad_right;
     }
 
     @Override

@@ -66,7 +66,7 @@ public class DWBlueLeftTSEWarehousePark extends LinearOpMode {
         telemetry.addData("Status", "Moving");
         telemetry.update();
         MoveWaypoints.moveWaypoints(new Path(new Location[]{
-                new Location(159, 1158),
+                //new Location(159, 1158),
                 scoringLocation,
         }), mecanum, odometry, currentLocation, this);
         twoBarLift.releaseItem();

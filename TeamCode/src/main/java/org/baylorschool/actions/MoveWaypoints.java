@@ -56,7 +56,7 @@ public class MoveWaypoints {
 
             double distanceSquared = Location.distanceSquared(currentLocation, currentGoal);
 
-            if (distanceSquared < 300 * 300)
+            if (distanceSquared < 100 * 100)
                 break;
 
             currentLocation.reportTelemetry(telemetry);
@@ -73,7 +73,7 @@ public class MoveWaypoints {
             telemetry.update();
         }
 
-        PIDFController pidX = Globals.movementPIDFController();
+        /*PIDFController pidX = Globals.movementPIDFController();
         PIDFController pidY = Globals.movementPIDFController();
 
         pidX.setTolerance(5);
@@ -93,7 +93,7 @@ public class MoveWaypoints {
             double sinTheta = Math.sin(theta);
 
             // https://en.wikipedia.org/wiki/Rotation_of_axes
-            // We rotate the axis to get xPrime and yPrime (like x' and y') in Wikipedia with the heading of the robot as 0º.
+            // We rotate the axis to get xPrime and yPrime (like x' and y' in Wikipedia) with the heading of the robot as 0º.
             double xPrime = (+ x * cosTheta + y * sinTheta);
             double yPrime = (- x * sinTheta + y * cosTheta);
 
@@ -118,6 +118,13 @@ public class MoveWaypoints {
             telemetry.addData("X Error", pidX.getPositionError());
             telemetry.addData("Y Error", pidY.getPositionError());
             telemetry.update();
+        }*/
+
+        while (opMode.opModeIsActive() && !Location.withinTolerance(currentLocation, currentGoal, new Location(5, 5))) {
+            telemetry.addLine("Moving slowly");
+            currentLocation.reportTelemetry(telemetry);
+            currentLocation = localization.calculateNewLocation(currentLocation);
+            MovePurePursuit.moveTowardPositionAngle(mecanum, currentLocation, currentGoal, 0, 0, .2, telemetry);
         }
 
         mecanum.stop();

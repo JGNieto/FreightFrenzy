@@ -39,7 +39,8 @@ public class PurePursuitTest extends LinearOpMode {
             new Location(268, 256),
             new Location(299, 969),
             new Location(146, 1451),
-            new Location(-329, 1396),
+            new Location(-329, 1451),
+            new Location(-530, 1524),
             new Location(-902, 1536),
 
     });
@@ -58,6 +59,8 @@ public class PurePursuitTest extends LinearOpMode {
         );
 
         waitForStart();
+
+        telemetry.setMsTransmissionInterval(10);
 
         odometry.reset();
         odometry.calculateNewLocation(currentLocation);

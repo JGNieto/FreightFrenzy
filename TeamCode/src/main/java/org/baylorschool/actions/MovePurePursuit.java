@@ -3,12 +3,14 @@ package org.baylorschool.actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.Range;
 
+import org.baylorschool.library.ExecutionFrequency;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Path;
 import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.math.CircleIntersect;
 import org.baylorschool.library.math.PerpendicularDistance;
+import org.baylorschool.library.math.SegmentMidpoint;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.List;
@@ -29,37 +31,46 @@ public class MovePurePursuit {
         // Ensure the first path line is calculated from the initial location.
         path.initialLocation(new Location(currentLocation));
 
+        ExecutionFrequency executionFrequency = new ExecutionFrequency(opMode.telemetry);
+
         while (opMode.opModeIsActive()) {
             // Calculate the next location using the Pure Pursuit algorithm.
             currentLocation = odometry.calculateNewLocation(currentLocation);
             currentLocation.reportTelemetry(opMode.telemetry);
 
             // Check whether we are within an acceptable distance to the final location. If so, movement is done.
-            if (Location.withinTolerance(currentLocation, path.getLastLocation(), path.getTolerance()))
+            if (path.getLocations().size() == 1)
                 break;
+
+            opMode.telemetry.addData("Locations Left", path.getLocations().size());
 
             // Compute target "lookahead" location according to Pure Pursuit.
             Location purePursuitTarget = getPurePursuitPoint(path, currentLocation, opMode.telemetry);
 
-            // If we are not near any path, go towards the first point of the path.
-            if (purePursuitTarget == null) {
-                moveTowardPosition(mecanum, currentLocation, path.getLocations().get(0), 0, 1);
+            if (purePursuitTarget == null) { // If we are not near any path
                 opMode.telemetry.addLine("Null Target");
+                if (path.getLocations().size() > 1) {
+                    // Moving to the first point sometimes causes problems if there is more than one point.
+                    // Thus, we go toward the midpoint of the first segment.
+                    Location location1 = path.getLocations().get(0);
+                    Location location2 = path.getLocations().get(1);
+                    Location midpoint = SegmentMidpoint.segmentMidpoint(location1, location2);
+                    midpoint.reportTelemetry(opMode.telemetry);
+                    moveTowardPosition(mecanum, currentLocation, midpoint, location1.getPurePursuitAngle(), location1.getPurePursuitTurnSpeed(), opMode.telemetry);
+                } else {
+                    Location location = path.getLocations().get(0);
+                    moveTowardPosition(mecanum, currentLocation, location, location.getPurePursuitAngle(), location.getPurePursuitTurnSpeed(), opMode.telemetry);
+                }
             } else {
                 moveTowardPositionAngle(mecanum, currentLocation, purePursuitTarget, purePursuitTarget.getHeading(), purePursuitTarget.getPurePursuitTurnSpeed(), opMode.telemetry);
                 purePursuitTarget.reportTelemetry(opMode.telemetry);
             }
+
+            executionFrequency.execution();
             opMode.telemetry.update();
         }
 
-        // Perfect angle.
-        while (opMode.opModeIsActive()) {
-            // If angle is good enough, stop movement.
-            if (Location.angleWithinTolerance(currentLocation, path.getLastLocation(), path.getTolerance()))
-                break;
-            // Move towards correct angle.
-            mecanum.moveCustomScaling(0, 0, getAngleTurnPower(currentLocation.getHeading(), path.getLastLocation().getHeading(), 1), MOVEMENT_COEFFICIENT);
-        }
+        currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, opMode);
 
         return currentLocation;
     }
@@ -92,14 +103,13 @@ public class MovePurePursuit {
             }
         }
 
-        telemetry.addData("Locations Left", path.getLocations().size());
         telemetry.addData("Ch Start Location", championStartLocationIndex);
 
         // To avoid going back and redoing previous paths, we remove waypoints we have already passed.
         // This is inefficient if we remove more than one because of the way ArrayList is implemented.
         // However, removing more than one is very rare, so we accept this inefficiency.
         for (int i = 0; i < championStartLocationIndex; i++) {
-            telemetry.log().add("Removing location");
+            telemetry.log().add("Removing location. Left: " + (path.getLocations().size() - 1));
 
             Runnable runnable = path.getLocations().get(i).getRunnable();
             if (runnable != null)
@@ -180,6 +190,10 @@ public class MovePurePursuit {
     }
 
     public static void moveTowardPositionAngle(Mecanum mecanum, Location currentLocation, Location target, double targetAngle, double turnSpeed, Telemetry telemetry) {
+        moveTowardPositionAngle(mecanum, currentLocation, target, targetAngle, turnSpeed, MOVEMENT_COEFFICIENT, telemetry);
+    }
+
+    public static void moveTowardPositionAngle(Mecanum mecanum, Location currentLocation, Location target, double targetAngle, double turnSpeed, double speed, Telemetry telemetry) {
         double distanceToTarget = Location.distance(currentLocation, target);
         double absoluteAngleDiff = Location.angleLocations(currentLocation, target); // Angle between points.
         double relativeAngleDiff = Location.angleBound(absoluteAngleDiff - currentLocation.getHeading()); // Angle for the robot to turn.
@@ -193,7 +207,7 @@ public class MovePurePursuit {
 
         double rotPower = getAngleTurnPower(currentLocation.getHeading(), targetAngle, turnSpeed);
 
-        mecanum.moveCustomScaling(yPower, xPower, rotPower, MOVEMENT_COEFFICIENT);
+        mecanum.moveCustomScaling(yPower, xPower, rotPower, speed);
 
         if (telemetry != null) {
             telemetry.addData("Dist", distanceToTarget);

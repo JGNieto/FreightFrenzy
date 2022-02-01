@@ -18,6 +18,7 @@ public class Location {
     private double purePursuitRadius = Globals.defaultPurePursuitRadius;
     private double purePursuitTurnSpeed = Globals.defaultPurePursuitTurnSpeed;
     private double purePursuitDistanceStopTurning = Globals.defaultPurePursuitDistanceStopTurning;
+    private double purePursuitAngle = Globals.defaultPurePursuitAngle;
 
     private Runnable runnable = null;
 
@@ -372,5 +373,18 @@ public class Location {
     public Location setPurePursuitDistanceStopTurning(double purePursuitDistanceStopTurning) {
         this.purePursuitDistanceStopTurning = purePursuitDistanceStopTurning;
         return this;
+    }
+
+    public double getPurePursuitAngle() {
+        return purePursuitAngle;
+    }
+
+    public Location setPurePursuitAngle(double purePursuitAngle) {
+        this.purePursuitAngle = purePursuitAngle;
+        return this;
+    }
+
+    public void setBackwards(boolean backwards) {
+        this.backwards = backwards;
     }
 }
