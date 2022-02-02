@@ -18,6 +18,7 @@ public class Carousel {
 
     public Carousel(HardwareMap hardwareMap) {
         this.flyWheel = hardwareMap.get(DcMotor.class, Globals.flyWheel);
+        flyWheel.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void move(CarouselSide side) {

@@ -18,8 +18,8 @@ import java.util.Collections;
 
 public class EnterWarehouse {
     // Locations to go to before actually entering the warehouse.
-    static Location redEntryPoint = new Location(Places.middle(0.5), Places.awayPerpendicular(3), 0);
-    static Location blueEntryPoint = new Location(Places.middle(0.5), Places.awayPerpendicular(-3), 0);
+    static Location redEntryPoint = new Location(Places.middle(0.5), Places.closePerpendicular(-3), 0);
+    static Location blueEntryPoint = new Location(Places.middle(0.5), Places.closePerpendicular(3), 0);
 
     // Locations to go to to enter the warehouse.
     static Location redInsidePoint = new Location(redEntryPoint).setX(Places.middle(2));
@@ -72,23 +72,28 @@ public class EnterWarehouse {
      * @param odometry For localization
      * @param locations A list of locations (which can be empty) that the robot will follow with Pure Pursuit before going to the entry point. E.g to avoid obstacles. This list will be mutated.
      * @param opMode OpMode that the robot is running at this time.
+     * @param runnable Runnable to execute once the robot is aligned to enter the warehouse.
      * @return Current Location.
      */
-    public static Location enterWarehouseOdometry(Globals.WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, ArrayList<Location> locations, LinearOpMode opMode) {
+    public static Location enterWarehouseOdometry(Globals.WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, ArrayList<Location> locations, LinearOpMode opMode, Runnable runnable) {
         // Add entry location to the end of the list of waypoints that Pure Pursuit will follow.
-        locations.add(side == Globals.WarehouseSide.BLUE ? blueEntryPoint : redEntryPoint);
+        locations.add(new Location(side == Globals.WarehouseSide.BLUE ? blueEntryPoint : redEntryPoint).setRunnable(runnable));
 
         // Create path instance from the locations list.
         Path path = new Path(locations);
 
         // Move using Pure Pursuit to the entry location.
-        currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
+        // currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
 
-        // Create path to move into the warehouse. Although Pure Pursuit is technically used, it will not affect much.
-        path = new Path(Collections.singletonList(side == Globals.WarehouseSide.BLUE ? blueInsidePoint : redInsidePoint));
+        // Move using odometry to the entry location.
+        currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, opMode);
+
+        // Create path to move into the warehouse.
+        path = new Path(side == Globals.WarehouseSide.BLUE ? blueInsidePoint : redInsidePoint);
 
         // Enter the warehouse.
-        currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
+        // currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
+        currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, opMode);
 
         // Return the new currentLocation.
         return currentLocation;
@@ -104,7 +109,7 @@ public class EnterWarehouse {
      * @return Current Location.
      */
     public static Location enterWarehouseOdometry(Globals.WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, LinearOpMode opMode) {
-        return enterWarehouseOdometry(side, currentLocation, mecanum, odometry, new ArrayList<>(), opMode);
+        return enterWarehouseOdometry(side, currentLocation, mecanum, odometry, new ArrayList<>(), opMode, null);
     }
 
     // Constants for the parkWarehouse function.

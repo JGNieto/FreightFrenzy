@@ -3,12 +3,14 @@ package org.baylorschool.actions;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.Range;
 
+import org.baylorschool.Globals;
 import org.baylorschool.library.ExecutionFrequency;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Path;
 import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.math.CircleIntersect;
+import org.baylorschool.library.math.MinPower;
 import org.baylorschool.library.math.PerpendicularDistance;
 import org.baylorschool.library.math.SegmentMidpoint;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -227,6 +229,10 @@ public class MovePurePursuit {
     }
 
     public static void moveTowardPosition(Mecanum mecanum, Location currentLocation, Location target, double preferredAngle, double turnSpeed, Telemetry telemetry) {
+        moveTowardPosition(mecanum, currentLocation, target, preferredAngle, turnSpeed, MOVEMENT_COEFFICIENT, telemetry);
+    }
+
+    public static void moveTowardPosition(Mecanum mecanum, Location currentLocation, Location target, double preferredAngle, double turnSpeed, double speed, Telemetry telemetry) {
         double distanceToTarget = Location.distanceSquared(currentLocation, target);
         double targetAngle; // Angle between points
 
@@ -236,13 +242,13 @@ public class MovePurePursuit {
         else
             targetAngle = Location.angleBound(Location.angleLocations(currentLocation, target) + preferredAngle);
 
-        moveTowardPositionAngle(mecanum, currentLocation, target, targetAngle, turnSpeed, telemetry);
+        moveTowardPositionAngle(mecanum, currentLocation, target, targetAngle, turnSpeed, speed, telemetry);
     }
 
     public static double getAngleTurnPower(double currentAngle, double targetAngle, double turnSpeed) {
         // If the angle difference is more than 15º, maximum power will be applied.
         // When it gets closer, the power will be gradually reduced.
         double angleTurnMagnitude = Location.angleTurn(currentAngle, targetAngle) / 15.0;
-        return Range.clip(angleTurnMagnitude, -1, 1) * turnSpeed;
+        return MinPower.minPower(Range.clip(angleTurnMagnitude, -1, 1) * turnSpeed, Globals.rotationMinPower);
     }
 }

@@ -70,6 +70,7 @@ public class TwoBarLift extends Lift {
     @Override
     public void initialize() {
         setLedState(true); // LED On to indicate lift is not working.
+        rollerMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
         twoBarMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 

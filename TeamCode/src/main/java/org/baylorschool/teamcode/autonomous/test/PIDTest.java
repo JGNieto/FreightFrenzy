@@ -27,7 +27,7 @@ public class PIDTest extends LinearOpMode {
 
         imu = new IMU(hardwareMap);
         mecanum = new Mecanum(hardwareMap);
-        odometry = new Odometry(mecanum, hardwareMap, imu, false);
+        odometry = new Odometry(hardwareMap, imu, false);
 
         waitForStart();
 

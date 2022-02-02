@@ -35,13 +35,7 @@ public class OdometryTest extends LinearOpMode {
 
         imu = new IMU(hardwareMap);
         mecanum = new Mecanum(hardwareMap);
-        odometry = new Odometry(mecanum.getFlMotor(), mecanum.getFrMotor(), mecanum.getBlMotor(),
-                hardwareMap.get(Servo.class, Globals.servoLeftHw),
-                hardwareMap.get(Servo.class, Globals.servoRightHw),
-                hardwareMap.get(Servo.class, Globals.servoMiddleHw),
-                imu,
-                false
-        );
+        odometry = new Odometry(hardwareMap, imu, false);
         carousel = new Carousel(hardwareMap);
         lift = Globals.createNewLift(this);
 

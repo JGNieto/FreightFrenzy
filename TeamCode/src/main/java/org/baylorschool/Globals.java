@@ -55,6 +55,11 @@
         public static final String servoRightHw = "servoRight"; // (1)
         public static final String servoMiddleHw = "servoMiddle"; // (2)
 
+        // Odometry (encoders)
+        public static final String odometryEncoderLeft = "roller";
+        public static final String odometryEncoderRight = "exHubOne";
+        public static final String odometryEncoderMiddle = "flyWheel";
+
         // Tape (capping)
         public static final String tapeExtend = "tapeExtend";
         public static final String tapeTilt = "tapeTilt";
@@ -66,14 +71,15 @@
             return new PIDFController(0.8, 5, 0, 0);
         }
 
-        public static final double rotationPIDFMinPower = 0.2;
+        public static final double rotationPIDFMinPower = 0.1;
+        public static final double rotationMinPower = 0;
         public static final double rotationPIDFCoefficient = 1.0 / 60.0;
 
         public static PIDFController movementPIDFController() {
             return new PIDFController(1.7, .7, 0, 0);
         }
 
-        public static final double movementPIDFMinPower = 0.2;
+        public static final double movementPIDFMinPower = 0;
         public static final double movementPIDFCoefficient = 1.0 / 800.0;
 
         ///////////////////////////// IMU /////////////////////////////
@@ -121,8 +127,8 @@
         // Encoder readings for the odometry will be multiplied times the following coefficients.
         // They are used to change the sign of the value.
         public static final int leftOdometryCoefficient = -1;
-        public static final int rightOdometryCoefficient = -1;
-        public static final int middleOdometryCoefficient = -1;
+        public static final int rightOdometryCoefficient = 1;
+        public static final int middleOdometryCoefficient = 1;
 
         // Servo position value for the respective servos and positions.
         public static final double positionWithdrawnRight = 0;

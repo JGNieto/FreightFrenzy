@@ -36,7 +36,7 @@ public class PIDTurnCalibration extends LinearOpMode {
     public void runOpMode() {
         mecanum = new Mecanum(hardwareMap);
         imu = new IMU(hardwareMap);
-        odometry = new Odometry(mecanum, hardwareMap, imu, true);
+        odometry = new Odometry(hardwareMap, imu, true);
 
         waitForStart();
 

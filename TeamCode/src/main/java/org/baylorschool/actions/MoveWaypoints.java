@@ -59,14 +59,20 @@ public class MoveWaypoints {
             if (distanceSquared < 100 * 100)
                 break;
 
+            double movementCoefficient = 0.8;
+
+            if (distanceSquared < 200 * 200) {
+                movementCoefficient = (movementCoefficient - Globals.movementPIDFMinPower) * (distanceSquared - 100 * 100) / (100 * 100) + Globals.movementPIDFMinPower;
+            }
+
             currentLocation.reportTelemetry(telemetry);
 
             if (currentGoal.getHeading() != -1) {
                 telemetry.addData("Angle", "Absolute");
-                MovePurePursuit.moveTowardPositionAngle(mecanum, currentLocation, currentGoal, currentGoal.getHeading(), currentGoal.getPurePursuitTurnSpeed(), telemetry);
+                MovePurePursuit.moveTowardPositionAngle(mecanum, currentLocation, currentGoal, currentGoal.getHeading(), currentGoal.getPurePursuitTurnSpeed(), movementCoefficient, telemetry);
             } else {
                 telemetry.addData("Angle", "Relative");
-                MovePurePursuit.moveTowardPosition(mecanum, currentLocation, currentGoal, 0, currentGoal.getPurePursuitTurnSpeed(), telemetry);
+                MovePurePursuit.moveTowardPosition(mecanum, currentLocation, currentGoal, 0, currentGoal.getPurePursuitTurnSpeed(), movementCoefficient, telemetry);
             }
 
             telemetry.addData("Last location", "%.0f, %.0f, %.0f", currentGoal.getX(), currentGoal.getY(), currentGoal.getHeading());
@@ -124,7 +130,7 @@ public class MoveWaypoints {
             telemetry.addLine("Moving slowly");
             currentLocation.reportTelemetry(telemetry);
             currentLocation = localization.calculateNewLocation(currentLocation);
-            MovePurePursuit.moveTowardPositionAngle(mecanum, currentLocation, currentGoal, 0, 0, .2, telemetry);
+            MovePurePursuit.moveTowardPositionAngle(mecanum, currentLocation, currentGoal, 0, 0, Globals.movementPIDFMinPower, telemetry);
         }
 
         mecanum.stop();

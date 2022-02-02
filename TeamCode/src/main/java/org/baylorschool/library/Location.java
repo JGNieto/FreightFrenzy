@@ -353,8 +353,9 @@ public class Location {
         return runnable;
     }
 
-    public void setRunnable(Runnable runnable) {
+    public Location setRunnable(Runnable runnable) {
         this.runnable = runnable;
+        return this;
     }
 
     /**

@@ -2,9 +2,11 @@ package org.baylorschool.teamcode.autonomous.deadwheel.blue;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
+import org.baylorschool.actions.EnterWarehouse;
 import org.baylorschool.actions.MoveWaypoints;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
@@ -15,6 +17,8 @@ import org.baylorschool.library.lift.Lift;
 import org.baylorschool.library.lift.TwoBarLift;
 import org.baylorschool.library.localization.Odometry;
 import org.openftc.easyopencv.OpenCvWebcam;
+
+import java.util.ArrayList;
 
 @Autonomous(name = "DWBlueLeftTSEWarehousePark", group = "Blue")
 public class DWBlueLeftTSEWarehousePark extends LinearOpMode {
@@ -34,13 +38,13 @@ public class DWBlueLeftTSEWarehousePark extends LinearOpMode {
         telemetry.update();
         twoBarLift = new TwoBarLift(this);
         mecanum = new Mecanum(hardwareMap);
+        mecanum.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         imu = new IMU(hardwareMap);
-        odometry = new Odometry(mecanum, hardwareMap, imu, false);
+        odometry = new Odometry(hardwareMap, imu, false);
 
         tsePipeline = new TSEPipeline(this);
         webcam = TSEPipeline.openWebcam(this, tsePipeline);
         twoBarLift.moveDown(this);
-        twoBarLift.setTelemetryEnabled(true);
 
         telemetry.addData("Status", "Waiting for vision...");
         telemetry.update();
@@ -65,11 +69,22 @@ public class DWBlueLeftTSEWarehousePark extends LinearOpMode {
 
         telemetry.addData("Status", "Moving");
         telemetry.update();
-        MoveWaypoints.moveWaypoints(new Path(new Location[]{
+        currentLocation = MoveWaypoints.moveWaypoints(new Path(new Location[]{
                 //new Location(159, 1158),
-                scoringLocation,
+                // scoringLocation,
+                new Location(-628, 0)
         }), mecanum, odometry, currentLocation, this);
-        twoBarLift.releaseItem();
+        mecanum.stop();
+        long startTime = System.currentTimeMillis();
+        twoBarLift.setRollerState(Lift.RollerState.RELEASING);
+        while (opModeIsActive()) {
+            currentLocation = odometry.calculateNewLocation(currentLocation);
+            if (System.currentTimeMillis() - startTime >= 2000) break;
+        }
+        twoBarLift.setRollerState(Lift.RollerState.STOP);
+        currentLocation = EnterWarehouse.enterWarehouseOdometry(Globals.WarehouseSide.BLUE, currentLocation, mecanum, odometry, new ArrayList<>(), this, () -> {
+            twoBarLift.retract();
+        });
         twoBarLift.closeThread();
     }
 }

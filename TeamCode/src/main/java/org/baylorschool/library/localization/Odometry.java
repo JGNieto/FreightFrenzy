@@ -53,10 +53,10 @@ public class Odometry implements Localization {
         this.reset();
     }
 
-    public Odometry(Mecanum mecanum, HardwareMap hardwareMap, IMU imu, boolean withdrawn) {
-        this.encoderLeft = mecanum.getFlMotor();
-        this.encoderRight = mecanum.getFrMotor();
-        this.encoderMid = mecanum.getBlMotor();
+    public Odometry(HardwareMap hardwareMap, IMU imu, boolean withdrawn) {
+        this.encoderLeft = hardwareMap.get(DcMotor.class, Globals.odometryEncoderLeft);
+        this.encoderRight = hardwareMap.get(DcMotor.class, Globals.odometryEncoderRight);
+        this.encoderMid = hardwareMap.get(DcMotor.class, Globals.odometryEncoderMiddle);
 
         this.servoLeft = hardwareMap.get(Servo.class, Globals.servoLeftHw);
         this.servoRight = hardwareMap.get(Servo.class, Globals.servoRightHw);
@@ -163,8 +163,6 @@ public class Odometry implements Localization {
         currentLocation.setX(currentLocation.getX() + dX * cosTheta - dY * sinTheta);
         currentLocation.setY(currentLocation.getY() + dX * sinTheta + dY * cosTheta);
         currentLocation.setHeading(Location.angleBound(currentLocation.getHeading() + Math.toDegrees(dTheta)));
-
-
 
         return currentLocation;
     }
