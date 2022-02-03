@@ -385,7 +385,8 @@ public class Location {
         return this;
     }
 
-    public void setBackwards(boolean backwards) {
+    public Location setBackwards(boolean backwards) {
         this.backwards = backwards;
+        return this;
     }
 }

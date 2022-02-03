@@ -64,6 +64,11 @@
         public static final String tapeExtend = "tapeExtend";
         public static final String tapeTilt = "tapeTilt";
 
+        // Touch sensors (localization)
+        // Set strings to null if not connected.
+        public static final String touchLeft = "touchLeft";
+        public static final String touchRight = "touchRight";
+
         public static final String webcamDeviceName = "Webcam 1"; // Generally don't need to change.
 
         ///////////////////////////// PID /////////////////////////////
@@ -78,6 +83,8 @@
         public static PIDFController movementPIDFController() {
             return new PIDFController(1.7, .7, 0, 0);
         }
+
+        public static final double movementFineAdjustmentPower = 0.1;
 
         public static final double movementPIDFMinPower = 0;
         public static final double movementPIDFCoefficient = 1.0 / 800.0;
@@ -126,15 +133,16 @@
 
         // Encoder readings for the odometry will be multiplied times the following coefficients.
         // They are used to change the sign of the value.
+        // NOTE: The odometry code already takes into account whether the motor is FORWARD or REVERSE
         public static final int leftOdometryCoefficient = -1;
         public static final int rightOdometryCoefficient = 1;
-        public static final int middleOdometryCoefficient = 1;
+        public static final int middleOdometryCoefficient = -1;
 
         // Servo position value for the respective servos and positions.
         public static final double positionWithdrawnRight = 0;
         public static final double positionWithdrawnLeft = 1;
         public static final double positionWithdrawnMiddle = 0;
-        public static final double positionOpenRight = 0.67;
+        public static final double positionOpenRight = 0.66;
         public static final double positionOpenLeft = 0.565;
         public static final double positionOpenMiddle = 0.51;
 

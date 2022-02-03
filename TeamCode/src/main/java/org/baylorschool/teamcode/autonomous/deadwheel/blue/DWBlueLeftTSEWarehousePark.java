@@ -64,7 +64,6 @@ public class DWBlueLeftTSEWarehousePark extends LinearOpMode {
         telemetry.addData("Status", "Waiting...");
         telemetry.update();
 
-        sleep(1000); // Wait for lift to move.
         Location scoringLocation = twoBarLift.getScoringLocation(currentLocation, Lift.Hub.BLUE, dropLevel);
 
         telemetry.addData("Status", "Moving");
@@ -75,6 +74,10 @@ public class DWBlueLeftTSEWarehousePark extends LinearOpMode {
                 new Location(-628, 0)
         }), mecanum, odometry, currentLocation, this);
         mecanum.stop();
+
+        telemetry.addData("Status", "Dropping");
+        telemetry.update();
+
         long startTime = System.currentTimeMillis();
         twoBarLift.setRollerState(Lift.RollerState.RELEASING);
         while (opModeIsActive()) {
@@ -82,6 +85,7 @@ public class DWBlueLeftTSEWarehousePark extends LinearOpMode {
             if (System.currentTimeMillis() - startTime >= 2000) break;
         }
         twoBarLift.setRollerState(Lift.RollerState.STOP);
+
         currentLocation = EnterWarehouse.enterWarehouseOdometry(Globals.WarehouseSide.BLUE, currentLocation, mecanum, odometry, new ArrayList<>(), this, () -> {
             twoBarLift.retract();
         });

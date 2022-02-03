@@ -44,6 +44,7 @@ public class OdometryTest extends LinearOpMode {
         odometry.calculateNewLocation(currentLocation);
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.initialize();
+        telemetry.setMsTransmissionInterval(10);
 
         boolean slowMode = false;
 
@@ -73,12 +74,15 @@ public class OdometryTest extends LinearOpMode {
             lift.loopIterationTeleOp(gamepad1);
 
             // Report telemetry
+            // telemetry.addData("Middle Diff", odometry.diff);
             telemetry.addData("Odo Left", odometry.getPreviousLeft());
             telemetry.addData("Odo Right", odometry.getPreviousRight());
             telemetry.addData("Odo Mid", odometry.getPreviousMid());
             telemetry.addData("Loc X", currentLocation.getX());
             telemetry.addData("Loc Y", currentLocation.getY());
             telemetry.addData("Loc Head", currentLocation.getHeading());
+            telemetry.addData("Right Pressed", odometry.rightPressed());
+            telemetry.addData("Left Pressed", odometry.leftPressed());
             telemetry.addData("X Gamepad", x);
             telemetry.addData("Y Gamepad", y);
             telemetry.addData("Speed", y);

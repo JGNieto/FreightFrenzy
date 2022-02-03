@@ -249,6 +249,6 @@ public class MovePurePursuit {
         // If the angle difference is more than 15º, maximum power will be applied.
         // When it gets closer, the power will be gradually reduced.
         double angleTurnMagnitude = Location.angleTurn(currentAngle, targetAngle) / 15.0;
-        return MinPower.minPower(Range.clip(angleTurnMagnitude, -1, 1) * turnSpeed, Globals.rotationMinPower);
+        return MinPower.minPower(Range.clip(angleTurnMagnitude, -.75, .75) * turnSpeed, Globals.rotationMinPower);
     }
 }

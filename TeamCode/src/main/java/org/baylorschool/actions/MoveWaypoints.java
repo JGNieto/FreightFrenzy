@@ -8,6 +8,7 @@ import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Path;
 import org.baylorschool.library.ftclib.PIDFController;
 import org.baylorschool.library.localization.Localization;
+import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.math.MinPower;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
@@ -128,9 +129,11 @@ public class MoveWaypoints {
 
         while (opMode.opModeIsActive() && !Location.withinTolerance(currentLocation, currentGoal, new Location(5, 5))) {
             telemetry.addLine("Moving slowly");
+
             currentLocation.reportTelemetry(telemetry);
             currentLocation = localization.calculateNewLocation(currentLocation);
-            MovePurePursuit.moveTowardPositionAngle(mecanum, currentLocation, currentGoal, 0, 0, Globals.movementPIDFMinPower, telemetry);
+            MovePurePursuit.moveTowardPositionAngle(mecanum, currentLocation, currentGoal, 0, 0, Globals.movementFineAdjustmentPower, telemetry);
+            telemetry.update();
         }
 
         mecanum.stop();

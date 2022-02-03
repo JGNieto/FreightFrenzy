@@ -187,8 +187,8 @@ public class Places {
     public static final Location[] BlueRightHubToPark = new Location[] {
             //new Location(awayParallel(-2), middle(1.5)).backwards(),
             //new Location(closeParallel(-3), middle(1.5)).backwards(),
-            new Location(awayParallel(-2), middle(1.5)),
-            new Location(closeParallel(-3), middle(1.5)),
+            new Location(middle(-2), middle(1.5)),
+            new Location(closeParallel(-3), middle(1.5)).setBackwards(true),
     };
 
     public static final Location[] RedLeftHubToPark = new Location[] {
