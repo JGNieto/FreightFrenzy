@@ -100,7 +100,7 @@ public class ControlMap {
         else if (gamepad2.a)
             return -1;
         else
-            return 0;
+            return - gamepad1.left_trigger + gamepad1.right_trigger;
     }
 
     public double tapeTilt() {

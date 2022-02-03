@@ -69,9 +69,7 @@ public class DWBlueLeftTSEWarehousePark extends LinearOpMode {
         telemetry.addData("Status", "Moving");
         telemetry.update();
         currentLocation = MoveWaypoints.moveWaypoints(new Path(new Location[]{
-                //new Location(159, 1158),
-                // scoringLocation,
-                new Location(-628, 0)
+                scoringLocation,
         }), mecanum, odometry, currentLocation, this);
         mecanum.stop();
 
@@ -86,9 +84,10 @@ public class DWBlueLeftTSEWarehousePark extends LinearOpMode {
         }
         twoBarLift.setRollerState(Lift.RollerState.STOP);
 
-        currentLocation = EnterWarehouse.enterWarehouseOdometry(Globals.WarehouseSide.BLUE, currentLocation, mecanum, odometry, new ArrayList<>(), this, () -> {
-            twoBarLift.retract();
-        });
+        currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
+        twoBarLift.retract();
+
+        currentLocation = EnterWarehouse.enterWarehouseOdometryTouch(Globals.WarehouseSide.BLUE, currentLocation, mecanum, odometry, new ArrayList<>(), this, null/*() -> twoBarLift.retract()*/, odometry);
         twoBarLift.closeThread();
     }
 }

@@ -30,6 +30,7 @@ public class Tape {
 
     public void setExtendPower(double power) {
         power = power < -1 ? -1 : (power > 1 ? 1 : power);
+        power *= -1;
         servoExtend.setPower(power);
     }
 

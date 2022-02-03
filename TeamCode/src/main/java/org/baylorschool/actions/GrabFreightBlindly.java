@@ -76,8 +76,8 @@ public class GrabFreightBlindly {
         // Keep track of whether it is the first forward time.
         boolean firstTime = true;
 
-        final double leftLimit = warehouseSide == Globals.WarehouseSide.RED ? redLeftLimit : blueLeftLimit;
-        final double rightLimit = warehouseSide == Globals.WarehouseSide.RED ? redRightLimit : blueRightLimit;
+        // final double leftLimit = warehouseSide == Globals.WarehouseSide.RED ? redLeftLimit : blueLeftLimit;
+        // final double rightLimit = warehouseSide == Globals.WarehouseSide.RED ? redRightLimit : blueRightLimit;
 
         ExecutionFrequency executionFrequency = new ExecutionFrequency(opMode.telemetry);
 

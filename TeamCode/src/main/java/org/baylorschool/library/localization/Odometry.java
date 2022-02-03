@@ -14,7 +14,7 @@ import org.baylorschool.library.Location;
 
 import java.security.InvalidParameterException;
 
-public class Odometry implements Localization {
+public class Odometry implements Localization, TouchSensors {
     private final DcMotor encoderLeft;
     private final DcMotor encoderRight;
     private final DcMotor encoderMid;
@@ -204,23 +204,34 @@ public class Odometry implements Localization {
     private void specialCases(Location currentLocation) {
         // Check switches
         if (leftPressed() || rightPressed()) {
-            // TODO: Include checks for 90 and -90 degrees (the other two walls)
-            // Check the IMU more or less agrees with touch sensor. If not, discard signal, because
-            // we probably just hit some random thing.
-            if (Math.abs(currentLocation.getHeading()) > 170) {
-                currentLocation.setHeading(180);
-                if (imu != null)
-                    imu.forceValue(180);
-            } else if (Math.abs(currentLocation.getHeading()) < 10) {
-                currentLocation.setHeading(0);
-                if (imu != null)
-                    imu.forceValue(0);
-            } else return;
+            boolean left = leftPressed();
+            boolean right = rightPressed();
 
-            if (rightPressed())
-                currentLocation.setY(Places.closeParallel(-3) + 5);
-            else if (leftPressed())
-                currentLocation.setY(Places.closeParallel(3) - 5);
+            double angle = currentLocation.getHeading();
+            double absAngle = Math.abs(angle);
+
+            // This program assumes the IMU is mostly right, and that it will not go crazy. Thus,
+            // we use that IMU heading to determine which wall we have hit.
+            if (absAngle >= 175) {
+                if (left) {
+                    currentLocation.setY(Places.closePerpendicular(-3));
+                } else if (right) {
+                    currentLocation.setY(Places.closePerpendicular(+3));
+                }
+            } else if (absAngle <= 5) {
+                if (left) {
+                    currentLocation.setY(Places.closePerpendicular(+3));
+                } else if (right) {
+                    currentLocation.setY(Places.closePerpendicular(-3));
+                }
+            } else if (85 <= absAngle && absAngle <= 95) {
+                int angleSign = angle < 0 ? -1 : 1;
+                if (left) {
+                    currentLocation.setX(Places.closePerpendicular(-3) * angleSign);
+                } else if (right) {
+                    currentLocation.setX(Places.closePerpendicular(+3) * angleSign);
+                }
+            }
         }
     }
 
@@ -250,12 +261,34 @@ public class Odometry implements Localization {
         moveServoNullSafe(servoMiddle, Globals.positionOpenMiddle);
     }
 
+    @Override
     public boolean leftPressed() {
         return touchSensorLeft != null && touchSensorLeft.isPressed();
     }
 
+    @Override
+    public boolean canDetectLeft() {
+        return touchSensorLeft != null;
+    }
+
+    @Override
     public boolean rightPressed() {
         return touchSensorRight != null && touchSensorRight.isPressed();
+    }
+
+    @Override
+    public boolean canDetectRight() {
+        return touchSensorRight != null;
+    }
+
+    @Override
+    public boolean backPressed() {
+        return false;
+    }
+
+    @Override
+    public boolean canDetectBack() {
+        return false;
     }
 
     // Moves servo if it is not null.

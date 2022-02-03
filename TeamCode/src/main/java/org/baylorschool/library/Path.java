@@ -78,6 +78,10 @@ public class Path {
         return this;
     }
 
+    public void setTolerance(Location tolerance) {
+        this.tolerance = tolerance;
+    }
+
     public Location getTolerance() {
         return tolerance;
     }

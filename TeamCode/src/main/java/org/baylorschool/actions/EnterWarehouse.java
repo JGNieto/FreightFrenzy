@@ -11,6 +11,7 @@ import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Path;
 import org.baylorschool.library.Sensors;
 import org.baylorschool.library.localization.Odometry;
+import org.baylorschool.library.localization.TouchSensors;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -65,7 +66,7 @@ public class EnterWarehouse {
     }
 
     /**
-     * Enters the warehouse using Odometry and Pure Pursuit.
+     * Enters the warehouse using Odometry.
      * @param side Which warehouse to enter
      * @param currentLocation Current location of the robot
      * @param mecanum For movement
@@ -90,6 +91,54 @@ public class EnterWarehouse {
 
         // Create path to move into the warehouse.
         path = new Path(side == Globals.WarehouseSide.BLUE ? blueInsidePoint : redInsidePoint);
+
+        // Enter the warehouse.
+        // currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
+        currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, opMode);
+
+        // Return the new currentLocation.
+        return currentLocation;
+    }
+
+    /**
+     * Enters the warehouse using Odometry and Touch Sensors.
+     * @param side Which warehouse to enter
+     * @param currentLocation Current location of the robot
+     * @param mecanum For movement
+     * @param odometry For localization
+     * @param locations A list of locations (which can be empty) that the robot will follow with Pure Pursuit before going to the entry point. E.g to avoid obstacles. This list will be mutated.
+     * @param opMode OpMode that the robot is running at this time.
+     * @param runnable Runnable to execute once the robot is aligned to enter the warehouse.
+     * @return Current Location.
+     */
+    public static Location enterWarehouseOdometryTouch(Globals.WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, ArrayList<Location> locations, LinearOpMode opMode, Runnable runnable, TouchSensors touchSensors) {
+        // Add entry location to the end of the list of waypoints that Pure Pursuit will follow.
+        locations.add(new Location(side == Globals.WarehouseSide.BLUE ? blueEntryPoint : redEntryPoint).setRunnable(runnable));
+
+        // Create path instance from the locations list.
+        Path path = new Path(locations);
+
+        // Move using Pure Pursuit to the entry location.
+        // currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
+
+        // Move using odometry to the entry location.
+        currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, opMode);
+
+        // Move using touch sensors to ensure we have reached the wall.
+        currentLocation = MoveSideways.moveSidewaysUntilTouch(
+                side == Globals.WarehouseSide.BLUE ? TouchSensors.Direction.LEFT : TouchSensors.Direction.RIGHT,
+                400,
+                touchSensors,
+                0,
+                currentLocation,
+                mecanum,
+                odometry,
+                opMode
+        );
+
+        // Create path to move into the warehouse.
+        path = new Path(side == Globals.WarehouseSide.BLUE ? blueInsidePoint : redInsidePoint);
+        path.setTolerance(new Location(100, 10));
 
         // Enter the warehouse.
         // currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
