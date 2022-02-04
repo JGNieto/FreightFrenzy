@@ -68,6 +68,7 @@
         // Set strings to null if not connected.
         public static final String touchLeft = "touchLeft";
         public static final String touchRight = "touchRight";
+        public static final String touchBack = "touchBack"; // Hardware not installed right now, but we provide support for the future.
 
         public static final String webcamDeviceName = "Webcam 1"; // Generally don't need to change.
 
@@ -100,6 +101,10 @@
         public static final double defaultPurePursuitTurnSpeed = 1; // TODO: Placeholder
         public static final double defaultPurePursuitDistanceStopTurning = 200;
         public static final double defaultPurePursuitAngle = 0; // By default, the robot tries to drive forward.
+
+        ///////////////////////////// AUTONOMOUS DECISION MAKING /////////////////////////////
+        public static final double matchLength = 30000; // The autonomous match lasts 30 seconds (30000 ms).
+        public static final double minTimeExitWarehouse = 13000; // Minimum time left to exit the warehouse.
 
         ///////////////////////////// MECANUM /////////////////////////////
         // Which side of the chassis' wheels are reverse.

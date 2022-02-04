@@ -53,7 +53,7 @@ public class MoveSideways {
 
             // This check is an "if" instead of part of the "while" loop because we want to make sure
             // that we update the localization when the button is pressed.
-            if (!touchSensors.pressed(direction))
+            if (touchSensors.pressed(direction))
                 break;
 
 

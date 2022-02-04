@@ -81,8 +81,8 @@ public class OdometryTest extends LinearOpMode {
             telemetry.addData("Loc X", currentLocation.getX());
             telemetry.addData("Loc Y", currentLocation.getY());
             telemetry.addData("Loc Head", currentLocation.getHeading());
-            telemetry.addData("Right Pressed", odometry.rightPressed());
-            telemetry.addData("Left Pressed", odometry.leftPressed());
+            telemetry.addData("Right Pressed", odometry.getTouchSensors().rightPressed());
+            telemetry.addData("Left Pressed", odometry.getTouchSensors().leftPressed());
             telemetry.addData("X Gamepad", x);
             telemetry.addData("Y Gamepad", y);
             telemetry.addData("Speed", y);

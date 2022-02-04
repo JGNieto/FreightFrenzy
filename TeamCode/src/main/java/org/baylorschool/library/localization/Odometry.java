@@ -14,13 +14,12 @@ import org.baylorschool.library.Location;
 
 import java.security.InvalidParameterException;
 
-public class Odometry implements Localization, TouchSensors {
+public class Odometry implements Localization {
     private final DcMotor encoderLeft;
     private final DcMotor encoderRight;
     private final DcMotor encoderMid;
 
-    private TouchSensor touchSensorLeft;
-    private TouchSensor touchSensorRight;
+    private TouchSensors touchSensors;
 
     private final IMU imu;
 
@@ -101,6 +100,10 @@ public class Odometry implements Localization, TouchSensors {
         this.setUpTouchSensors(hardwareMap);
     }
 
+    private void setUpTouchSensors(HardwareMap hardwareMap) {
+        this.touchSensors = new TouchSensors(hardwareMap);
+    }
+
     public void reset() {
         this.previousLeft = 0;
         this.previousMid = 0;
@@ -109,19 +112,6 @@ public class Odometry implements Localization, TouchSensors {
         resetMotor(encoderLeft);
         resetMotor(encoderMid);
         resetMotor(encoderRight);
-    }
-
-    private void setUpTouchSensors(HardwareMap hardwareMap) {
-        try {
-            touchSensorLeft = hardwareMap.get(TouchSensor.class, Globals.touchLeft);
-        } catch (Exception e) {
-            // We can live without left sensor.
-        }
-        try {
-            touchSensorRight = hardwareMap.get(TouchSensor.class, Globals.touchRight);
-        } catch (Exception e) {
-            // We can live without right sensor.
-        }
     }
 
     private void resetMotor(DcMotor dcMotor) {
@@ -188,51 +178,13 @@ public class Odometry implements Localization, TouchSensors {
         currentLocation.setY(currentLocation.getY() + dX * sinTheta + dY * cosTheta);
         currentLocation.setHeading(Location.angleBound(currentLocation.getHeading() + Math.toDegrees(dTheta)));
 
-        specialCases(currentLocation); // Causes side effect and mutates currentLocation.
+        touchSensors.computeLocation(currentLocation); // Causes side effect and mutates currentLocation.
 
         return currentLocation;
     }
 
     private int encoderMultiplier(DcMotor dcMotor) {
         return dcMotor.getDirection() == DcMotorSimple.Direction.REVERSE ? -1 : 1;
-    }
-
-    /**
-     * Computes special cases of localization.
-     * @param currentLocation Current location. IT IS MUTATED.
-     */
-    private void specialCases(Location currentLocation) {
-        // Check switches
-        if (leftPressed() || rightPressed()) {
-            boolean left = leftPressed();
-            boolean right = rightPressed();
-
-            double angle = currentLocation.getHeading();
-            double absAngle = Math.abs(angle);
-
-            // This program assumes the IMU is mostly right, and that it will not go crazy. Thus,
-            // we use that IMU heading to determine which wall we have hit.
-            if (absAngle >= 175) {
-                if (left) {
-                    currentLocation.setY(Places.closePerpendicular(-3));
-                } else if (right) {
-                    currentLocation.setY(Places.closePerpendicular(+3));
-                }
-            } else if (absAngle <= 5) {
-                if (left) {
-                    currentLocation.setY(Places.closePerpendicular(+3));
-                } else if (right) {
-                    currentLocation.setY(Places.closePerpendicular(-3));
-                }
-            } else if (85 <= absAngle && absAngle <= 95) {
-                int angleSign = angle < 0 ? -1 : 1;
-                if (left) {
-                    currentLocation.setX(Places.closePerpendicular(-3) * angleSign);
-                } else if (right) {
-                    currentLocation.setX(Places.closePerpendicular(+3) * angleSign);
-                }
-            }
-        }
     }
 
     @Override
@@ -261,40 +213,14 @@ public class Odometry implements Localization, TouchSensors {
         moveServoNullSafe(servoMiddle, Globals.positionOpenMiddle);
     }
 
-    @Override
-    public boolean leftPressed() {
-        return touchSensorLeft != null && touchSensorLeft.isPressed();
-    }
-
-    @Override
-    public boolean canDetectLeft() {
-        return touchSensorLeft != null;
-    }
-
-    @Override
-    public boolean rightPressed() {
-        return touchSensorRight != null && touchSensorRight.isPressed();
-    }
-
-    @Override
-    public boolean canDetectRight() {
-        return touchSensorRight != null;
-    }
-
-    @Override
-    public boolean backPressed() {
-        return false;
-    }
-
-    @Override
-    public boolean canDetectBack() {
-        return false;
-    }
-
     // Moves servo if it is not null.
     public void moveServoNullSafe(Servo servo, double position) {
         if (servo != null)
             servo.setPosition(position);
+    }
+
+    public TouchSensors getTouchSensors() {
+        return touchSensors;
     }
 
     public int getPreviousLeft() {

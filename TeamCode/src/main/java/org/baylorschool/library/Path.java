@@ -24,7 +24,7 @@ public class Path {
     }
 
     public Path(Location location) {
-        this.locations = new ArrayList<Location>();
+        this.locations = new ArrayList<>();
         locations.add(location);
         this.tolerance = Globals.defaultTolerance;
     }

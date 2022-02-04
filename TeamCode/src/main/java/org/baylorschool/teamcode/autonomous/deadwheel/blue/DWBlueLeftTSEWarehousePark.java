@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
 import org.baylorschool.actions.EnterWarehouse;
+import org.baylorschool.actions.GrabFreightBlindly;
 import org.baylorschool.actions.MoveWaypoints;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
@@ -87,7 +88,11 @@ public class DWBlueLeftTSEWarehousePark extends LinearOpMode {
         currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
         twoBarLift.retract();
 
-        currentLocation = EnterWarehouse.enterWarehouseOdometryTouch(Globals.WarehouseSide.BLUE, currentLocation, mecanum, odometry, new ArrayList<>(), this, null/*() -> twoBarLift.retract()*/, odometry);
+        currentLocation = EnterWarehouse.enterWarehouseOdometryTouch(Globals.WarehouseSide.BLUE, currentLocation, mecanum, odometry, new ArrayList<>(), this, () -> twoBarLift.setRollerState(Lift.RollerState.GRABBING), odometry.getTouchSensors());
+
+        currentLocation = GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, twoBarLift, odometry, this, Globals.WarehouseSide.BLUE);
+
+        odometry.withdraw();
         twoBarLift.closeThread();
     }
 }

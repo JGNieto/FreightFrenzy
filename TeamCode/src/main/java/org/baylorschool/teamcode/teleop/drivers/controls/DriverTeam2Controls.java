@@ -18,6 +18,8 @@ public class DriverTeam2Controls extends ControlMap {
     public Globals.DropLevel liftDropLevel() {
         if (gamepad2.dpad_up)
             return Globals.DropLevel.TOP;
+        else if (gamepad2.right_trigger > 0.3)
+            return Globals.DropLevel.BOTTOM;
         else
             return null;
     }

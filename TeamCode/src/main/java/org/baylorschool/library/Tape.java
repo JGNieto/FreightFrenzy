@@ -13,8 +13,8 @@ public class Tape {
     long lastTiltUpdate = 0;
     final double tiltMultiplier = 1;
 
-    final double minTilt = 0.34;
-    final double maxTilt = 0.85;
+    final double minTilt = 0;
+    final double maxTilt = 1;
     double currentTilt = minTilt;
 
 

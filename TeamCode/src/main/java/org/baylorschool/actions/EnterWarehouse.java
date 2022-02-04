@@ -148,8 +148,23 @@ public class EnterWarehouse {
         return currentLocation;
     }
 
-    public static Location exitWarehouse(Globals.WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, LinearOpMode opMode, Runnable runnable, TouchSensors touchSensors) {
-        // First, move next to the wall.
+    static final double moveBackX = Places.awayParallel(1) + 50;
+    static final Location moveBackTolerance = new Location(70, 10000); // We don't care about y.
+
+    public static Location exitWarehouse(Globals.WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, LinearOpMode opMode, TouchSensors touchSensors, Runnable runnableMovedBack, Runnable runnableBeforeExit) {
+        // Move back, to try to get away from the blocks.
+        Path path = new Path(new Location(currentLocation).setX(moveBackX));
+        path.setTolerance(moveBackTolerance);
+        currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, opMode);
+
+        // Reorient, in case we have rotated during grabbing motion.
+        currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, opMode);
+
+        // Run runnable, if provided.
+        if (runnableMovedBack != null)
+            runnableMovedBack.run();
+
+        // Move next to the wall.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
                 side == Globals.WarehouseSide.BLUE ? TouchSensors.Direction.LEFT : TouchSensors.Direction.RIGHT,
                 1000,
@@ -161,7 +176,13 @@ public class EnterWarehouse {
                 opMode
         );
 
+        // Run runnable, if provided.
+        if (runnableBeforeExit != null)
+            runnableBeforeExit.run();
+
         // Exit warehouse
+        path = new Path(new Location(currentLocation).setX(Places.middle(1)));
+        currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, opMode);
 
         return currentLocation;
     }
