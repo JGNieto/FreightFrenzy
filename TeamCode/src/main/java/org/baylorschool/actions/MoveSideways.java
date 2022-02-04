@@ -47,9 +47,15 @@ public class MoveSideways {
                 break;
         }
 
-        while ((timeLimitMS != 0 || System.currentTimeMillis() - startTime < timeLimitMS) && !touchSensors.pressed(direction)) {
+        while (opMode.opModeIsActive() && (timeLimitMS != 0 || System.currentTimeMillis() - startTime < timeLimitMS)) {
             if (localization != null)
                 currentLocation = localization.calculateNewLocation(currentLocation);
+
+            // This check is an "if" instead of part of the "while" loop because we want to make sure
+            // that we update the localization when the button is pressed.
+            if (!touchSensors.pressed(direction))
+                break;
+
 
             opMode.telemetry.addLine("Moving sideways.");
             currentLocation.reportTelemetry(opMode.telemetry);

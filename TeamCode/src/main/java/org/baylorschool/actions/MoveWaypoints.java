@@ -127,12 +127,16 @@ public class MoveWaypoints {
             telemetry.update();
         }*/
 
-        while (opMode.opModeIsActive() && !Location.withinTolerance(currentLocation, currentGoal, new Location(5, 5))) {
-            telemetry.addLine("Moving slowly");
+        final Location tolerance = path.getTolerance();
 
-            currentLocation.reportTelemetry(telemetry);
+        while (opMode.opModeIsActive() && !Location.withinTolerance(currentLocation, currentGoal, tolerance)) {
             currentLocation = localization.calculateNewLocation(currentLocation);
+
+            telemetry.addLine("Moving slowly");
+            currentLocation.reportTelemetry(telemetry);
+
             MovePurePursuit.moveTowardPositionAngle(mecanum, currentLocation, currentGoal, 0, 0, Globals.movementFineAdjustmentPower, telemetry);
+
             telemetry.update();
         }
 

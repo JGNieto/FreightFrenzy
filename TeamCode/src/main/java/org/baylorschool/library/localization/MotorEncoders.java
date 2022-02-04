@@ -12,6 +12,8 @@ public class MotorEncoders implements Localization {
     private final Telemetry telemetry;
     private final Vuforia vuforia;
 
+    private TouchSensors touchSensors;
+
     public MotorEncoders(Mecanum mecanum, IMU imu, Telemetry telemetry, Vuforia vuforia) {
         this.mecanum = mecanum;
         this.imu = imu;
@@ -60,7 +62,13 @@ public class MotorEncoders implements Localization {
         currentLocation.setX(currentLocation.getX() + movementX);
         currentLocation.setY(currentLocation.getY() + movementY);
 
+        // TODO: Touch sensors.
+
         return currentLocation;
+    }
+
+    public void setTouchSensors(TouchSensors touchSensors) {
+        this.touchSensors = touchSensors;
     }
 
     @Override

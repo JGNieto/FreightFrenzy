@@ -148,6 +148,24 @@ public class EnterWarehouse {
         return currentLocation;
     }
 
+    public static Location exitWarehouse(Globals.WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, LinearOpMode opMode, Runnable runnable, TouchSensors touchSensors) {
+        // First, move next to the wall.
+        currentLocation = MoveSideways.moveSidewaysUntilTouch(
+                side == Globals.WarehouseSide.BLUE ? TouchSensors.Direction.LEFT : TouchSensors.Direction.RIGHT,
+                1000,
+                touchSensors,
+                0,
+                currentLocation,
+                mecanum,
+                odometry,
+                opMode
+        );
+
+        // Exit warehouse
+
+        return currentLocation;
+    }
+
     /**
      * Enters the warehouse
      * @param side Which warehouse to enter
