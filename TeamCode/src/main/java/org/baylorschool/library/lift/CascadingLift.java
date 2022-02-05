@@ -2,6 +2,7 @@ package org.baylorschool.library.lift;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.baylorschool.Globals;
@@ -10,29 +11,32 @@ import org.baylorschool.library.Location;
 
 public class CascadingLift extends Lift {
 
-    private static final int maxEncoderValue = 1000; // TODO
-    private static final int minEncoderValueServoOpen = 50; // TODO
+    private static final int maxEncoderValue = 4000;
+
+    // Constants to make the servo fit.
+    private static final int servoFitEncoderMin = 1000;
 
     private static final int bottomLevelTSHEncoder = 300; // TODO
     private static final int middleLevelTSHEncoder = 200; // TODO
     private static final int topLevelTSHEncoder = 100; // TODO
 
     private static final double liftPower = 1;
-    private static final double downPower = -0.2;
+    private static final double downPower = -0.8;
 
     private static final double servoOpen = 1;
-    private static final double servoClosed = 0;
+    private static final double servoFit = .5;
+    private static final double servoClosed = .4;
 
     // Distance away from the CENTER of the Team Shipping Hub to drop on each level.
     private static final double dropDistanceTop = 541; // TODO
     private static final double dropDistanceMiddle = 541; // TODO
     private static final double dropDistanceBottom = 541; // TODO
 
-    private static final double grabbingPower = 0.6; // TODO
-    private static final double grabAdjustPower = 0.2; // TODO
+    private static final double grabbingPower = 0.6;
+    private static final double grabAdjustPower = 0.3;
     private static final int grabExtraTurns = 1; // NOTE: In this case, each "turn" is really one third of a turn. // TODO
     private static final int grabbingEncoderMultiplier = 288 / 3;
-    private static final int grabbingEncoderTolerance = 20; // TODO
+    private static final int grabbingEncoderTolerance = 5;
 
     private static final int releaseDelay = 2000;
     private static final int retractWaitTime = 200;
@@ -87,6 +91,8 @@ public class CascadingLift extends Lift {
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         grabMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        grabMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -111,6 +117,10 @@ public class CascadingLift extends Lift {
             opMode.telemetry.addData("LiftPos", liftMotor.getCurrentPosition());
             opMode.telemetry.addData("LiftTar", liftMotor.getTargetPosition());
             opMode.telemetry.addData("Lift Power", liftMotor.getPower());
+            opMode.telemetry.addData("Grabbing", grabbing);
+            opMode.telemetry.addData("Grabbing Mod", (grabMotor.getCurrentPosition() - zeroValueGrabber) % grabbingEncoderMultiplier);
+            opMode.telemetry.addData("Releasing", releasing);
+            opMode.telemetry.addData("Servo position", releaseServo.getPosition());
         }
         int encoderValue = liftMotor.getCurrentPosition();
         if (movement == LiftMovement.UP) {
@@ -143,16 +153,20 @@ public class CascadingLift extends Lift {
                     liftMotor.setPower(liftPower);
                 else
                     liftMotor.setPower(downPower);
+            } else {
+                liftMotor.setPower(0);
             }
         }
 
-        if (encoderValue < minEncoderValueServoOpen)
-            releasing = false;
-
-        if (releasing)
+        if (releasing) {
             releaseServo.setPosition(servoOpen);
-        else
-            releaseServo.setPosition(servoClosed);
+        } else {
+            if (encoderValue <= servoFitEncoderMin) {
+                releaseServo.setPosition(servoClosed);
+            } else {
+                releaseServo.setPosition(servoFit);
+            }
+        }
 
         if (grabbing) {
             grabMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -160,14 +174,18 @@ public class CascadingLift extends Lift {
         } else {
             int grabEncoderValue = grabMotor.getCurrentPosition() - zeroValueGrabber;
             int mod = grabEncoderValue % grabbingEncoderMultiplier;
-            if (!grabMotor.isBusy() && mod > grabbingEncoderTolerance && grabEncoderValue - mod > grabbingEncoderTolerance) {
+            if (mod > grabbingEncoderTolerance && grabEncoderValue - mod > grabbingEncoderTolerance) {
+                if (!grabMotor.isBusy()) {
+                    grabMotor.setPower(0);
+
+                    grabEncoderValue += grabbingEncoderMultiplier * grabExtraTurns; // Add some extra turns.
+
+                    grabMotor.setTargetPosition(grabEncoderValue + mod + zeroValueGrabber);
+                    grabMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    grabMotor.setPower(grabAdjustPower);
+                }
+            } else {
                 grabMotor.setPower(0);
-
-                grabEncoderValue += grabbingEncoderMultiplier * grabExtraTurns; // Add some extra turns.
-
-                grabMotor.setTargetPosition(grabEncoderValue + mod + zeroValueGrabber);
-                grabMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                grabMotor.setPower(grabAdjustPower);
             }
         }
     }

@@ -114,7 +114,7 @@
 
         ///////////////////////////// MECANUM /////////////////////////////
         // Which side of the chassis' wheels are reverse.
-        public static final Mecanum.Side reverseSide = Mecanum.Side.RIGHT;
+        public static final Mecanum.Side reverseSide = Mecanum.Side.BETABOT;
 
         // Details about the wheels
         public static final double ticksPerRevolution = 537.7;

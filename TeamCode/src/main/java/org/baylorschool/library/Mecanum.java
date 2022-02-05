@@ -1,6 +1,7 @@
 package org.baylorschool.library;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.baylorschool.Globals;
@@ -33,7 +34,8 @@ public class Mecanum {
         LEFT,
         RIGHT,
         NONE,
-        BOTH
+        BOTH,
+        BETABOT // Betabot is so weird we make one for it.
     }
 
     /**
@@ -95,6 +97,11 @@ public class Mecanum {
             frMotor.setDirection(DcMotor.Direction.FORWARD);
             brMotor.setDirection(DcMotor.Direction.FORWARD);
             flMotor.setDirection(DcMotor.Direction.FORWARD);
+            blMotor.setDirection(DcMotor.Direction.FORWARD);
+        } else if (reverse.equals(Side.BETABOT)) {
+            frMotor.setDirection(DcMotor.Direction.FORWARD);
+            brMotor.setDirection(DcMotor.Direction.REVERSE);
+            flMotor.setDirection(DcMotor.Direction.REVERSE);
             blMotor.setDirection(DcMotor.Direction.FORWARD);
         }
     }

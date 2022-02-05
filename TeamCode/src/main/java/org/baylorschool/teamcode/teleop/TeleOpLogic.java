@@ -36,7 +36,6 @@ public class TeleOpLogic extends LinearOpMode {
         carousel = new Carousel(hardwareMap);
         lift = Globals.createNewLift(this);
         lift.setTelemetryEnabled(true);
-        lift.moveDown(this);
         lift.initialize();
 
         waitForStart();

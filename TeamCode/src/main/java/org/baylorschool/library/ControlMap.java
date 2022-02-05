@@ -75,12 +75,17 @@ public class ControlMap {
         return gamepad2.dpad_down;
     }
 
+    /*
     public boolean liftReleasing() {
         if (gamepad2.left_bumper && !wasPressedReleasing)
             releasing = !releasing;
 
         wasPressedReleasing = gamepad2.left_bumper;
         return releasing;
+    }
+     */
+    public boolean liftReleasing() {
+        return gamepad2.left_bumper;
     }
 
     public boolean liftGrabbing() {
