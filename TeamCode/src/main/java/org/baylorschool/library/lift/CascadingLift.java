@@ -13,17 +13,26 @@ public class CascadingLift extends Lift {
     private static final int maxEncoderValue = 1000; // TODO
     private static final int minEncoderValueServoOpen = 50; // TODO
 
+    private static final int bottomLevelTSHEncoder = 300; // TODO
+    private static final int middleLevelTSHEncoder = 200; // TODO
+    private static final int topLevelTSHEncoder = 100; // TODO
+
     private static final double liftPower = 1;
     private static final double downPower = -0.2;
 
     private static final double servoOpen = 1;
     private static final double servoClosed = 0;
 
-    private static final double grabbingPower = 0.6;
-    private static final double grabAdjustPower = 0.2;
-    private static final int grabExtraTurns = 1;
+    // Distance away from the CENTER of the Team Shipping Hub to drop on each level.
+    private static final double dropDistanceTop = 541; // TODO
+    private static final double dropDistanceMiddle = 541; // TODO
+    private static final double dropDistanceBottom = 541; // TODO
+
+    private static final double grabbingPower = 0.6; // TODO
+    private static final double grabAdjustPower = 0.2; // TODO
+    private static final int grabExtraTurns = 1; // NOTE: In this case, each "turn" is really one third of a turn. // TODO
     private static final int grabbingEncoderMultiplier = 288 / 3;
-    private static final int grabbingEncoderTolerance = 20;
+    private static final int grabbingEncoderTolerance = 20; // TODO
 
     private static final int releaseDelay = 2000;
     private static final int retractWaitTime = 200;
@@ -38,6 +47,8 @@ public class CascadingLift extends Lift {
     private boolean grabbing = false;
     private boolean releasing = false;
 
+    private Globals.DropLevel targetDropLevel = null;
+
     public CascadingLift(LinearOpMode opMode) {
         super(opMode);
 
@@ -48,7 +59,7 @@ public class CascadingLift extends Lift {
 
     @Override
     public void moveToDropLevel(Globals.DropLevel dropLevel) {
-        // TODO: Implement this method.
+        targetDropLevel = dropLevel;
     }
 
     @Override
@@ -113,7 +124,26 @@ public class CascadingLift extends Lift {
             else
                 liftMotor.setPower(0);
         } else {
-            liftMotor.setPower(0);
+            if (targetDropLevel != null && !liftMotor.isBusy()) {
+                int targetPosition = 0;
+                switch (targetDropLevel) {
+                    case BOTTOM:
+                        targetPosition = bottomLevelTSHEncoder;
+                        break;
+                    case MIDDLE:
+                        targetPosition = middleLevelTSHEncoder;
+                        break;
+                    case TOP:
+                        targetPosition = topLevelTSHEncoder;
+                        break;
+                }
+                liftMotor.setTargetPosition(targetPosition);
+                liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                if (targetPosition > encoderValue)
+                    liftMotor.setPower(liftPower);
+                else
+                    liftMotor.setPower(downPower);
+            }
         }
 
         if (encoderValue < minEncoderValueServoOpen)
@@ -130,7 +160,7 @@ public class CascadingLift extends Lift {
         } else {
             int grabEncoderValue = grabMotor.getCurrentPosition() - zeroValueGrabber;
             int mod = grabEncoderValue % grabbingEncoderMultiplier;
-            if (!grabMotor.isBusy() && mod > grabbingEncoderTolerance) {
+            if (!grabMotor.isBusy() && mod > grabbingEncoderTolerance && grabEncoderValue - mod > grabbingEncoderTolerance) {
                 grabMotor.setPower(0);
 
                 grabEncoderValue += grabbingEncoderMultiplier * grabExtraTurns; // Add some extra turns.
@@ -156,7 +186,7 @@ public class CascadingLift extends Lift {
 
     @Override
     public Location getScoringLocation(Location currentLocation, Hub hub, Globals.DropLevel dropLevel) {
-        throw new UnsupportedOperationException("Cascading lift scoring location not implemented.");
+        return super.getScoringLocation(currentLocation, hub, dropLevel, dropDistanceTop, dropDistanceMiddle, dropDistanceBottom);
     }
 
     @Override
@@ -169,12 +199,21 @@ public class CascadingLift extends Lift {
 
     @Override
     public void loopIterationTeleOp(ControlMap controlMap) {
-        if (controlMap.liftUp())
-            movement = TwoBarLift.LiftMovement.UP;
-        else if (controlMap.liftDown())
-            movement = TwoBarLift.LiftMovement.DOWN;
-        else
-            movement = TwoBarLift.LiftMovement.HOLD;
+        if (controlMap.liftUp()) {
+            if (targetDropLevel != null) {
+                targetDropLevel = null;
+                liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            movement = Lift.LiftMovement.UP;
+        } else if (controlMap.liftDown()) {
+            if (targetDropLevel != null) {
+                targetDropLevel = null;
+                liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            movement = Lift.LiftMovement.DOWN;
+        } else {
+            movement = Lift.LiftMovement.HOLD;
+        }
 
         releasing = controlMap.liftReleasing();
         grabbing = controlMap.liftGrabbing();
