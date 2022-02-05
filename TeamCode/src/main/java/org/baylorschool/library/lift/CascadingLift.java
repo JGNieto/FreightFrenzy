@@ -130,7 +130,7 @@ public class CascadingLift extends Lift {
         } else {
             int grabEncoderValue = grabMotor.getCurrentPosition() - zeroValueGrabber;
             int mod = grabEncoderValue % grabbingEncoderMultiplier;
-            if (!grabMotor.isBusy() && mod < grabbingEncoderTolerance) {
+            if (!grabMotor.isBusy() && mod > grabbingEncoderTolerance) {
                 grabMotor.setPower(0);
 
                 grabEncoderValue += grabbingEncoderMultiplier * grabExtraTurns; // Add some extra turns.
