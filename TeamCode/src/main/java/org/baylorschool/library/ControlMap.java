@@ -12,6 +12,13 @@ public class ControlMap {
 
     private boolean slowMode = false;
 
+    private boolean releasing = false;
+    private boolean wasPressedReleasing = false;
+
+    private boolean grabbing = false;
+    private boolean wasPressedGrabbing = false;
+
+
     public ControlMap(Gamepad gamepad1, Gamepad gamepad2) {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
@@ -69,11 +76,19 @@ public class ControlMap {
     }
 
     public boolean liftReleasing() {
-        return gamepad2.left_bumper;
+        if (gamepad2.left_bumper && !wasPressedReleasing)
+            releasing = !releasing;
+
+        wasPressedReleasing = gamepad2.left_bumper;
+        return releasing;
     }
 
     public boolean liftGrabbing() {
-        return gamepad2.right_bumper;
+        if (gamepad2.right_bumper && !wasPressedGrabbing)
+            grabbing = !grabbing;
+
+        wasPressedGrabbing = gamepad2.right_bumper;
+        return grabbing;
     }
 
     public boolean liftRetract() {

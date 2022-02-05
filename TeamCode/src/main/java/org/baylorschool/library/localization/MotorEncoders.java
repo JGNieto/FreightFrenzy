@@ -49,9 +49,9 @@ public class MotorEncoders implements Localization {
         // Movement is a vector, which we break down into x and y components with math.
         double movementModulus = (
                 mecanum.getLatestDeltaBl() +
-                        mecanum.getLatestDeltaBr() +
-                        mecanum.getLatestDeltaFl() +
-                        mecanum.getLatestDeltaFr()
+                mecanum.getLatestDeltaBr() +
+                mecanum.getLatestDeltaFl() +
+                mecanum.getLatestDeltaFr()
         ) / 4;
 
         double headingRadians = Math.toRadians(currentLocation.getHeading());

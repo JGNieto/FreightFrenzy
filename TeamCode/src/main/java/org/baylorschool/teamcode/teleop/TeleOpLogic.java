@@ -17,9 +17,7 @@ public class TeleOpLogic extends LinearOpMode {
     private Mecanum mecanum;
     private Carousel carousel;
     private Lift lift;
-    private Odometry odometry;
     private final ControlMap controlMap;
-    private Tape tape;
 
     private final double SLOW_MODE_COEFFICIENT = 0.5;
     private final double ROTATION_COEFFICIENT = 0.8;
@@ -34,10 +32,8 @@ public class TeleOpLogic extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        odometry = new Odometry(hardwareMap, true);
         mecanum = new Mecanum(hardwareMap);
         carousel = new Carousel(hardwareMap);
-        tape = new Tape(hardwareMap);
         lift = Globals.createNewLift(this);
         lift.setTelemetryEnabled(true);
         lift.moveDown(this);
@@ -55,10 +51,8 @@ public class TeleOpLogic extends LinearOpMode {
             double rotation = controlMap.getRotation() * ROTATION_COEFFICIENT;
 
             if (controlMap.carouselBlue())
-                //carousel.dropDuckAsync(Carousel.CarouselSide.BLUE);
                 carousel.setDropPower(Carousel.CarouselSide.BLUE);
             else if (controlMap.carouselRed())
-                //carousel.dropDuckAsync(Carousel.CarouselSide.RED);
                 carousel.setDropPower(Carousel.CarouselSide.RED);
             else
                 carousel.stop();
@@ -66,10 +60,6 @@ public class TeleOpLogic extends LinearOpMode {
             // If driver wants full power, give it to them.
             if (controlMap.fullRotationPower())
                 rotation = controlMap.getRotation();
-
-            // Tape measure power.
-            tape.setTiltPower(controlMap.tapeTilt());
-            tape.setExtendPower(controlMap.tapeExtend());
 
             // Execute movement
             mecanum.moveGamepad(y, x, rotation, controlMap.isSlowMode() ? SLOW_MODE_COEFFICIENT : 1);
@@ -82,7 +72,6 @@ public class TeleOpLogic extends LinearOpMode {
             telemetry.addData("Strafe", x);
             telemetry.addData("Rotation", rotation);
             telemetry.addData("Tape Tilt Power", controlMap.tapeTilt());
-            telemetry.addData("Tape Tilt", tape.getCurrentTilt());
             telemetry.addData("Tape Extend", controlMap.tapeExtend());
             telemetry.addData("EncoderFR", mecanum.getFrMotor().getCurrentPosition());
             telemetry.addData("EncoderBR", mecanum.getBrMotor().getCurrentPosition());

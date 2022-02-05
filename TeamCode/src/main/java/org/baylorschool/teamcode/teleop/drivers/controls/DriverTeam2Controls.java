@@ -4,6 +4,8 @@ import org.baylorschool.Globals;
 import org.baylorschool.library.ControlMap;
 
 public class DriverTeam2Controls extends ControlMap {
+    private boolean servoOpen = false;
+
     @Override
     public boolean liftDown() {
         return gamepad2.dpad_left;

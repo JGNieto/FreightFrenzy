@@ -6,6 +6,7 @@
     import org.baylorschool.library.Location;
     import org.baylorschool.library.Mecanum;
     import org.baylorschool.library.ftclib.PIDFController;
+    import org.baylorschool.library.lift.CascadingLift;
     import org.baylorschool.library.lift.Lift;
     import org.baylorschool.library.lift.TwoBarLift;
     import org.opencv.core.Scalar;
@@ -26,8 +27,8 @@
 
         ///////////////////////////// ROBOT SIZE /////////////////////////////
         // MILLIMETERS
-        public static final double robotLength = 433;
-        public static final double robotWidth = 337;
+        public static final double robotLength = 432;
+        public static final double robotWidth = 292;
 
         ///////////////////////////// HARDWARE CONFIG /////////////////////////////
         // Names of the config MUST match these values
@@ -42,6 +43,11 @@
         public static final String rollerHw = "roller"; // (0) Expansion Hub
         public static final String twoBarHw = "twobar"; // (1) Expansion Hub
         public static final String rollerSwitch = "rollerSwitch"; // (Digital 0) Expansion Hub
+
+        // Cascading Lift
+        public static final String cascadingLiftHw = "cascadingLift";
+        public static final String cascadingServoHw = "cascadingServo";
+        public static final String cascadingMotorHw = "cascadingMotor";
 
         // Lift LEDs
         public static final String ledIntakeFull = "ledRed"; // (Digital 3) Expansion Hub
@@ -172,7 +178,7 @@
         // The following method is called every time a lift is created.
         // If using, say, a cascade lift, change TwoBarLift to CascadeLift.
         public static Lift createNewLift(LinearOpMode opMode) {
-            return new TwoBarLift(opMode);
+            return new CascadingLift(opMode);
         }
 
         ///////////////////////////// CAROUSEL SPEEDS /////////////////////////////
