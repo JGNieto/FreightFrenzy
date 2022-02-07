@@ -2,15 +2,14 @@ package org.baylorschool.library.localization;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.baylorschool.Globals;
-import org.baylorschool.Places;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
+import org.baylorschool.library.debugging.DebuggingClient;
+import org.baylorschool.library.debugging.DebuggingInformation;
 
 import java.security.InvalidParameterException;
 
@@ -179,6 +178,9 @@ public class Odometry implements Localization {
         currentLocation.setHeading(Location.angleBound(currentLocation.getHeading() + Math.toDegrees(dTheta)));
 
         touchSensors.computeLocation(currentLocation); // Causes side effect and mutates currentLocation.
+
+        DebuggingInformation.setLocation(currentLocation);
+        DebuggingClient.getInstance().update();
 
         return currentLocation;
     }

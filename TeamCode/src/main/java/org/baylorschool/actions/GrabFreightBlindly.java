@@ -19,9 +19,9 @@ public class GrabFreightBlindly {
 
     ///////////////////////////// Constants for blind movement /////////////////////////////
     // Distance between the front of the robot and the wall at which it turns around.
-    static final int turnAroundDistance = 170;
-    static final int farAwayDistance = 270;
-    static final int sidewaysMovement = 70;
+    static final int turnAroundDistance = 750;
+    static final int farAwayDistance = 850;
+    static final int sidewaysMovement = 35;
 
     // Limit of how many times we will go through the forward-backward-sideways cycle before forcing
     // a direction change.

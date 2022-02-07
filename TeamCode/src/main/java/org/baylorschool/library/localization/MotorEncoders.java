@@ -4,6 +4,8 @@ import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Vuforia;
+import org.baylorschool.library.debugging.DebuggingClient;
+import org.baylorschool.library.debugging.DebuggingInformation;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class MotorEncoders implements Localization {
@@ -62,6 +64,8 @@ public class MotorEncoders implements Localization {
         currentLocation.setX(currentLocation.getX() + movementX);
         currentLocation.setY(currentLocation.getY() + movementY);
 
+        DebuggingInformation.setLocation(currentLocation);
+        DebuggingClient.getInstance().update();
         // TODO: Touch sensors.
 
         return currentLocation;
