@@ -133,7 +133,7 @@
         ///////////////////////////// ODOMETRY /////////////////////////////
         public static final double odometryTicksPerRevolution = 1440; // Javier originally measured this roughly and, surprisingly, correctly (we now know this is the exact number now because the part number is E8T-360 etc. and 360 * 4 = 1440).
         public static final double wheelRadius = 37.3 / 2;
-        public static final double dPar = 305.0 / 2.0; // Distance between center of robot and parallel wheels.
+        public static final double dPar = 305.0; // Distance between the parallel wheels.
         public static final double dPer = -196.0; // Distance between center of robot and perpendicular wheel. Negative because it is at the back.
 
         // Encoder readings for the odometry will be multiplied times the following coefficients.

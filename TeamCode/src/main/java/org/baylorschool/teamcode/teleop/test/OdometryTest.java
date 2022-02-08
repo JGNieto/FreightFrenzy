@@ -11,6 +11,7 @@ import org.baylorschool.library.Carousel;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
+import org.baylorschool.library.debugging.DebuggingClient;
 import org.baylorschool.library.lift.Lift;
 import org.baylorschool.library.localization.Odometry;
 
@@ -45,6 +46,8 @@ public class OdometryTest extends LinearOpMode {
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         lift.initialize();
         telemetry.setMsTransmissionInterval(10);
+
+        DebuggingClient.getInstance().setRunning(true);
 
         boolean slowMode = false;
 

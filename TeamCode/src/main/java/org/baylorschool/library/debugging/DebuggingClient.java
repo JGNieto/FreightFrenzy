@@ -13,7 +13,7 @@ public class DebuggingClient {
         return instance;
     }
 
-    private final static String laptopIpAddr = "192.168.43.69";
+    private final static String laptopIpAddr = "192.168.43.97";
     private final static int port = 11468; // wink
 
     private boolean running = false;
