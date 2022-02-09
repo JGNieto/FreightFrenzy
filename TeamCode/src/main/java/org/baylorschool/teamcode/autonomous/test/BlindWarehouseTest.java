@@ -54,7 +54,7 @@ public class BlindWarehouseTest extends LinearOpMode {
         odometry.calculateNewLocation(currentLocation);
         mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, warehouseSide);
+        GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, warehouseSide, 0);
 
         lift.closeThread();
     }

@@ -238,8 +238,8 @@ public class Location {
      * @return distance squared in mm^2
      */
     public static double distanceSquared(Location location1, Location location2) {
-        double deltaX = Math.abs(location1.getX() - location2.getX());
-        double deltaY = Math.abs(location1.getY() - location2.getY());
+        double deltaX = location1.getX() - location2.getX();
+        double deltaY = location1.getY() - location2.getY();
 
         return deltaX * deltaX + deltaY * deltaY;
     }

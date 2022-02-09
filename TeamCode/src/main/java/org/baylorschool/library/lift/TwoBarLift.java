@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.LED;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.Location;
+import org.baylorschool.library.localization.Localization;
 
 public class TwoBarLift extends Lift {
     private static final double ticksPerRevolution = 751.8;
@@ -211,5 +212,17 @@ public class TwoBarLift extends Lift {
         this.rollerState = RollerState.RELEASING;
         opMode.sleep(releaseDelay);
         this.rollerState = RollerState.STOP;
+    }
+
+    @Override
+    public Location releaseItemLocalization(Location currentLocation, Localization localization) {
+        long startTime = System.currentTimeMillis();
+        this.setRollerState(Lift.RollerState.RELEASING);
+        while (opMode.opModeIsActive()) {
+            currentLocation = localization.calculateNewLocation(currentLocation);
+            if (System.currentTimeMillis() - startTime >= releaseDelay) break;
+        }
+        this.setRollerState(Lift.RollerState.STOP);
+        return currentLocation;
     }
 }

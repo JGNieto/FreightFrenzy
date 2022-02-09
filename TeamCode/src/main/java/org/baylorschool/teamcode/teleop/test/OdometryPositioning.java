@@ -42,10 +42,10 @@ public class OdometryPositioning extends LinearOpMode {
             double x = gamepad1.left_stick_x;
             double rotation = gamepad1.right_stick_x * ROTATION_COEFFICIENT;
 
-            if (gamepad1.dpad_right || gamepad1.dpad_left) {
-                if (gamepad1.dpad_right)
+            if (gamepad1.y || gamepad1.a) {
+                if (gamepad1.y)
                     selectedServo--;
-                else if (gamepad1.dpad_left)
+                else if (gamepad1.a)
                     selectedServo++;
 
                 if (selectedServo > 2 || selectedServo < 0) {

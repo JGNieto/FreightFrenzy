@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.baylorschool.Globals;
+import org.baylorschool.library.lift.Lift;
+import org.baylorschool.library.localization.Localization;
 
 public class Carousel {
     private final DcMotor flyWheel;
@@ -44,7 +46,18 @@ public class Carousel {
     public void dropDuck(CarouselSide side, LinearOpMode opMode) {
         setDropPower(side);
         opMode.sleep(Globals.carouselSinglePause);
-        this.stop();
+        stop();
+    }
+
+    public Location dropDuck(CarouselSide side, Location currentLocation, LinearOpMode opMode, Localization localization) {
+        long startTime = System.currentTimeMillis();
+        setDropPower(side);
+        while (opMode.opModeIsActive()) {
+            currentLocation = localization.calculateNewLocation(currentLocation);
+            if (System.currentTimeMillis() - startTime >= Globals.carouselSinglePause) break;
+        }
+        stop();
+        return currentLocation;
     }
 
     public void dropDuckAsync(CarouselSide side) {

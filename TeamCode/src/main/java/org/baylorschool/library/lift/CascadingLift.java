@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.Location;
+import org.baylorschool.library.localization.Localization;
 
 public class CascadingLift extends Lift {
 
@@ -20,6 +21,11 @@ public class CascadingLift extends Lift {
     @Override
     public void releaseItem() {
 
+    }
+
+    @Override
+    public Location releaseItemLocalization(Location currentLocation, Localization localization) {
+        return null;
     }
 
     @Override

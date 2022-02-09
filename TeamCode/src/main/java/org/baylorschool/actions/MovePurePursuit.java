@@ -98,7 +98,7 @@ public class MovePurePursuit {
             Location startLocation = path.getLocations().get(i);
             Location endLocation = path.getLocations().get(i + 1);
 
-            double distance = PerpendicularDistance.getShortestDistanceBetweenPointAndSegment(startLocation, endLocation, currentLocation);
+            double distance = PerpendicularDistance.getShortestDistanceBetweenPointAndSegmentSquared(startLocation, endLocation, currentLocation);
             if (distance < championDistance || championDistance == -1) {
                 championStartLocationIndex = i;
                 championDistance = distance;

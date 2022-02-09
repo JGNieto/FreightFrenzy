@@ -8,6 +8,7 @@ import org.baylorschool.library.ExecutionFrequency;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.lift.Lift;
+import org.baylorschool.library.localization.Localization;
 import org.baylorschool.library.localization.Odometry;
 
 public class GrabFreightBlindly {
@@ -19,19 +20,19 @@ public class GrabFreightBlindly {
 
     ///////////////////////////// Constants for blind movement /////////////////////////////
     // Distance between the front of the robot and the wall at which it turns around.
-    static final int turnAroundDistance = 750;
-    static final int farAwayDistance = 850;
+    static final int turnAroundDistance = (int) Places.middle(1);
+    static final int farAwayDistance = (int) Places.middle(1) + 40;
     static final int sidewaysMovement = 35;
 
     // Limit of how many times we will go through the forward-backward-sideways cycle before forcing
     // a direction change.
-    static final int sidewaysMovementsLimit = 5;
+    static final int sidewaysMovementsLimit = 4;
 
     // Nanoseconds (milliseconds * 1000)
-    static final long firstForwardTime = 1000 * 1000000; // Max time for forward motion the first time it happens.
-    static final long forwardTime = 500 * 1000000;
-    static final long backwardTime = 500 * 1000000;
-    static final long sidewaysTime = 300 * 1000000;
+    static final long firstForwardTime = 1000; // Max time for forward motion the first time it happens.
+    static final long forwardTime = 500;
+    static final long backwardTime = 500;
+    static final long sidewaysTime = 300;
 
     // Motor speeds
     static final double forwardSpeed = .3;
@@ -44,7 +45,18 @@ public class GrabFreightBlindly {
     static final double redLeftLimit = Places.awayParallel(-1) - 120;
     static final double redRightLimit = Places.closeParallel(-3) + 40;
 
-    public static Location grabFreightBlindly(Location currentLocation, Mecanum mecanum, Lift lift, Odometry odometry, LinearOpMode opMode, Globals.WarehouseSide warehouseSide) {
+    /**
+     * Moves the robot until it finds freight inside of the warehouse.
+     * @param currentLocation Current location of the robot.
+     * @param mecanum Mecanum instance.
+     * @param lift Lift instance.
+     * @param localization Localization instance.
+     * @param opMode LinearOpMode instance.
+     * @param warehouseSide Side of the warehouse we are in.
+     * @param timeLimit Time limit in milliseconds, after which the robot will give up and return. Set to 0 for no time limit.
+     * @return
+     */
+    public static Location grabFreightBlindly(Location currentLocation, Mecanum mecanum, Lift lift, Localization localization, LinearOpMode opMode, Globals.WarehouseSide warehouseSide, double timeLimit) {
         // The implementation of this action is a kind of state machine. We keep track of the situation
         // we are in and, each iteration of the loop, we decide whether to change to a different
         // state. When we change state we also change the power configuration of the mecanum motors
@@ -61,7 +73,10 @@ public class GrabFreightBlindly {
         // Although we use the odometry information to stop moving once we reach our target, we also
         // set a time limit on all movements. This variable keeps track of when we started the movement
         // to know whether it has been too long.
-        long stageStartTime = System.nanoTime();
+        long stageStartTime = System.currentTimeMillis();
+
+        // Time limit for finding something before we return.
+        long startTime = stageStartTime;
 
         // State machine variable. First step is moving forward.
         MovementStage movementStage = MovementStage.FORWARD;
@@ -91,11 +106,15 @@ public class GrabFreightBlindly {
             opMode.telemetry.clearAll();
 
             // Update position.
-            currentLocation = odometry.calculateNewLocation(currentLocation);
+            currentLocation = localization.calculateNewLocation(currentLocation);
 
             // Compute distance between front of the robot and wall
             double distanceToWall = Places.middle(3) - (currentLocation.getX() + Globals.robotLength / 2);
-            long currentTime = System.nanoTime();
+            long currentTime = System.currentTimeMillis();
+
+            // Stop if time has run out.
+            if (timeLimit != 0 && currentTime - startTime > timeLimit)
+                break;
 
             opMode.telemetry.addData("Distance", distanceToWall);
             opMode.telemetry.addData("Time", currentTime - stageStartTime);
@@ -119,7 +138,7 @@ public class GrabFreightBlindly {
 
                         // If, for whatever reason, the robot has rotated too much, rotate back.
                         if (Math.abs(currentLocation.getHeading()) > 30)
-                            currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, opMode);
+                            currentLocation = MoveWaypoints.rotatePID(currentLocation, localization, mecanum, 0, opMode);
 
                         // Check whether he have hit the side.
                         // Max of sideways movements should do the trick
@@ -151,7 +170,7 @@ public class GrabFreightBlindly {
             }
             opMode.telemetry.addData("Movement", movementStage.toString());
             currentLocation.reportTelemetry(opMode.telemetry);
-            executionFrequency.execution(currentTime);
+            executionFrequency.execution();
             opMode.telemetry.update();
         }
         lift.setMovement(Lift.LiftMovement.HOLD);

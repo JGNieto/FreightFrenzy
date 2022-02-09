@@ -7,6 +7,7 @@ import org.baylorschool.Globals;
 import org.baylorschool.Places;
 import org.baylorschool.library.ControlMap;
 import org.baylorschool.library.Location;
+import org.baylorschool.library.localization.Localization;
 import org.baylorschool.library.math.CircleIntersect;
 
 import java.util.List;
@@ -62,6 +63,11 @@ public abstract class Lift {
      * Releases the item (interrupts opMode thread).
      */
     public abstract void releaseItem();
+
+    /**
+     * Releases the item while updating localization (interrupts opMode thread).
+     */
+    public abstract Location releaseItemLocalization(Location currentLocation, Localization localization);
 
     /**
      * Retracts the lift (warning: quite aggressive).

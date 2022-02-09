@@ -29,13 +29,14 @@ public class PerpendicularDistance {
     // https://stackoverflow.com/questions/849211/shortest-distance-between-a-point-and-a-line-segment
     // Adapted quano's answer.
     /**
-     * Computes the shortest distance between a point and an SEGMENT line defined by two points.
+     * Computes the shortest distance SQUARED between a point and an SEGMENT line defined by two points.
+     * It is squared to avoid the costly square root computation.
      * @param lineA First point that defines line (x and y).
      * @param lineB Second point that defines line (x and y).
      * @param point Point of which distance is computed.
      * @return Distance between point and segment.
      */
-    public static double getShortestDistanceBetweenPointAndSegment(Location lineA, Location lineB, Location point) {
+    public static double getShortestDistanceBetweenPointAndSegmentSquared(Location lineA, Location lineB, Location point) {
         double x1 = lineA.getX();
         double y1 = lineA.getY();
         double x2 = lineB.getX();
@@ -58,6 +59,19 @@ public class PerpendicularDistance {
 
         double dx = x - x3;
         double dy = y - y3;
-        return Math.sqrt(dx*dx + dy*dy);
+        return dx*dx + dy*dy;
+    }
+
+    /**
+     * Computes the shortest distance between a point and an SEGMENT line defined by two points.
+     * YOU PROBABLY WANT TO USE getShortestDistanceBetweenPointAndSegmentSquared if you are comparing
+     * values and do not want the true distance.
+     * @param lineA First point that defines line (x and y).
+     * @param lineB Second point that defines line (x and y).
+     * @param point Point of which distance is computed.
+     * @return Distance between point and segment.
+     */
+    public static double getShortestDistanceBetweenPointAndSegment(Location lineA, Location lineB, Location point) {
+        return Math.sqrt(getShortestDistanceBetweenPointAndSegmentSquared(lineA, lineB, point));
     }
 }

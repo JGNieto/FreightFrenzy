@@ -1,7 +1,6 @@
-package org.baylorschool.teamcode.autonomous.deadwheel.blue;
+package org.baylorschool.teamcode.autonomous.deadwheel.red;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -24,16 +23,15 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.ArrayList;
 
-@Disabled // Not competition ready.
-@Autonomous(name = "DWBlueLeftTSEWarehouseManyBlocks", group = "Blue")
-public class DWBlueLeftTSEManyBlocks extends LinearOpMode {
+@Autonomous(name = "DWRedRightTSEWarehousePark", group = "Red")
+public class DWRedRightTSEWarehousePark extends LinearOpMode {
 
     private Lift lift;
     private Mecanum mecanum;
     private TSEPipeline tsePipeline;
     private OpenCvWebcam webcam;
     private IMU imu;
-    private Location currentLocation = new Location(Places.blueLeftStart);
+    private Location currentLocation = new Location(Places.redRightStart);
     private Globals.DropLevel dropLevel;
     private Odometry odometry;
     private ElapsedTime elapsedTime;
@@ -58,7 +56,6 @@ public class DWBlueLeftTSEManyBlocks extends LinearOpMode {
 
         waitForStart();
         elapsedTime.reset();
-
         DebuggingClient.getInstance().setRunning(true);
 
         telemetry.addData("Status", "Starting...");
@@ -69,46 +66,42 @@ public class DWBlueLeftTSEManyBlocks extends LinearOpMode {
         // Remove if using vuforia:
         TSEPipeline.stop(webcam);
         lift.startThread();
+        lift.moveToDropLevel(dropLevel);
 
-        // Move to and from the warehouse.
-        while (opModeIsActive()) {
-            lift.moveToDropLevel(dropLevel);
-            Location scoringLocation = lift.getScoringLocation(currentLocation, Lift.Hub.BLUE, dropLevel);
-
-            telemetry.addData("Status", "Moving");
-            telemetry.update();
-
-            currentLocation = MoveWaypoints.moveWaypoints(new Path(new Location[]{
-                    scoringLocation,
-            }), mecanum, odometry, currentLocation, this);
-            mecanum.stop();
-
-            telemetry.addData("Status", "Dropping");
-            telemetry.update();
-
-            lift.releaseItemLocalization(currentLocation, odometry);
-
-            currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
-            lift.retract();
-
-            currentLocation = EnterWarehouse.enterWarehouseOdometryTouch(Globals.WarehouseSide.BLUE, currentLocation, mecanum, odometry, new ArrayList<>(), this, null/*() -> twoBarLift.retract()*/, odometry.getTouchSensors());
-
-            currentLocation = GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, Globals.WarehouseSide.BLUE, 0);
-
-            telemetry.log().add(String.valueOf(Globals.matchLength - elapsedTime.time()));
-
-            if (Globals.matchLength - elapsedTime.time() < Globals.minTimeExitWarehouse)
-                break;
-
-            currentLocation = EnterWarehouse.exitWarehouse(Globals.WarehouseSide.BLUE, currentLocation, mecanum, odometry, this, odometry.getTouchSensors(), null, null);
-
-            dropLevel = Globals.DropLevel.TOP;
-        }
-
+        telemetry.addData("Status", "Waiting...");
         telemetry.update();
 
+        Location scoringLocation = lift.getScoringLocation(currentLocation, Lift.Hub.RED, dropLevel);
+
+        telemetry.addData("Status", "Moving");
+        telemetry.update();
+        currentLocation = MoveWaypoints.moveWaypoints(new Path(new Location[]{
+                scoringLocation,
+        }), mecanum, odometry, currentLocation, this);
+        mecanum.stop();
+
+        telemetry.addData("Status", "Dropping");
+        telemetry.update();
+
+        lift.releaseItemLocalization(currentLocation, odometry);
+
+        currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
+        lift.retract();
+
+        currentLocation = EnterWarehouse.enterWarehouseOdometryTouch(Globals.WarehouseSide.RED, currentLocation, mecanum, odometry, new ArrayList<>(), this, () -> lift.setRollerState(Lift.RollerState.GRABBING), odometry.getTouchSensors());
+
+        // To make sure we are fully parked and have time to retract odometry, we set a limit on grabFreightBlindly.
+        double timeLeft = Globals.matchLength - elapsedTime.time();
+        timeLeft -= 1000; // Want to give one second for odometry retraction.
+        currentLocation = GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, Globals.WarehouseSide.RED, timeLeft);
+
+        // We need to retract odometry ASAP, so that is the first thing we do.
         odometry.withdraw();
+
+        // Close the thread: we do not need it anymore.
         lift.closeThread();
+
+        // Sleep so that the opmode runs until it is forced to stop or 2 seconds pass. This is to raise the odometry.
         sleep(2000);
     }
 }

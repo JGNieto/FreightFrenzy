@@ -30,30 +30,29 @@
         public static final double robotWidth = 337;
 
         ///////////////////////////// HARDWARE CONFIG /////////////////////////////
-        // Names of the config MUST match these values
-        // Motors (in parentheses the preferred port number on the control hub)
-        // If using dead wheel odometry, the wheel that must be connected to each port is listed.
-        public static final String flMotorHw = "flMotor"; // (0) - Odometry Encoder Left
-        public static final String frMotorHw = "frMotor"; // (1) - Odometry Encoder Right
-        public static final String blMotorHw = "blMotor"; // (2) - Odometry Encoder Middle
-        public static final String brMotorHw = "brMotor"; // (3)
+        // Names of the config MUST match these values.
+        // Refer to OneNote > Team Project to see which ports are what.
+        public static final String flMotorHw = "flMotor";
+        public static final String frMotorHw = "frMotor";
+        public static final String blMotorHw = "blMotor";
+        public static final String brMotorHw = "brMotor";
 
         // Lift
-        public static final String rollerHw = "roller"; // (0) Expansion Hub
-        public static final String twoBarHw = "twobar"; // (1) Expansion Hub
-        public static final String rollerSwitch = "rollerSwitch"; // (Digital 0) Expansion Hub
+        public static final String rollerHw = "roller";
+        public static final String twoBarHw = "twobar";
+        public static final String rollerSwitch = "rollerSwitch";
 
         // Lift LEDs
-        public static final String ledIntakeFull = "ledRed"; // (Digital 3) Expansion Hub
-        public static final String ledIntakeEmpty = "ledBlue"; // (Digital 5) Expansion Hub
+        public static final String ledIntakeFull = "ledRed";
+        public static final String ledIntakeEmpty = "ledBlue";
 
         // Fly Wheel (for carousel).
         public static final String flyWheel = "flyWheel";
 
         // Servos (Odometry)
-        public static final String servoLeftHw = "servoLeft"; // (0)
-        public static final String servoRightHw = "servoRight"; // (1)
-        public static final String servoMiddleHw = "servoMiddle"; // (2)
+        public static final String servoLeftHw = "servoLeft";
+        public static final String servoRightHw = "servoRight";
+        public static final String servoMiddleHw = "servoMiddle";
 
         // Odometry (encoders)
         public static final String odometryEncoderLeft = "roller";
@@ -147,7 +146,7 @@
         public static final double positionWithdrawnRight = 0;
         public static final double positionWithdrawnLeft = 1;
         public static final double positionWithdrawnMiddle = 0;
-        public static final double positionOpenRight = 0.66;
+        public static final double positionOpenRight = 0.63;
         public static final double positionOpenLeft = 0.565;
         public static final double positionOpenMiddle = 0.51;
 

@@ -19,8 +19,8 @@ import java.util.Collections;
 
 public class EnterWarehouse {
     // Locations to go to before actually entering the warehouse.
-    static Location redEntryPoint = new Location(Places.middle(0.5), Places.closePerpendicular(-3), 0);
-    static Location blueEntryPoint = new Location(Places.middle(0.5), Places.closePerpendicular(3), 0);
+    static Location redEntryPoint = new Location(Places.middle(0.3), Places.closePerpendicular(-3), 0);
+    static Location blueEntryPoint = new Location(Places.middle(0.3), Places.closePerpendicular(3), 0);
 
     // Locations to go to to enter the warehouse.
     static Location redInsidePoint = new Location(redEntryPoint).setX(Places.middle(2));
