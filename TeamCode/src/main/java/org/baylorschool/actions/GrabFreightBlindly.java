@@ -29,7 +29,7 @@ public class GrabFreightBlindly {
     static final int sidewaysMovementsLimit = 4;
 
     // Nanoseconds (milliseconds * 1000)
-    static final long firstForwardTime = 1000; // Max time for forward motion the first time it happens.
+    static final long firstForwardTime = 500; // Max time for forward motion the first time it happens.
     static final long forwardTime = 500;
     static final long backwardTime = 500;
     static final long sidewaysTime = 300;

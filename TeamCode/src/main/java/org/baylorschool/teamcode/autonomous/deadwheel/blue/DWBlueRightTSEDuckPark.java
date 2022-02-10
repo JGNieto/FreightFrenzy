@@ -34,12 +34,16 @@ public class DWBlueRightTSEDuckPark extends LinearOpMode {
     private Odometry odometry;
     private ElapsedTime elapsedTime;
 
-    private static final Location duckLocation = new Location(Places.middle(-2), Places.closePerpendicular(3), 0);
-    private static final Location robotLocationDroppingDuck = new Location(-1445, Places.closePerpendicular(3), 0);
+    private static final Location robotLocationDroppingDuck = new Location(Places.closePerpendicular(-3), 1416, -90);
+
+    private static final Location[] hubToDuck = new Location[] {
+            new Location(Places.middle(-1.5), Places.middle(2.5), -90),
+            new Location(Places.middle(-2.5), Places.middle(2) + 40, -90)
+    };
 
     private static final Location[] carouselToPark = new Location[] {
             new Location(Places.middle(-2), Places.middle(2), 0),
-            new Location(Places.closeParallel(-3), Places.middle(2), 0),
+            new Location(Places.closeParallel(-3), Places.middle(1.5), 0),
     };
 
     @Override
@@ -92,15 +96,16 @@ public class DWBlueRightTSEDuckPark extends LinearOpMode {
 
         lift.releaseItemLocalization(currentLocation, odometry);
 
-        currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
-        lift.retract();
+        //currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
+        //lift.retract();
 
         // Move between the carousel and the storage unit.
-        currentLocation = MoveWaypoints.moveWaypoints(new Path(duckLocation).setTolerance(new Location(100, 50)).setTimeout(3000), mecanum, odometry, currentLocation, this);
+        Path path = new Path(hubToDuck).setTolerance(new Location(100, 50)).setTimeout(4000).setRunnable(0, () -> lift.retract());
+        currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, this);
 
         // Ensure we are next to the wall.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
-                TouchSensors.Direction.BACK,
+                TouchSensors.Direction.RIGHT,
                 1000,
                 odometry.getTouchSensors(),
                 .4,
@@ -116,14 +121,28 @@ public class DWBlueRightTSEDuckPark extends LinearOpMode {
                 TouchSensors.Direction.BACK,
                 1000,
                 odometry.getTouchSensors(),
-                .2,
+                .3,
                 currentLocation,
                 mecanum,
                 odometry,
                 this
         );
 
-        currentLocation = new Location(robotLocationDroppingDuck);
+        sleep(500);
+
+        currentLocation = MoveSideways.moveSidewaysUntilTouch(
+                TouchSensors.Direction.BACK,
+                250,
+                odometry.getTouchSensors(),
+                .1,
+                currentLocation,
+                mecanum,
+                odometry,
+                this
+        );
+
+        Location newLocation = new Location(robotLocationDroppingDuck).setHeading(currentLocation.getHeading());
+        currentLocation = new Location(newLocation);
 
         // Drop the duck.
         currentLocation = carousel.dropDuck(Carousel.CarouselSide.BLUE, currentLocation, this, odometry);
@@ -140,7 +159,7 @@ public class DWBlueRightTSEDuckPark extends LinearOpMode {
                 TouchSensors.Direction.BACK,
                 1000,
                 odometry.getTouchSensors(),
-                .2,
+                .3,
                 currentLocation,
                 mecanum,
                 odometry,

@@ -35,7 +35,7 @@ public class DWRedLeftTSEDuckPark extends LinearOpMode {
     private ElapsedTime elapsedTime;
 
     private static final Location duckLocation = new Location(Places.middle(-2.5), Places.awayPerpendicular(-2), 0);
-    private static final Location robotLocationDroppingDuck = new Location(Places.closeParallel(-3), -1450, 0);
+    private static final Location robotLocationDroppingDuck = new Location(Places.closeParallel(-3), -1397);
 
     private static final Location[] carouselToPark = new Location[] {
             new Location(Places.closeParallel(-3) + 100, Places.middle(-1.8), 0),
@@ -110,20 +110,32 @@ public class DWRedLeftTSEDuckPark extends LinearOpMode {
                 this
         );
 
-        // Move next to the carousel.
-        // We use moveSidewaysUntilTouch method to take advantage of its time limit and to avoid duplication.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
-                TouchSensors.Direction.RIGHT,
-                1000,
+                TouchSensors.Direction.FORWARD,
+                100,
                 odometry.getTouchSensors(),
-                .2,
+                .1,
                 currentLocation,
                 mecanum,
                 odometry,
                 this
         );
 
-        currentLocation = new Location(robotLocationDroppingDuck);
+        // Move next to the carousel.
+        // We use moveSidewaysUntilTouch method to take advantage of its time limit and to avoid duplication.
+        currentLocation = MoveSideways.moveSidewaysUntilTouch(
+                TouchSensors.Direction.RIGHT,
+                1000,
+                odometry.getTouchSensors(),
+                .3,
+                currentLocation,
+                mecanum,
+                odometry,
+                this
+        );
+
+        Location newLocation = new Location(robotLocationDroppingDuck).setHeading(currentLocation.getHeading());
+        currentLocation = new Location(newLocation);
 
         // Drop the duck.
         currentLocation = carousel.dropDuck(Carousel.CarouselSide.RED, currentLocation, this, odometry);

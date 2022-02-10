@@ -15,6 +15,10 @@ import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
 public class TSEPipeline extends OpenCvPipeline {
+    // If the detection is below this number, assume we are only seeing noise. Also assume that
+    // this is happening because the TSE is at the bottom level and it is not visible.
+    private static final int threshold = 70_000;
+
     private volatile Globals.DropLevel dropLevel = Globals.DropLevel.TOP;
     private Mat onlyGreen;
 
@@ -68,9 +72,9 @@ public class TSEPipeline extends OpenCvPipeline {
 
     // Dirty function to determine where there is the largest amount of green.
     private void determineLargest() {
-        if (topAvg >= middleAvg && topAvg >= bottomAvg) {
+        if (topAvg >= middleAvg && topAvg >= bottomAvg && topAvg >= threshold) {
             this.dropLevel = Globals.DropLevel.TOP;
-        } else if (middleAvg >= topAvg && middleAvg >= bottomAvg) {
+        } else if (middleAvg >= topAvg && middleAvg >= bottomAvg && topAvg >= threshold) {
             this.dropLevel = Globals.DropLevel.MIDDLE;
         } else {
             this.dropLevel = Globals.DropLevel.BOTTOM;

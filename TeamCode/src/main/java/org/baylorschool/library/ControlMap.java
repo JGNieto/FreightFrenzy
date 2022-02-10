@@ -86,11 +86,11 @@ public class ControlMap {
 
     // Carousel
     public boolean carouselRed() {
-        return gamepad2.x;
+        return gamepad2.b;
     }
 
     public boolean carouselBlue() {
-        return gamepad2.b;
+        return gamepad2.x;
     }
 
     // Tape Measurer

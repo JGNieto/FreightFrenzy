@@ -45,6 +45,9 @@ public class MoveSideways {
             case BACK:
                 mecanum.moveNoScaling(-speed, 0, 0);
                 break;
+            case FORWARD:
+                mecanum.moveNoScaling(speed, 0, 0);
+                break;
         }
 
         while (opMode.opModeIsActive() && (timeLimitMS == 0 || System.currentTimeMillis() - startTime < timeLimitMS)) {

@@ -31,7 +31,7 @@ public class TouchSensors {
     }
 
     public enum Direction {
-        LEFT, RIGHT, BACK;
+        LEFT, RIGHT, BACK, FORWARD
     }
 
     /**
