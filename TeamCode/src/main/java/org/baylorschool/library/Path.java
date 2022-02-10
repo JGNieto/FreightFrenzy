@@ -12,6 +12,8 @@ public class Path {
     private ArrayList<Location> locations;
     private Location tolerance;
     private Location previousLocation = null;
+    private int timeout = 0;
+    private long startTime;
 
     public Path(List<Location> locations) {
         this.locations = new ArrayList<>(locations);
@@ -69,6 +71,11 @@ public class Path {
             return null;
     }
 
+    public boolean hasTimedOut() {
+        if (timeout == 0) return false;
+        return System.currentTimeMillis() - startTime > timeout;
+    }
+
     /**
      * Sets the runnable for a location in the path.
      * @param i Index of the location in the path.
@@ -78,8 +85,23 @@ public class Path {
         return this;
     }
 
-    public void setTolerance(Location tolerance) {
+    public Path setTolerance(Location tolerance) {
         this.tolerance = tolerance;
+        return this;
+    }
+
+    public int getTimeout() {
+        return timeout;
+    }
+
+    public Path timeStart() {
+        startTime = System.currentTimeMillis();
+        return this;
+    }
+
+    public Path setTimeout(int timeout) {
+        this.timeout = timeout;
+        return this;
     }
 
     public Location getTolerance() {

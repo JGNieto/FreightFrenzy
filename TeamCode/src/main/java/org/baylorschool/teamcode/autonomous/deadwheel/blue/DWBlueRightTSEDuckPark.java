@@ -35,10 +35,11 @@ public class DWBlueRightTSEDuckPark extends LinearOpMode {
     private ElapsedTime elapsedTime;
 
     private static final Location duckLocation = new Location(Places.middle(-2), Places.closePerpendicular(3), 0);
+    private static final Location robotLocationDroppingDuck = new Location(-1445, Places.closePerpendicular(3), 0);
 
     private static final Location[] carouselToPark = new Location[] {
             new Location(Places.middle(-2), Places.middle(2), 0),
-            new Location(Places.closeParallel(3), Places.middle(2), 0),
+            new Location(Places.closeParallel(-3), Places.middle(2), 0),
     };
 
     @Override
@@ -95,7 +96,7 @@ public class DWBlueRightTSEDuckPark extends LinearOpMode {
         lift.retract();
 
         // Move between the carousel and the storage unit.
-        currentLocation = MoveWaypoints.moveWaypoints(new Path(duckLocation), mecanum, odometry, currentLocation, this);
+        currentLocation = MoveWaypoints.moveWaypoints(new Path(duckLocation).setTolerance(new Location(100, 50)).setTimeout(3000), mecanum, odometry, currentLocation, this);
 
         // Ensure we are next to the wall.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
@@ -112,7 +113,7 @@ public class DWBlueRightTSEDuckPark extends LinearOpMode {
         // Move next to the carousel.
         // We use moveSidewaysUntilTouch method to take advantage of its time limit and to avoid duplication.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
-                TouchSensors.Direction.RIGHT,
+                TouchSensors.Direction.BACK,
                 1000,
                 odometry.getTouchSensors(),
                 .2,
@@ -122,6 +123,8 @@ public class DWBlueRightTSEDuckPark extends LinearOpMode {
                 this
         );
 
+        currentLocation = new Location(robotLocationDroppingDuck);
+
         // Drop the duck.
         currentLocation = carousel.dropDuck(Carousel.CarouselSide.BLUE, currentLocation, this, odometry);
 
@@ -129,7 +132,8 @@ public class DWBlueRightTSEDuckPark extends LinearOpMode {
         currentLocation = MoveWaypoints.moveWaypoints(new Path(carouselToPark), mecanum, odometry, currentLocation, this);
 
         // Start withdrawing odometry. We do not need it anymore.
-        odometry.withdraw();
+        odometry.withdraw();;
+        lift.closeThread();
 
         // Make sure we are properly parked. This is usually not a problem, only to be safe.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(

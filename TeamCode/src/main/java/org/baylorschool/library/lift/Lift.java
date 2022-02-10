@@ -157,13 +157,13 @@ public abstract class Lift {
         // the line between the robot and the center.
         List<Location> potentialLocations = CircleIntersect.getCircleLineIntersectionLocation(currentLocation, targetHubLocation, targetHubLocation, radius);
         Location closestLocation = null;
-        double distanceToLocation = -1;
+        double distanceToLocationSquared = -1;
 
         for (Location location : potentialLocations) {
-            double distance = Location.distance(currentLocation, location);
-            if (closestLocation == null || distance < distanceToLocation) {
+            double distance = Location.distanceSquared(currentLocation, location);
+            if (closestLocation == null || distance < distanceToLocationSquared) {
                 closestLocation = location;
-                distanceToLocation = distance;
+                distanceToLocationSquared = distance;
             }
         }
 

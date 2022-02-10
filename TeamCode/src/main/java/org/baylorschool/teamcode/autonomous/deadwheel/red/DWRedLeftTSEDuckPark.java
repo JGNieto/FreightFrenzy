@@ -34,11 +34,12 @@ public class DWRedLeftTSEDuckPark extends LinearOpMode {
     private Odometry odometry;
     private ElapsedTime elapsedTime;
 
-    private static final Location duckLocation = new Location(Places.closeParallel(-3), Places.awayPerpendicular(-2), 0);
+    private static final Location duckLocation = new Location(Places.middle(-2.5), Places.awayPerpendicular(-2), 0);
+    private static final Location robotLocationDroppingDuck = new Location(Places.closeParallel(-3), -1450, 0);
 
     private static final Location[] carouselToPark = new Location[] {
-            new Location(Places.closeParallel(3) + 100, Places.middle(-2.8), 0),
-            new Location(Places.closeParallel(3), Places.middle(-2), 0),
+            new Location(Places.closeParallel(-3) + 100, Places.middle(-1.8), 0),
+            new Location(Places.closeParallel(-3), Places.middle(-1.5), 0),
     };
 
     @Override
@@ -95,7 +96,7 @@ public class DWRedLeftTSEDuckPark extends LinearOpMode {
         lift.retract();
 
         // Move between the carousel and the storage unit.
-        currentLocation = MoveWaypoints.moveWaypoints(new Path(duckLocation), mecanum, odometry, currentLocation, this);
+        currentLocation = MoveWaypoints.moveWaypoints(new Path(duckLocation).setTolerance(new Location(100, 50)).setTimeout(3000), mecanum, odometry, currentLocation, this);
 
         // Ensure we are next to the wall.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
@@ -122,6 +123,8 @@ public class DWRedLeftTSEDuckPark extends LinearOpMode {
                 this
         );
 
+        currentLocation = new Location(robotLocationDroppingDuck);
+
         // Drop the duck.
         currentLocation = carousel.dropDuck(Carousel.CarouselSide.RED, currentLocation, this, odometry);
 
@@ -130,6 +133,7 @@ public class DWRedLeftTSEDuckPark extends LinearOpMode {
 
         // Start withdrawing odometry. We do not need it anymore.
         odometry.withdraw();
+        lift.closeThread();
 
         // Make sure we are properly parked. This is usually not a problem, only to be safe.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(

@@ -47,7 +47,7 @@ public class MoveSideways {
                 break;
         }
 
-        while (opMode.opModeIsActive() && (timeLimitMS != 0 || System.currentTimeMillis() - startTime < timeLimitMS)) {
+        while (opMode.opModeIsActive() && (timeLimitMS == 0 || System.currentTimeMillis() - startTime < timeLimitMS)) {
             if (localization != null)
                 currentLocation = localization.calculateNewLocation(currentLocation);
 

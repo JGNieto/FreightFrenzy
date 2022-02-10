@@ -19,8 +19,10 @@ public class MoveWaypoints {
         double finalAngle = path.getLastLocation().getHeading();
         Runnable runnable = path.getLastLocation().getRunnable();
 
+        path.timeStart();
+
         // We will move without caring too much about precision for all the points except for the last one.
-        if (path.getLocations().size() >= 2) {
+        if (path.getLocations().size() >= 2 && !path.hasTimedOut()) {
             while (opMode.opModeIsActive()) {
                 currentLocation = localization.calculateNewLocation(currentLocation);
 
@@ -52,7 +54,7 @@ public class MoveWaypoints {
         Location currentGoal = path.currentGoal();
 
         // For the last point, we move without precision until we get close to it. Then, we move with PID.
-        while (opMode.opModeIsActive()) { // No precision
+        while (opMode.opModeIsActive() && !path.hasTimedOut()) { // No precision
             currentLocation = localization.calculateNewLocation(currentLocation);
 
             double distanceSquared = Location.distanceSquared(currentLocation, currentGoal);
@@ -129,7 +131,7 @@ public class MoveWaypoints {
 
         final Location tolerance = path.getTolerance();
 
-        while (opMode.opModeIsActive() && !Location.withinTolerance(currentLocation, currentGoal, tolerance)) {
+        while (opMode.opModeIsActive() && !Location.withinTolerance(currentLocation, currentGoal, tolerance) && !path.hasTimedOut()) {
             currentLocation = localization.calculateNewLocation(currentLocation);
 
             telemetry.addLine("Moving slowly");

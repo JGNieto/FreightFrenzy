@@ -28,8 +28,8 @@ public class TwoBarLift extends Lift {
     private static final double liftPowerHold = .2;
 
     // Distance away from the CENTER of the Team Shipping Hub to drop on each level.
-    private static final double dropDistanceTop = 541;
-    private static final double dropDistanceMiddle = 654;
+    private static final double dropDistanceTop = 590;
+    private static final double dropDistanceMiddle = 650;
     private static final double dropDistanceBottom = 611;
 
     private static final int releaseDelay = 2000;
