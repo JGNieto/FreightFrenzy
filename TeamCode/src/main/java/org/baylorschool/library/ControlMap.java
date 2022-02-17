@@ -84,6 +84,10 @@ public class ControlMap {
         return null;
     }
 
+    public boolean liftHoldDown() {
+        return gamepad2.left_trigger > .3;
+    }
+
     // Carousel
     public boolean carouselRed() {
         return gamepad2.b;

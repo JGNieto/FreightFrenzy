@@ -14,7 +14,8 @@ public class EnsureFullyParked {
     private static final Location parkingTargetRed = new Location(Places.middle(2), Places.middle(-2));
 
     public static Location ensureFullyParked(Location currentLocation, Globals.WarehouseSide side, Mecanum mecanum, LinearOpMode opMode) {
-        /*
+
+        /* FIXME: DISABLED FOR NOW. NOT MATCH READY.
         When we reach this point we have either grabbed freight and probably have lots of time left or
         have not managed to do it and have about one second left. In any case, we have two objectives:
          - Make sure that we are FULLY parked
@@ -25,6 +26,7 @@ public class EnsureFullyParked {
         */
 
         // Check whether we have already parked.
+        /*
         if (AreasIntersect.isFullyParkedWarehouse(currentLocation, side))
             return currentLocation;
 
@@ -35,7 +37,7 @@ public class EnsureFullyParked {
 
         opMode.sleep(1000);
         mecanum.stop();
-
+         */
         return currentLocation;
     }
 }

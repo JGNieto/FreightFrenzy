@@ -63,7 +63,7 @@ public class GrabFreightBlindly {
         // to execute the desired movement.
 
         // Retract lift and make it grab.
-        lift.setMovement(Lift.LiftMovement.DOWN);
+        lift.setHoldDown(true);
         lift.setRollerState(Lift.RollerState.GRABBING);
 
         // If we get too close to one side of the warehouse, we will simply start to move in the opposite
@@ -173,7 +173,7 @@ public class GrabFreightBlindly {
             executionFrequency.execution();
             opMode.telemetry.update();
         }
-        lift.setMovement(Lift.LiftMovement.HOLD);
+        lift.setHoldDown(false);
         lift.retract();
         return currentLocation;
     }

@@ -15,13 +15,16 @@ import java.util.List;
 public abstract class Lift {
     // Use separate thread to fix cases when the main OpMode thread is in an infinite loop.
     // Ex: waiting for isBusy to be false
-    protected boolean threadShouldStop = false;
+    protected volatile boolean threadShouldStop = false;
     protected Thread thread;
 
     // These variables are only to be used by TeleOp systems.
     // Autonomous systems should use setTargetHeight and setTargetAngle.
-    protected LiftMovement movement = LiftMovement.HOLD;
-    protected RollerState rollerState = RollerState.STOP;
+    protected volatile LiftMovement movement = LiftMovement.HOLD;
+    protected volatile RollerState rollerState = RollerState.STOP;
+
+
+    protected volatile boolean holdDown = false;
 
     protected boolean telemetryEnabled = false;
 
@@ -244,6 +247,8 @@ public abstract class Lift {
                 movement = TwoBarLift.LiftMovement.HOLD;
         }
 
+        setHoldDown(controlMap.liftHoldDown());
+
         if (controlMap.liftReleasing())
             rollerState = TwoBarLift.RollerState.RELEASING;
         else if (controlMap.liftGrabbing())
@@ -268,5 +273,13 @@ public abstract class Lift {
 
     public void setTelemetryEnabled(boolean telemetryEnabled) {
         this.telemetryEnabled = telemetryEnabled;
+    }
+
+    public boolean isHoldDown() {
+        return holdDown;
+    }
+
+    public void setHoldDown(boolean holdDown) {
+        this.holdDown = holdDown;
     }
 }

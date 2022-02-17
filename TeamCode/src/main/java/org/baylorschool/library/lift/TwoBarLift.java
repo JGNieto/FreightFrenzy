@@ -113,7 +113,10 @@ public class TwoBarLift extends Lift {
             opMode.telemetry.addData("Lift WasMoving", wasMoving);
             opMode.telemetry.addData("Limit Switch", limitSwitch.getState() ? "Empty" : "Full");
         }
-        if (movement == LiftMovement.UP) {
+        if (holdDown) {
+            twoBarMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            twoBarMotor.setPower(-.6);
+        } else if (movement == LiftMovement.UP) {
             wasMoving = true;
             twoBarMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             twoBarMotor.setPower(liftPowerUp);
