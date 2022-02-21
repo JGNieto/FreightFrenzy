@@ -74,7 +74,7 @@ public class TSEPipeline extends OpenCvPipeline {
     private void determineLargest() {
         if (topAvg >= middleAvg && topAvg >= bottomAvg && topAvg >= threshold) {
             this.dropLevel = Globals.DropLevel.TOP;
-        } else if (middleAvg >= topAvg && middleAvg >= bottomAvg && topAvg >= threshold) {
+        } else if (middleAvg >= topAvg && middleAvg >= bottomAvg && middleAvg >= threshold) {
             this.dropLevel = Globals.DropLevel.MIDDLE;
         } else {
             this.dropLevel = Globals.DropLevel.BOTTOM;
@@ -103,6 +103,11 @@ public class TSEPipeline extends OpenCvPipeline {
         this.topAvg = (int) Core.sumElems(topMat).val[0];
         this.middleAvg = (int) Core.sumElems(middleMat).val[0];
         this.bottomAvg = (int) Core.sumElems(bottomMat).val[0];
+
+        // Avoid memory leak.
+        this.topMat.release();
+        this.middleMat.release();
+        this.bottomMat.release();
 
         determineLargest();
 

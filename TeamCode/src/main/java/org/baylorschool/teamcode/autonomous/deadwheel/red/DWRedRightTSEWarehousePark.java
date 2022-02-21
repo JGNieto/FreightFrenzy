@@ -91,17 +91,19 @@ public class DWRedRightTSEWarehousePark extends LinearOpMode {
         currentLocation = EnterWarehouse.enterWarehouseOdometryTouch(Globals.WarehouseSide.RED, currentLocation, mecanum, odometry, new ArrayList<>(), this, () -> lift.setRollerState(Lift.RollerState.GRABBING), odometry.getTouchSensors());
 
         // To make sure we are fully parked and have time to retract odometry, we set a limit on grabFreightBlindly.
-        double timeLeft = Globals.matchLength - elapsedTime.time();
-        timeLeft -= 1000; // Want to give one second for odometry retraction.
-        currentLocation = GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, Globals.WarehouseSide.RED, timeLeft);
+        //double timeLeft = Globals.matchLength - elapsedTime.time();
+        //timeLeft -= 1000; // Want to give one second for odometry retraction.
+        //currentLocation = GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, Globals.WarehouseSide.RED, timeLeft);
+        //mecanum.moveMecanum(.2, 0, 0);
+        mecanum.stop();
 
         // We need to retract odometry ASAP, so that is the first thing we do.
         odometry.withdraw();
 
-        // Close the thread: we do not need it anymore.
-        lift.closeThread();
-
         // Sleep so that the opmode runs until it is forced to stop or 2 seconds pass. This is to raise the odometry.
         sleep(2000);
+
+        // Close the thread: we do not need it anymore.
+        lift.closeThread();
     }
 }

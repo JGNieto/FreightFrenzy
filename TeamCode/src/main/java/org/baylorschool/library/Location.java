@@ -196,8 +196,8 @@ public class Location {
         double cosAngle = Math.cos(angle);
         double sinAngle = Math.sin(angle);
 
-        double deltaX = (x * sinAngle) + (y * cosAngle);
-        double deltaY = (x * cosAngle) + (y * sinAngle);
+        double deltaX = (x * cosAngle) - (y * sinAngle);
+        double deltaY = (x * sinAngle) + (y * cosAngle);
 
         location.setX(location.getX() + deltaX);
         location.setY(location.getY() + deltaY);

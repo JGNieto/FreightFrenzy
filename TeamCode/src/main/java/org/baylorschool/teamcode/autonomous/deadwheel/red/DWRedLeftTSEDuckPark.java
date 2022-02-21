@@ -92,6 +92,8 @@ public class DWRedLeftTSEDuckPark extends LinearOpMode {
 
         lift.releaseItemLocalization(currentLocation, odometry);
 
+        currentLocation = MoveWaypoints.moveWaypoints(new Path(Location.moveLocation(new Location(currentLocation), 0, -100).setPurePursuitTurnSpeed(0)).setTimeout(2000), mecanum, odometry, currentLocation, this);
+
         currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
         lift.retract();
 
