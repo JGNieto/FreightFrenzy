@@ -16,6 +16,9 @@ public class TwoBarLift extends Lift {
     // use liftPowerUp or liftPowerDown, else use liftPowerHold.
     private static final int ticksDifferenceBeforeUsingMovementPower = (int) (ticksPerRevolution * 15 / 360);
 
+    /*public static final int bottomLevelTSHEncoder = 200;
+    public static final int middleLevelTSHEncoder = 290;
+    public static final int topLevelTSHEncoder = 400;*/
     public static final int bottomLevelTSHEncoder = 214;
     public static final int middleLevelTSHEncoder = 333;
     public static final int topLevelTSHEncoder = 435;

@@ -1,5 +1,5 @@
 package org.baylorschool.library.ftclib;
-// Class taken from https://github.com/FTCLib/FTCLib/blob/9250bf545a79e7dfe7308bf40085f1cac3ec71cc/core/src/main/java/com/arcrobotics/ftclib/controller/PIDFController.java
+// Adapted from https://github.com/FTCLib/FTCLib/blob/9250bf545a79e7dfe7308bf40085f1cac3ec71cc/core/src/main/java/com/arcrobotics/ftclib/controller/PIDFController.java
 /**
  * This is a PID controller (https://en.wikipedia.org/wiki/PID_controller)
  * for your robot. Internally, it performs all the calculations for you.

@@ -20,19 +20,19 @@ public class GrabFreightBlindly {
 
     ///////////////////////////// Constants for blind movement /////////////////////////////
     // Distance between the front of the robot and the wall at which it turns around.
-    static final int turnAroundDistance = (int) Places.middle(1);
-    static final int farAwayDistance = (int) Places.middle(1) + 40;
-    static final int sidewaysMovement = 35;
+    static final int turnAroundDistance = (int) Places.middle(.75);
+    static final int farAwayDistance = (int) Places.middle(1) + 20;
+    static final int sidewaysMovement = 6;
 
     // Limit of how many times we will go through the forward-backward-sideways cycle before forcing
     // a direction change.
     static final int sidewaysMovementsLimit = 4;
 
-    // Nanoseconds (milliseconds * 1000)
-    static final long firstForwardTime = 500; // Max time for forward motion the first time it happens.
-    static final long forwardTime = 500;
+    // Milliseconds
+    static final long firstForwardTime = 1000; // Max time for forward motion the first time it happens.
+    static final long forwardTime = 800;
     static final long backwardTime = 500;
-    static final long sidewaysTime = 300;
+    static final long sidewaysTime = 200;
 
     // Motor speeds
     static final double forwardSpeed = .3;
@@ -154,6 +154,7 @@ public class GrabFreightBlindly {
                         if (sidewaysMovements >= sidewaysMovementsLimit) {
                             sidewaysDirection *= -1;
                             sidewaysMovements = 0;
+                            firstTime = true;
                         }
 
                         mecanum.moveNoScaling(0, - sidewaysSpeed * sidewaysDirection, 0);

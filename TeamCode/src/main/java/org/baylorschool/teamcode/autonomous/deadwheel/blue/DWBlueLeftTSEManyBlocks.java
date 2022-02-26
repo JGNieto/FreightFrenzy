@@ -24,7 +24,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.util.ArrayList;
 
-@Disabled // Not competition ready.
+//@Disabled // Not competition ready.
 @Autonomous(name = "DWBlueLeftTSEWarehouseManyBlocks", group = "Blue")
 public class DWBlueLeftTSEManyBlocks extends LinearOpMode {
 
@@ -94,6 +94,7 @@ public class DWBlueLeftTSEManyBlocks extends LinearOpMode {
             currentLocation = EnterWarehouse.enterWarehouseOdometryTouch(Globals.WarehouseSide.BLUE, currentLocation, mecanum, odometry, new ArrayList<>(), this, null/*() -> twoBarLift.retract()*/, odometry.getTouchSensors());
 
             currentLocation = GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, Globals.WarehouseSide.BLUE, 0);
+            lift.setRollerState(Lift.RollerState.STOP);
 
             telemetry.log().add(String.valueOf(Globals.matchLength - elapsedTime.time()));
 

@@ -23,8 +23,8 @@ public class EnterWarehouse {
     static Location blueEntryPoint = new Location(Places.middle(0.3), Places.closePerpendicular(3), 0);
 
     // Locations to go to to enter the warehouse.
-    static Location redInsidePoint = new Location(redEntryPoint).setX(Places.middle(2));
-    static Location blueInsidePoint = new Location(blueEntryPoint).setX(Places.middle(2));
+    static Location redInsidePoint = new Location(redEntryPoint).setX(Places.middle(1.5));
+    static Location blueInsidePoint = new Location(blueEntryPoint).setX(Places.middle(1.5));
 
     /**
      * Moves the robot to the inside of the warehouse. Current location should be near the wall adjacent to the desired warehouse.
@@ -138,7 +138,7 @@ public class EnterWarehouse {
 
         // Create path to move into the warehouse.
         path = new Path(side == Globals.WarehouseSide.BLUE ? blueInsidePoint : redInsidePoint);
-        path.setTolerance(new Location(100, 10));
+        path.setTolerance(new Location(25, 100));
 
         // Enter the warehouse.
         // currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
@@ -148,7 +148,7 @@ public class EnterWarehouse {
         return currentLocation;
     }
 
-    static final double moveBackX = Places.awayParallel(1) + 50;
+    static final double moveBackX = Places.middle(1.5);
     static final Location moveBackTolerance = new Location(70, 10000); // We don't care about y.
 
     public static Location exitWarehouse(Globals.WarehouseSide side, Location currentLocation, Mecanum mecanum, Odometry odometry, LinearOpMode opMode, TouchSensors touchSensors, Runnable runnableMovedBack, Runnable runnableBeforeExit) {
@@ -169,7 +169,7 @@ public class EnterWarehouse {
                 side == Globals.WarehouseSide.BLUE ? TouchSensors.Direction.LEFT : TouchSensors.Direction.RIGHT,
                 1000,
                 touchSensors,
-                0,
+                .3,
                 currentLocation,
                 mecanum,
                 odometry,
