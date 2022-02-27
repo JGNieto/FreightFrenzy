@@ -21,7 +21,7 @@ public class TwoBarLift extends Lift {
     public static final int topLevelTSHEncoder = 400;*/
     public static final int bottomLevelTSHEncoder = 214;
     public static final int middleLevelTSHEncoder = 333;
-    public static final int topLevelTSHEncoder = 435;
+    public static final int topLevelTSHEncoder = 445;
 
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = 0.65;

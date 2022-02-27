@@ -2,6 +2,7 @@ package org.baylorschool.teamcode.teleop.test;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -13,6 +14,7 @@ import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.debugging.DebuggingClient;
 import org.baylorschool.library.lift.Lift;
+import org.baylorschool.library.localization.ColorSensors;
 import org.baylorschool.library.localization.Odometry;
 
 @TeleOp(name="OdometryTest", group="Test")
@@ -22,6 +24,7 @@ public class OdometryTest extends LinearOpMode {
     private Carousel carousel;
     private Lift lift;
     private Odometry odometry;
+    private ColorSensors colorSensors;
     private IMU imu;
 
     private final double SLOW_MODE_COEFFICIENT = 0.5;
@@ -38,6 +41,7 @@ public class OdometryTest extends LinearOpMode {
         mecanum = new Mecanum(hardwareMap);
         odometry = new Odometry(hardwareMap, imu, false);
         carousel = new Carousel(hardwareMap);
+        colorSensors = odometry.getColorSensors();
         lift = Globals.createNewLift(this);
 
         waitForStart();
@@ -76,6 +80,18 @@ public class OdometryTest extends LinearOpMode {
             mecanum.moveGamepad(y, x, rotation, slowMode ? SLOW_MODE_COEFFICIENT : 1);
             lift.loopIterationTeleOp(gamepad1);
 
+            ColorSensor colorl = colorSensors.getLeftSensor();
+            int rl = colorl.red();
+            int gl = colorl.green();
+            int bl = colorl.blue();
+
+            ColorSensor colorr = colorSensors.getRightSensor();
+            int rr = colorr.red();
+            int gr = colorr.green();
+            int br = colorr.blue();
+
+            boolean triggerColor = colorSensors.isTrigger();
+
             // Report telemetry
             // telemetry.addData("Middle Diff", odometry.diff);
             telemetry.addData("Odo Left", odometry.getPreviousLeft());
@@ -91,6 +107,9 @@ public class OdometryTest extends LinearOpMode {
             telemetry.addData("Speed", y);
             telemetry.addData("Strafe", x);
             telemetry.addData("Rotation", rotation);
+            telemetry.addData("Color L", "%d %d %d", rl, gl, bl);
+            telemetry.addData("Color R", "%d %d %d", rr, gr, br);
+            telemetry.addData("Color Trigger", triggerColor ? "YES" : "no");
             telemetry.update();
         }
     }

@@ -180,9 +180,14 @@ public class EnterWarehouse {
         if (runnableBeforeExit != null)
             runnableBeforeExit.run();
 
+        // Enable color sensor detection.
+        odometry.setColorSensorsEnabled(true);
+
         // Exit warehouse
         path = new Path(new Location(currentLocation).setX(Places.middle(1)));
         currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, opMode);
+
+        odometry.setColorSensorsEnabled(false);
 
         return currentLocation;
     }

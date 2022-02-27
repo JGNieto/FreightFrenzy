@@ -63,6 +63,10 @@
         public static final String tapeExtend = "tapeExtend";
         public static final String tapeTilt = "tapeTilt";
 
+        // Color sensors
+        public static final String leftColorSensor = "leftColorSensor";
+        public static final String rightColorSensor = "rightColorSensor";
+
         // Touch sensors (localization)
         // Set strings to null if not connected.
         public static final String touchLeft = "touchLeft";
