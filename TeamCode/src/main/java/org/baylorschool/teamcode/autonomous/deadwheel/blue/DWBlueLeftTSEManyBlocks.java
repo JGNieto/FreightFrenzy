@@ -93,7 +93,7 @@ public class DWBlueLeftTSEManyBlocks extends LinearOpMode {
 
             currentLocation = EnterWarehouse.enterWarehouseOdometryTouch(Globals.WarehouseSide.BLUE, currentLocation, mecanum, odometry, new ArrayList<>(), this, null/*() -> twoBarLift.retract()*/, odometry.getTouchSensors());
 
-            currentLocation = GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, Globals.WarehouseSide.BLUE, 0);
+            currentLocation = GrabFreightBlindly.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, Globals.WarehouseSide.BLUE, 0, odometry.getColorSensors());
             lift.setRollerState(Lift.RollerState.STOP);
 
             telemetry.log().add(String.valueOf(Globals.matchLength - elapsedTime.time()));

@@ -8,6 +8,7 @@ import org.baylorschool.library.ExecutionFrequency;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.lift.Lift;
+import org.baylorschool.library.localization.ColorSensors;
 import org.baylorschool.library.localization.Localization;
 import org.baylorschool.library.localization.Odometry;
 
@@ -20,18 +21,20 @@ public class GrabFreightBlindly {
 
     ///////////////////////////// Constants for blind movement /////////////////////////////
     // Distance between the front of the robot and the wall at which it turns around.
-    static final int turnAroundDistance = (int) Places.middle(.75);
-    static final int farAwayDistance = (int) Places.middle(1) + 20;
+    static final int turnAroundDistance = (int) Places.middle(.65);
+    static final int farAwayDistance = (int) Places.middle(1.5);
     static final int sidewaysMovement = 6;
 
     // Limit of how many times we will go through the forward-backward-sideways cycle before forcing
     // a direction change.
     static final int sidewaysMovementsLimit = 4;
 
+    static final double pitchThreshold = 5.0;
+
     // Milliseconds
     static final long firstForwardTime = 1000; // Max time for forward motion the first time it happens.
     static final long forwardTime = 800;
-    static final long backwardTime = 500;
+    static final long backwardTime = 400;
     static final long sidewaysTime = 200;
 
     // Motor speeds
@@ -56,7 +59,7 @@ public class GrabFreightBlindly {
      * @param timeLimit Time limit in milliseconds, after which the robot will give up and return. Set to 0 for no time limit.
      * @return
      */
-    public static Location grabFreightBlindly(Location currentLocation, Mecanum mecanum, Lift lift, Localization localization, LinearOpMode opMode, Globals.WarehouseSide warehouseSide, double timeLimit) {
+    public static Location grabFreightBlindly(Location currentLocation, Mecanum mecanum, Lift lift, Localization localization, LinearOpMode opMode, Globals.WarehouseSide warehouseSide, double timeLimit, ColorSensors colorSensors) {
         // The implementation of this action is a kind of state machine. We keep track of the situation
         // we are in and, each iteration of the loop, we decide whether to change to a different
         // state. When we change state we also change the power configuration of the mecanum motors
@@ -84,6 +87,9 @@ public class GrabFreightBlindly {
         // Variable to store y (sideways) coordinate between one movement and the next.
         double previousY = currentLocation.getY();
 
+        boolean firstIteration = true;
+        double pitchBaseline = currentLocation.getPitch();
+
         // Apart from limiting how far left or right we can go, we limit how many sideways movements
         // we can do before changing direction. This variable keeps track of how many we have done so far.
         int sidewaysMovements = 0;
@@ -108,6 +114,11 @@ public class GrabFreightBlindly {
             // Update position.
             currentLocation = localization.calculateNewLocation(currentLocation);
 
+            if (firstIteration) {
+                firstIteration = false;
+                pitchBaseline = currentLocation.getPitch();
+            }
+
             // Compute distance between front of the robot and wall
             double distanceToWall = Places.middle(3) - (currentLocation.getX() + Globals.robotLength / 2);
             long currentTime = System.currentTimeMillis();
@@ -123,18 +134,26 @@ public class GrabFreightBlindly {
 
             switch (movementStage) {
                 case FORWARD:
-                    if (distanceToWall < turnAroundDistance || currentTime - stageStartTime > (firstTime ? firstForwardTime : forwardTime)) {
+                    if (distanceToWall < turnAroundDistance || currentTime - stageStartTime > (firstTime ? firstForwardTime : forwardTime) || Math.abs(currentLocation.getPitch() - pitchBaseline) > pitchThreshold) {
                         firstTime = false;
                         stageStartTime = currentTime;
                         movementStage = MovementStage.BACKWARD;
                         mecanum.moveNoScaling(backwardSpeed,0, 0);
+                        lift.setHoldDown(false);
+                        lift.setRollerState(Lift.RollerState.STOP);
+                        colorSensors.resetBaseLine();
+                        colorSensors.setLooking(true);
                     }
                     break;
                 case BACKWARD:
-                    if (distanceToWall > farAwayDistance || currentTime - stageStartTime > backwardTime) {
+                    if (distanceToWall > farAwayDistance || currentTime - stageStartTime > backwardTime || colorSensors.isTrigger()) {
+                        lift.setRollerState(Lift.RollerState.GRABBING);
+                        lift.setHoldDown(true);
                         stageStartTime = currentTime;
                         movementStage = MovementStage.SIDEWAYS;
                         previousY = currentLocation.getY();
+
+                        colorSensors.setLooking(false);
 
                         // If, for whatever reason, the robot has rotated too much, rotate back.
                         if (Math.abs(currentLocation.getHeading()) > 30)

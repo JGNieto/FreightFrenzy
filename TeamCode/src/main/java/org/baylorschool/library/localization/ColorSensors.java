@@ -4,13 +4,14 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.baylorschool.Globals;
+import org.baylorschool.Places;
 import org.baylorschool.library.Location;
 
 public class ColorSensors {
     private ColorSensor leftSensor;
     private ColorSensor rightSensor;
 
-    private boolean hasTriggered = false;
+    private boolean isLooking = false;
 
     private int[] leftBaseline = new int[] {50, 50, 50};
     private int[] rightBaseline = new int[] {50, 50, 50};
@@ -35,7 +36,6 @@ public class ColorSensors {
      * Resets the baseline to compare future measurements.
      */
     public void resetBaseLine() {
-        hasTriggered = false;
         leftBaseline = new int[] {leftSensor.red(), leftSensor.green(), leftSensor.blue()};
         rightBaseline = new int[] {rightSensor.red(), rightSensor.green(), rightSensor.blue()};
     }
@@ -54,12 +54,13 @@ public class ColorSensors {
     }
 
     public void computeLocation(Location location) {
-        if (hasTriggered) return;
+        if (!isLooking) return;
         if (!isTrigger()) return;
         if (Math.abs(location.getHeading()) > 10) return;
 
-        hasTriggered = true;
-        //location.setX();
+        isLooking = false;
+        location.setX(Places.awayParallel(1) + 150);
+        System.out.println("Updated location based on color sensor.");
     }
 
     public ColorSensor getLeftSensor() {
@@ -76,5 +77,13 @@ public class ColorSensors {
 
     public void setRightSensor(ColorSensor rightSensor) {
         this.rightSensor = rightSensor;
+    }
+
+    public boolean isLooking() {
+        return isLooking;
+    }
+
+    public void setLooking(boolean looking) {
+        this.isLooking = looking;
     }
 }

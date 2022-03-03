@@ -154,7 +154,7 @@ public class TouchSensors {
             double angle = currentLocation.getHeading();
             double absAngle = Math.abs(angle);
 
-            // This program assumes the IMU is mostly right, and that it will not go crazy. Thus,
+            // This program assumes the IMU is mostly correct, and that it will not go crazy. Thus,
             // we use that IMU heading to determine which wall we have hit.
             if (absAngle >= 175) {
                 if (left) {

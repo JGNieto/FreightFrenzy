@@ -20,8 +20,6 @@ public class Odometry implements Localization {
 
     private ColorSensors colorSensors;
 
-    private boolean colorSensorsEnabled = false;
-
     private TouchSensors touchSensors;
 
     private final IMU imu;
@@ -168,6 +166,7 @@ public class Odometry implements Localization {
         double dY = Globals.mmPerTick * (diffMid - (diffRight - diffLeft) * Globals.dPer / Globals.dPar);
 
         if (imu != null) {
+            currentLocation.setPitch(Location.angleBound(imu.getPitch()));
             dTheta = Math.toRadians(diffImu);
         } else {
             dTheta = Globals.mmPerTick * (diffRight - diffLeft) / Globals.dPar;
@@ -184,8 +183,7 @@ public class Odometry implements Localization {
 
         touchSensors.computeLocation(currentLocation); // Causes side effect and mutates currentLocation.
 
-        if (colorSensorsEnabled)
-            colorSensors.computeLocation(currentLocation);
+        colorSensors.computeLocation(currentLocation);
 
         DebuggingInformation.setLocation(currentLocation);
         DebuggingClient.getInstance().update();
@@ -255,15 +253,5 @@ public class Odometry implements Localization {
 
     public void setColorSensors(ColorSensors colorSensors) {
         this.colorSensors = colorSensors;
-    }
-
-    public boolean isColorSensorsEnabled() {
-        return colorSensorsEnabled;
-    }
-
-    public void setColorSensorsEnabled(boolean colorSensorsEnabled) {
-        this.colorSensorsEnabled = colorSensorsEnabled;
-
-        if (colorSensorsEnabled) this.colorSensors.resetBaseLine();
     }
 }

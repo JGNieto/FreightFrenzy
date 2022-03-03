@@ -140,9 +140,14 @@ public class EnterWarehouse {
         path = new Path(side == Globals.WarehouseSide.BLUE ? blueInsidePoint : redInsidePoint);
         path.setTolerance(new Location(25, 100));
 
+        odometry.getColorSensors().resetBaseLine();
+        odometry.getColorSensors().setLooking(true);
+
         // Enter the warehouse.
         // currentLocation = MovePurePursuit.movePurePursuit(currentLocation, path, opMode, odometry, mecanum);
         currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, opMode);
+
+        odometry.getColorSensors().setLooking(false);
 
         // Return the new currentLocation.
         return currentLocation;
@@ -176,18 +181,30 @@ public class EnterWarehouse {
                 opMode
         );
 
+        currentLocation = MoveSideways.moveSidewaysUntilTouch(
+                side == Globals.WarehouseSide.BLUE ? TouchSensors.Direction.RIGHT : TouchSensors.Direction.LEFT,
+                200,
+                touchSensors,
+                .1,
+                currentLocation,
+                mecanum,
+                odometry,
+                opMode
+        );
+
         // Run runnable, if provided.
         if (runnableBeforeExit != null)
             runnableBeforeExit.run();
 
         // Enable color sensor detection.
-        odometry.setColorSensorsEnabled(true);
+        odometry.getColorSensors().resetBaseLine();
+        odometry.getColorSensors().setLooking(true);
 
         // Exit warehouse
-        path = new Path(new Location(currentLocation).setX(Places.middle(1)));
+        path = new Path(new Location(currentLocation).setX(Places.middle(1)).setPurePursuitTurnSpeed(1).setPurePursuitAngle(180).setPurePursuitDistanceStopTurning(0));
         currentLocation = MoveWaypoints.moveWaypoints(path, mecanum, odometry, currentLocation, opMode);
 
-        odometry.setColorSensorsEnabled(false);
+        odometry.getColorSensors().setLooking(false);
 
         return currentLocation;
     }
