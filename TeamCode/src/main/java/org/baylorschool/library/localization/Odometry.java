@@ -181,8 +181,8 @@ public class Odometry implements Localization {
         currentLocation.setY(currentLocation.getY() + dX * sinTheta + dY * cosTheta);
         currentLocation.setHeading(Location.angleBound(currentLocation.getHeading() + Math.toDegrees(dTheta)));
 
-        touchSensors.computeLocation(currentLocation); // Causes side effect and mutates currentLocation.
-
+        // Causes side effect and mutates currentLocation.
+        touchSensors.computeLocation(currentLocation);
         colorSensors.computeLocation(currentLocation);
 
         DebuggingInformation.setLocation(currentLocation);
