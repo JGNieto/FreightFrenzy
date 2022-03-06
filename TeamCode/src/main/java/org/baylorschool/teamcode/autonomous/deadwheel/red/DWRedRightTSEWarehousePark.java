@@ -100,10 +100,10 @@ public class DWRedRightTSEWarehousePark extends LinearOpMode {
         // We need to retract odometry ASAP, so that is the first thing we do.
         odometry.withdraw();
 
-        // Sleep so that the opmode runs until it is forced to stop or 2 seconds pass. This is to raise the odometry.
-        sleep(2000);
-
         // Close the thread: we do not need it anymore.
         lift.closeThread();
+
+        // Sleep so that the opmode runs until it is forced to stop or 2 seconds pass. This is to raise the odometry.
+        sleep(2000);
     }
 }

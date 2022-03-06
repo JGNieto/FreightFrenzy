@@ -10,7 +10,7 @@ import org.baylorschool.library.Location;
 import org.baylorschool.library.localization.Localization;
 
 public class TwoBarLift extends Lift {
-    private static final double ticksPerRevolution = 751.8;
+    private static final double ticksPerRevolution = 384.1;
 
     // If the difference between encoder position and expected position is greater than this,
     // use liftPowerUp or liftPowerDown, else use liftPowerHold.
@@ -19,16 +19,16 @@ public class TwoBarLift extends Lift {
     /*public static final int bottomLevelTSHEncoder = 200;
     public static final int middleLevelTSHEncoder = 290;
     public static final int topLevelTSHEncoder = 400;*/
-    public static final int bottomLevelTSHEncoder = 214;
-    public static final int middleLevelTSHEncoder = 333;
-    public static final int topLevelTSHEncoder = 445;
+    public static final int bottomLevelTSHEncoder = (int) (214 / 1.955);
+    public static final int middleLevelTSHEncoder = (int) (333 / 1.955);
+    public static final int topLevelTSHEncoder = (int) (445 / 1.955);
 
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = 0.65;
 
     private static final double liftPowerUp = .4;
     private static final double liftPowerDown = -.2;
-    private static final double liftPowerHold = .2;
+    private static final double liftPowerHold = .4;
 
     // Distance away from the CENTER of the Team Shipping Hub to drop on each level.
     private static final double dropDistanceTop = 610;
