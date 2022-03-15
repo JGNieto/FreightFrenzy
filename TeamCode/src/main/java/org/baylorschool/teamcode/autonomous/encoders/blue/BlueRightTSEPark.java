@@ -8,14 +8,12 @@ import org.baylorschool.Places;
 import org.baylorschool.actions.MoveWaypointsEncoders;
 import org.baylorschool.library.Carousel;
 import org.baylorschool.library.Location;
-import org.baylorschool.library.Path;
 import org.baylorschool.library.Sensors;
 import org.baylorschool.library.TSEPipeline;
 import org.baylorschool.library.lift.TwoBarLift;
 import org.baylorschool.library.localization.Odometry;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 

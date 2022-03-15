@@ -8,7 +8,6 @@ import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.Path;
 import org.baylorschool.library.ftclib.PIDFController;
 import org.baylorschool.library.localization.Localization;
-import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.math.MinPower;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 

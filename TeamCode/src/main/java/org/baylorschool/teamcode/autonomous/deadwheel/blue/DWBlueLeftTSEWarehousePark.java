@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.baylorschool.Globals;
 import org.baylorschool.Places;
 import org.baylorschool.actions.EnterWarehouse;
-import org.baylorschool.actions.GrabFreightBlindly;
 import org.baylorschool.actions.MoveWaypoints;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
@@ -17,7 +16,6 @@ import org.baylorschool.library.Path;
 import org.baylorschool.library.TSEPipeline;
 import org.baylorschool.library.debugging.DebuggingClient;
 import org.baylorschool.library.lift.Lift;
-import org.baylorschool.library.lift.TwoBarLift;
 import org.baylorschool.library.localization.Odometry;
 import org.openftc.easyopencv.OpenCvWebcam;
 

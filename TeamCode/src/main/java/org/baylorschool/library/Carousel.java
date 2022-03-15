@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.baylorschool.Globals;
-import org.baylorschool.library.lift.Lift;
 import org.baylorschool.library.localization.Localization;
 
 public class Carousel {

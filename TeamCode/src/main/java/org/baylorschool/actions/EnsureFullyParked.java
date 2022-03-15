@@ -6,7 +6,6 @@ import org.baylorschool.Globals;
 import org.baylorschool.Places;
 import org.baylorschool.library.Location;
 import org.baylorschool.library.Mecanum;
-import org.baylorschool.library.math.AreasIntersect;
 
 public class EnsureFullyParked {
 

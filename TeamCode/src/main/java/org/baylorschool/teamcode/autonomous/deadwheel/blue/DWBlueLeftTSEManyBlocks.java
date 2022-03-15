@@ -1,7 +1,6 @@
 package org.baylorschool.teamcode.autonomous.deadwheel.blue;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -18,7 +17,6 @@ import org.baylorschool.library.Path;
 import org.baylorschool.library.TSEPipeline;
 import org.baylorschool.library.debugging.DebuggingClient;
 import org.baylorschool.library.lift.Lift;
-import org.baylorschool.library.lift.TwoBarLift;
 import org.baylorschool.library.localization.Odometry;
 import org.openftc.easyopencv.OpenCvWebcam;
 

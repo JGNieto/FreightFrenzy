@@ -10,7 +10,6 @@ import org.baylorschool.library.Mecanum;
 import org.baylorschool.library.lift.Lift;
 import org.baylorschool.library.localization.ColorSensors;
 import org.baylorschool.library.localization.Localization;
-import org.baylorschool.library.localization.Odometry;
 
 public class GrabFreightBlindly {
     // When grabbing freight blindly, the robot first moves forward to try to grab. If it doesn't,

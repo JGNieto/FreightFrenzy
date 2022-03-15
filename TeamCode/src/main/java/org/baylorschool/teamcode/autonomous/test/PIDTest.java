@@ -3,11 +3,8 @@ package org.baylorschool.teamcode.autonomous.test;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 
-import org.baylorschool.Globals;
 import org.baylorschool.Places;
-import org.baylorschool.actions.MovePurePursuit;
 import org.baylorschool.actions.MoveWaypoints;
 import org.baylorschool.library.IMU;
 import org.baylorschool.library.Location;
