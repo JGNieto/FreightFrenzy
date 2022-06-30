@@ -23,7 +23,7 @@ public class TwoBarLift extends Lift {
 
 
     private static final double rollerGrabPower = -1;
-    private static final double rollerReleasePower = 0.65;
+    private static final double rollerReleasePower = 0.7;
 
     private static final double liftPowerUp = .4;
     private static final double liftPowerDown = -.2;
@@ -33,9 +33,9 @@ public class TwoBarLift extends Lift {
     private static final double dropDistanceTop = 610;
     private static final double dropDistanceMiddle = 670;
     private static final double dropDistanceBottom = 635;
-    private static final double dropDistanceCoop = 840;
+    private static final double dropDistanceCoop = 945;
 
-    private static final int releaseDelay = 2000;
+    private static final int releaseDelay = 1000;
     private static final int rollerThrottle = 2000; // Minimum milliseconds between limit switch becoming free and grabbing again.
 
     private volatile int targetEncoderPosition = 0;

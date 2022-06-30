@@ -33,15 +33,15 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
     private ElapsedTime elapsedTime;
 
     private static final Location duckLocation = new Location(Places.middle(-2.5), Places.awayPerpendicular(-2.2), 0);
-    private static final Location robotLocationDroppingDuck = new Location(Places.closeParallel(-3), -1397);
-
     private static final Location[] carouselToCycling = new Location[] {
             new Location(Places.closeParallel(-3) + 100, Places.middle(-1.8), 0),
-            new Location(Places.closeParallel(-3), Places.middle(-1.3), 0),
+            new Location(Places.closeParallel(-3), Places.middle(-1.215), 0),
     };
 
     private static final Location[] intakingToHub = new Location[] {
-            new Location(Places.closeParallel(-3) + 100, Places.middle(-2), 0),
+            new Location(Places.closeParallel(-3) + 100, Places.middle(-1.3), 0),
+            new Location(Places.middle(-.1), Places.middle(-1), 90),
+
     };
 
     @Override
@@ -81,14 +81,14 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
         currentLocation = MoveWaypoints.moveWaypoints(new Path(new Location[]{
                 scoringLocation,
         }), mecanum, odometry, currentLocation, this);
-        mecanum.stop();
+        mecanum.setPower(0);
 
         telemetry.addData("Status", "Dropping");
         telemetry.update();
 
         lift.releaseItemLocalization(currentLocation, odometry);
 
-        currentLocation = MoveWaypoints.moveWaypoints(new Path(Location.moveLocation(new Location(currentLocation), 0, -100).setPurePursuitTurnSpeed(0)).setTimeout(1000), mecanum, odometry, currentLocation, this);
+        currentLocation = MoveWaypoints.moveWaypoints(new Path(Location.moveLocation(new Location(currentLocation), 0, -150).setPurePursuitTurnSpeed(0)).setTimeout(1000), mecanum, odometry, currentLocation, this);
 
         currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
         lift.retract();
@@ -99,20 +99,9 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
             // Ensure we are next to the wall.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
                 TouchSensors.Direction.BACK,
-                600,
+                700,
                 odometry.getTouchSensors(),
-                .7,
-                currentLocation,
-                mecanum,
-                odometry,
-                this
-        );
-
-        currentLocation = MoveSideways.moveSidewaysUntilTouch(
-                TouchSensors.Direction.BACK,
-                100,
-                odometry.getTouchSensors(),
-                .3,
+                .8,
                 currentLocation,
                 mecanum,
                 odometry,
@@ -126,23 +115,22 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
             // We use moveSidewaysUntilTouch method to take advantage of its time limit and to avoid duplication.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
                 TouchSensors.Direction.RIGHT,
-                1200,
+                1250,
                 odometry.getTouchSensors(),
-                .7,
+                .5,
                 currentLocation,
                 mecanum,
                 odometry,
                 this
         );
 
-        Location newLocation = new Location(robotLocationDroppingDuck).setHeading(currentLocation.getHeading());
-        currentLocation = new Location(newLocation);
-
         // Drop the duck.
         currentLocation = carousel.dropDuck(Carousel.CarouselSide.RED, currentLocation, this, odometry);
 
         // Move to park.
         while (opModeIsActive()) {
+            dropLevel = Globals.DropLevel.COOP;
+
             currentLocation = MoveWaypoints.moveWaypoints(new Path(carouselToCycling), mecanum, odometry, currentLocation, this);
 
             currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 90, this);
@@ -156,12 +144,6 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
             lift.moveToDropLevel(dropLevel);
 
             currentLocation = MoveWaypoints.moveWaypoints(new Path(intakingToHub), mecanum, odometry, currentLocation, this);
-
-
-            currentLocation = MoveWaypoints.moveWaypoints(new Path(new Location[]{
-                    scoringLocation,
-            }), mecanum, odometry, currentLocation, this);
-            mecanum.stop();
 
             lift.releaseItemLocalization(currentLocation, odometry);
 

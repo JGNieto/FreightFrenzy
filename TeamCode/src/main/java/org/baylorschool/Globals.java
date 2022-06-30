@@ -120,7 +120,7 @@
         public static final double ticksPerMm = ticksPerRevolution / (Math.PI * wheelDiameter);
 
         // Master coefficient for autonomous
-        public static double autonomousSpeed = 0.5;
+        public static double autonomousSpeed = 0.8;
 
         // Encoder ticks to rotate 360 degrees.
         public static final double fullTurnEncoderCountFL = 2975;
@@ -189,8 +189,8 @@
 
         // Single speed used with only one pause
         // Right now, only one speed is used, and the carousel is paused once.
-        public static final double carouselSingleSpeed = 0.5;
-        public static final int carouselSinglePause = 2500;
+        public static final double carouselSingleSpeed = 0.7;
+        public static final int carouselSinglePause = 1250;
 
         ///////////////////////////// VUFORIA /////////////////////////////
         // Physical position of the camera.

@@ -26,19 +26,19 @@ public class GrabFreightBlindlyCoopHub {
 
     // Limit of how many times we will go through the forward-backward-sideways cycle before forcing
     // a direction change.
-    static final int sidewaysMovementsLimit = 4;
+    static final int sidewaysMovementsLimit = 3;
 
     static final double pitchThreshold = 5.0;
 
     // Milliseconds
     static final long firstForwardTime = 1000; // Max time for forward motion the first time it happens.
-    static final long forwardTime = 800;
-    static final long backwardTime = 400;
+    static final long forwardTime = 1000;
+    static final long backwardTime = 500;
     static final long sidewaysTime = 200;
 
     // Motor speeds
-    static final double forwardSpeed = .15;
-    static final double backwardSpeed = -.5;
+    static final double forwardSpeed = .2;
+    static final double backwardSpeed = -.7;
     static final double sidewaysSpeed = .3;
 
     // Sideways limits
