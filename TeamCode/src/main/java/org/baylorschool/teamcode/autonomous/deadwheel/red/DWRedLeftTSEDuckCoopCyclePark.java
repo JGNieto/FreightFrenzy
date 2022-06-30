@@ -32,7 +32,7 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
     private Odometry odometry;
     private ElapsedTime elapsedTime;
 
-    private static final Location duckLocation = new Location(Places.middle(-2.5), Places.awayPerpendicular(-2), 0);
+    private static final Location duckLocation = new Location(Places.middle(-2.5), Places.awayPerpendicular(-2.2), 0);
     private static final Location robotLocationDroppingDuck = new Location(Places.closeParallel(-3), -1397);
 
     private static final Location[] carouselToCycling = new Location[] {
@@ -40,6 +40,9 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
             new Location(Places.closeParallel(-3), Places.middle(-1.3), 0),
     };
 
+    private static final Location[] intakingToHub = new Location[] {
+            new Location(Places.closeParallel(-3) + 100, Places.middle(-2), 0),
+    };
 
     @Override
     public void runOpMode() {
@@ -96,7 +99,7 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
             // Ensure we are next to the wall.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
                 TouchSensors.Direction.BACK,
-                640,
+                600,
                 odometry.getTouchSensors(),
                 .7,
                 currentLocation,
@@ -105,13 +108,25 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
                 this
         );
 
+        currentLocation = MoveSideways.moveSidewaysUntilTouch(
+                TouchSensors.Direction.BACK,
+                100,
+                odometry.getTouchSensors(),
+                .3,
+                currentLocation,
+                mecanum,
+                odometry,
+                this
+        );
+
+
         currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
 
             // Move next to the carousel.
             // We use moveSidewaysUntilTouch method to take advantage of its time limit and to avoid duplication.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
                 TouchSensors.Direction.RIGHT,
-                1100,
+                1200,
                 odometry.getTouchSensors(),
                 .7,
                 currentLocation,
@@ -138,9 +153,10 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
 
             telemetry.log().add(String.valueOf(Globals.matchLength - elapsedTime.time()));
 
-            dropLevel = Globals.DropLevel.COOP;
-
             lift.moveToDropLevel(dropLevel);
+
+            currentLocation = MoveWaypoints.moveWaypoints(new Path(intakingToHub), mecanum, odometry, currentLocation, this);
+
 
             currentLocation = MoveWaypoints.moveWaypoints(new Path(new Location[]{
                     scoringLocation,

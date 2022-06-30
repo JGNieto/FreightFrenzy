@@ -192,7 +192,7 @@ public class GrabFreightBlindlyCoopHub {
             opMode.telemetry.update();
         }
         lift.setHoldDown(false);
-        retract();
+        lift.retract();
         return currentLocation;
     }
 }

@@ -24,7 +24,7 @@ public class Places {
 
     public static final Location redTeamShippingHub = new Location(middle(-0.5), middle(-1));
     public static final Location blueTeamShippingHub = new Location(middle(-0.5), middle(1));
-    public static final Location coopShippingHub = new Location(middle(-1), middle(-.53));
+    public static final Location coopShippingHub = new Location(middle(-.95), middle(0));
 
 
     public enum StartLocation {
