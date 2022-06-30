@@ -45,6 +45,7 @@ public abstract class Lift {
     public enum Hub {
         RED,
         BLUE,
+        COOP,
     }
 
     public Lift(LinearOpMode opMode) {
@@ -129,7 +130,7 @@ public abstract class Lift {
     }
 
     // Function to be used by children.
-    protected Location getScoringLocation(Location currentLocation, Hub hub, Globals.DropLevel dropLevel, double dropDistanceTop, double dropDistanceMiddle, double dropDistanceBottom) {
+    protected Location getScoringLocation(Location currentLocation, Hub hub, Globals.DropLevel dropLevel, double dropDistanceTop, double dropDistanceMiddle, double dropDistanceCoop, double dropDistanceBottom) {
         double radius;
         Location targetHubLocation;
         switch (hub) {
@@ -138,6 +139,9 @@ public abstract class Lift {
                 break;
             case BLUE:
                 targetHubLocation = Places.blueTeamShippingHub;
+                break;
+            case COOP:
+                targetHubLocation = Places.coopShippingHub;
                 break;
             default:
                 throw new IllegalArgumentException("Hub argument for getScoringLocation() invalid.");
@@ -152,6 +156,9 @@ public abstract class Lift {
                 break;
             case BOTTOM:
                 radius = dropDistanceBottom;
+                break;
+            case COOP:
+                radius = dropDistanceCoop;
                 break;
             default:
                 throw new IllegalArgumentException("Drop Level argument for getScoringLocation() invalid.");

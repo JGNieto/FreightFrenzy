@@ -15,18 +15,24 @@ public class Places {
     public static final Location blueCarouselLocationAway = new Location(0,0,-90); // FIXME MEASURE
 
     public static final Location redLeftStart = new Location(middle(-1.5), closeParallel(-3), 90);
+    public static final Location redMiddleStart = new Location(middle(-1.5), closeParallel(-3), 90);
     public static final Location redRightStart = new Location(middle(0.5), closeParallel(-3), 90);
     public static final Location blueLeftStart = new Location(middle(0.5), closeParallel(3), -90);
+    public static final Location blueMiddleStart = new Location(middle(-1.5), closeParallel(3), -90);
     public static final Location blueRightStart = new Location(middle(-1.5), closeParallel(3), -90);
+
 
     public static final Location redTeamShippingHub = new Location(middle(-0.5), middle(-1));
     public static final Location blueTeamShippingHub = new Location(middle(-0.5), middle(1));
+    public static final Location coopShippingHub = new Location(middle(-1), middle(-.53));
+
 
     public enum StartLocation {
         BLUE_LEFT,
         BLUE_RIGHT,
         RED_LEFT,
         RED_RIGHT,
+        RED_MIDDLE,
     }
 
     /**

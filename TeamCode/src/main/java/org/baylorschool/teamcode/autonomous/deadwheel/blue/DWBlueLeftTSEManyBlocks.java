@@ -56,7 +56,6 @@ public class DWBlueLeftTSEManyBlocks extends LinearOpMode {
 
         waitForStart();
         elapsedTime.reset();
-
         DebuggingClient.getInstance().setRunning(true);
 
         telemetry.addData("Status", "Starting...");

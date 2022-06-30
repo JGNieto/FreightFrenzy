@@ -16,6 +16,7 @@
 
         public enum DropLevel {
             BOTTOM,
+            COOP,
             MIDDLE,
             TOP,
         }
@@ -119,7 +120,7 @@
         public static final double ticksPerMm = ticksPerRevolution / (Math.PI * wheelDiameter);
 
         // Master coefficient for autonomous
-        public static final double autonomousSpeed = 0.3;
+        public static double autonomousSpeed = 0.5;
 
         // Encoder ticks to rotate 360 degrees.
         public static final double fullTurnEncoderCountFL = 2975;
