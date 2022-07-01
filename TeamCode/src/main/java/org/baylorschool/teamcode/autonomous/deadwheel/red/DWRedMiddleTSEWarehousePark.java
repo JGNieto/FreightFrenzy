@@ -97,11 +97,11 @@ public class DWRedMiddleTSEWarehousePark extends LinearOpMode {
         odometry.withdraw();
         lift.closeThread();
 
-        sleep(5000);
+        sleep(9000);
 
-        mecanum.setPower(-1);
+        mecanum.setPowerAutonomous();
 
-        sleep(1300);
+        sleep(1250);
 
         // Stop movement.
         mecanum.stop();

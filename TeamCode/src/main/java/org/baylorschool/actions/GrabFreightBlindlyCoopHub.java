@@ -32,13 +32,13 @@ public class GrabFreightBlindlyCoopHub {
 
     // Milliseconds
     static final long firstForwardTime = 1000; // Max time for forward motion the first time it happens.
-    static final long forwardTime = 1000;
-    static final long backwardTime = 500;
+    static final long forwardTime = 900;
+    static final long backwardTime = 700;
     static final long sidewaysTime = 200;
 
     // Motor speeds
     static final double forwardSpeed = .2;
-    static final double backwardSpeed = -.7;
+    static final double backwardSpeed = -1;
     static final double sidewaysSpeed = .3;
 
     // Sideways limits

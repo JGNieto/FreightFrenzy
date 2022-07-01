@@ -34,13 +34,13 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
 
     private static final Location duckLocation = new Location(Places.middle(-2.5), Places.awayPerpendicular(-2.2), 0);
     private static final Location[] carouselToCycling = new Location[] {
-            new Location(Places.closeParallel(-3) + 100, Places.middle(-1.8), 0),
-            new Location(Places.closeParallel(-3), Places.middle(-1.215), 0),
+            new Location(Places.closeParallel(-2.9) + 100, Places.middle(-1.8), 0),
+            new Location(Places.closeParallel(-2.9), Places.middle(-1.21), 90),
     };
 
     private static final Location[] intakingToHub = new Location[] {
-            new Location(Places.closeParallel(-3) + 100, Places.middle(-1.3), 0),
-            new Location(Places.middle(-.1), Places.middle(-1), 90),
+            new Location(Places.closeParallel(-3) + 100, Places.middle(-1.37), 0),
+            new Location(Places.middle(-1.1), Places.middle(-1.125), 90),
 
     };
 
@@ -51,11 +51,11 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
         lift = Globals.createNewLift(this);
         mecanum = new Mecanum(hardwareMap);
         mecanum.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        mecanum.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         imu = new IMU(hardwareMap);
         carousel = new Carousel(hardwareMap);
         odometry = new Odometry(hardwareMap, imu, false);
         elapsedTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
-
         lift.moveDown(this);
 
         telemetry.addData("Status", "Waiting...");
@@ -90,7 +90,6 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
 
         currentLocation = MoveWaypoints.moveWaypoints(new Path(Location.moveLocation(new Location(currentLocation), 0, -150).setPurePursuitTurnSpeed(0)).setTimeout(1000), mecanum, odometry, currentLocation, this);
 
-        currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
         lift.retract();
 
             // Move between the carousel and the storage unit.
@@ -99,7 +98,7 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
             // Ensure we are next to the wall.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
                 TouchSensors.Direction.BACK,
-                700,
+                650,
                 odometry.getTouchSensors(),
                 .8,
                 currentLocation,
@@ -108,42 +107,52 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
                 this
         );
 
-
-        currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 0, this);
-
             // Move next to the carousel.
             // We use moveSidewaysUntilTouch method to take advantage of its time limit and to avoid duplication.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
                 TouchSensors.Direction.RIGHT,
-                1250,
+                1200,
                 odometry.getTouchSensors(),
-                .5,
+                .7,
                 currentLocation,
                 mecanum,
                 odometry,
                 this
         );
 
+        currentLocation = MoveSideways.moveSidewaysUntilTouch(
+                TouchSensors.Direction.BACK,
+                200,
+                odometry.getTouchSensors(),
+                .4,
+                currentLocation,
+                mecanum,
+                odometry,
+                this
+        );
+
+
         // Drop the duck.
         currentLocation = carousel.dropDuck(Carousel.CarouselSide.RED, currentLocation, this, odometry);
 
         // Move to park.
         while (opModeIsActive()) {
-            dropLevel = Globals.DropLevel.COOP;
-
             currentLocation = MoveWaypoints.moveWaypoints(new Path(carouselToCycling), mecanum, odometry, currentLocation, this);
-
-            currentLocation = MoveWaypoints.rotatePID(currentLocation, odometry, mecanum, 90, this);
             lift.retract();
 
             currentLocation = GrabFreightBlindlyCoopHub.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, Globals.WarehouseSide.RED, 0, odometry.getColorSensors());
             lift.setRollerState(Lift.RollerState.STOP);
+            lift.retract();
 
             telemetry.log().add(String.valueOf(Globals.matchLength - elapsedTime.time()));
 
+            dropLevel = Globals.DropLevel.COOP;
+
+            lift.startThread();
             lift.moveToDropLevel(dropLevel);
 
             currentLocation = MoveWaypoints.moveWaypoints(new Path(intakingToHub), mecanum, odometry, currentLocation, this);
+            mecanum.stop();
 
             lift.releaseItemLocalization(currentLocation, odometry);
 

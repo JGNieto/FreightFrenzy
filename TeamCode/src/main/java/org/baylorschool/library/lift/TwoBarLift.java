@@ -17,7 +17,7 @@ public class TwoBarLift extends Lift {
     private static final int ticksDifferenceBeforeUsingMovementPower = (int) (ticksPerRevolution * 15 / 360);
 
     public static final int bottomLevelTSHEncoder = 260;
-    public static final int coopTSHEncoder = 280;
+    public static final int coopTSHEncoder = 305;
     public static final int middleLevelTSHEncoder = 360;
     public static final int topLevelTSHEncoder = 490;
 
@@ -33,9 +33,9 @@ public class TwoBarLift extends Lift {
     private static final double dropDistanceTop = 610;
     private static final double dropDistanceMiddle = 670;
     private static final double dropDistanceBottom = 635;
-    private static final double dropDistanceCoop = 945;
+    private static final double dropDistanceCoop = 750;
 
-    private static final int releaseDelay = 1000;
+    private static final int releaseDelay = 800;
     private static final int rollerThrottle = 2000; // Minimum milliseconds between limit switch becoming free and grabbing again.
 
     private volatile int targetEncoderPosition = 0;
