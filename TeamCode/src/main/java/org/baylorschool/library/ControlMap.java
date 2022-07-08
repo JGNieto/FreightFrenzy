@@ -3,8 +3,9 @@ package org.baylorschool.library;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.baylorschool.Globals;
+import org.baylorschool.library.lift.Lift;
 
-public class ControlMap {
+public abstract class ControlMap {
     protected Gamepad gamepad1;
     protected Gamepad gamepad2;
 
@@ -124,4 +125,6 @@ public class ControlMap {
         if (!oneGamePad) // OneGamePad is a shortcut for making all controls be on a single gamepad.
             this.gamepad2 = gamepad2;
     }
+
+    public abstract Globals.DropLevel liftDropLevel(Lift lift);
 }

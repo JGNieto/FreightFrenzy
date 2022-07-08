@@ -2,12 +2,12 @@ package org.baylorschool.teamcode.teleop.drivers.controls;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.ControlMap;
+import org.baylorschool.library.lift.Lift;
 
 public class MichaelJacksonsControls extends ControlMap {
     public MichaelJacksonsControls() {
         super();
     }
-
     @Override
     public double tapeTilt() {
         if (gamepad1.dpad_up) {
@@ -37,13 +37,12 @@ public class MichaelJacksonsControls extends ControlMap {
     }
 
     @Override
-    public Globals.DropLevel liftDropLevel() {
-        if (gamepad2.left_trigger > .2)
-            return Globals.DropLevel.TOP;
-        else if (gamepad2.right_trigger > 0.2)
+    public Globals.DropLevel liftDropLevel(Lift lift) {
+        if (lift.getCapturedElements() == 1)
             return Globals.DropLevel.COOP;
         else
             return null;
     }
+
 
 }

@@ -1,4 +1,4 @@
-package org.baylorschool.teamcode.autonomous.deadwheel.red;
+package org.baylorschool.teamcode.autonomous.deadwheel.blue;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -9,6 +9,7 @@ import org.baylorschool.Globals;
 import org.baylorschool.Places;
 import org.baylorschool.actions.EnterWarehouse;
 import org.baylorschool.actions.GrabFreightBlindlyCoopHub;
+import org.baylorschool.actions.GrabFreightBlindlyCoopHub2;
 import org.baylorschool.actions.MoveSideways;
 import org.baylorschool.actions.MoveWaypoints;
 import org.baylorschool.library.Carousel;
@@ -22,7 +23,7 @@ import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.localization.TouchSensors;
 
 @Autonomous(name = "DWRedLeftTSEDuckCoopCyclePark", group = "Red")
-public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
+public class DWBlueLeftTSEDuckCoopCyclePark extends LinearOpMode {
     private Lift lift;
     private Mecanum mecanum;
     private IMU imu;
@@ -32,15 +33,15 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
     private Odometry odometry;
     private ElapsedTime elapsedTime;
 
-    private static final Location duckLocation = new Location(Places.middle(-2.5), Places.awayPerpendicular(-2.2), 0);
+    private static final Location duckLocation = new Location(Places.middle(2.5), Places.awayPerpendicular(-2.2), 0);
     private static final Location[] carouselToCycling = new Location[] {
-            new Location(Places.closeParallel(-2.9) + 100, Places.middle(-1.8), 0),
-            new Location(Places.closeParallel(-2.9), Places.middle(-1.25), 90),
+            new Location(Places.closeParallel(-2.9) + 100, Places.middle(1.8), 0),
+            new Location(Places.closeParallel(-2.9), Places.middle(1.25), 90),
     };
 
     private static final Location[] intakingToHub = new Location[] {
-            new Location(Places.closeParallel(-3) + 100, Places.middle(-1.37), 0),
-            new Location(Places.middle(-2), Places.middle(-1.125), 90),
+            new Location(Places.closeParallel(-3) + 100, Places.middle(1.37), 0),
+            new Location(Places.middle(-2), Places.middle(1.125), 90),
     };
 
     private int cycles;
@@ -97,7 +98,7 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
             currentLocation = MoveWaypoints.moveWaypoints(new Path(carouselToCycling), mecanum, odometry, currentLocation, this);
             lift.retract();
 
-            currentLocation = GrabFreightBlindlyCoopHub.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, Globals.WarehouseSide.RED, 0, odometry.getColorSensors());
+            currentLocation = GrabFreightBlindlyCoopHub2.grabFreightBlindly(currentLocation, mecanum, lift, odometry, this, Globals.WarehouseSide.BLUE, 0, odometry.getColorSensors());
             lift.setRollerState(Lift.RollerState.STOP);
             lift.retract();
 
@@ -125,10 +126,10 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
             }
         }
 
-            // Move between the carousel and the storage unit.
+        // Move between the carousel and the storage unit.
         currentLocation = MoveWaypoints.moveWaypoints(new Path(duckLocation).setTolerance(new Location(100, 50)).setTimeout(1000), mecanum, odometry, currentLocation, this);
 
-            // Ensure we are next to the wall.
+        // Ensure we are next to the wall.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
                 TouchSensors.Direction.BACK,
                 650,
@@ -140,8 +141,8 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
                 this
         );
 
-            // Move next to the carousel.
-            // We use moveSidewaysUntilTouch method to take advantage of its time limit and to avoid duplication.
+        // Move next to the carousel.
+        // We use moveSidewaysUntilTouch method to take advantage of its time limit and to avoid duplication.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
                 TouchSensors.Direction.RIGHT,
                 1200,
