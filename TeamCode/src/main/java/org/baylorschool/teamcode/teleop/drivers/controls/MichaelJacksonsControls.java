@@ -1,13 +1,18 @@
 package org.baylorschool.teamcode.teleop.drivers.controls;
 
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.baylorschool.Globals;
 import org.baylorschool.library.ControlMap;
 import org.baylorschool.library.lift.Lift;
 
 public class MichaelJacksonsControls extends ControlMap {
+
     public MichaelJacksonsControls() {
         super();
     }
+    ElapsedTime liftTimer = new ElapsedTime();
+
     @Override
     public double tapeTilt() {
         if (gamepad1.dpad_up) {
@@ -38,9 +43,12 @@ public class MichaelJacksonsControls extends ControlMap {
 
     @Override
     public Globals.DropLevel liftDropLevel(Lift lift) {
-        if (lift.getCapturedElements() == 1)
+        if (lift.getCapturedElements() == 1) {
             return Globals.DropLevel.COOP;
-        else
+        } else if (lift.getCapturedElements() == 0 && liftTimer.milliseconds() < 400) {
+            liftTimer.reset();
+            return Globals.DropLevel.INITIAL;
+        } else
             return null;
     }
 

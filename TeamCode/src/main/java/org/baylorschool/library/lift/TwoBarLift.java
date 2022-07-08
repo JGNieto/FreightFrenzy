@@ -211,6 +211,8 @@ public class TwoBarLift extends Lift {
             targetEncoderPosition = bottomLevelTSHEncoder;
         else if (dropLevel == Globals.DropLevel.COOP)
             targetEncoderPosition = coopTSHEncoder;
+        else if (dropLevel == Globals.DropLevel.INITIAL)
+            targetEncoderPosition = 0;
         else
             retract();
     }

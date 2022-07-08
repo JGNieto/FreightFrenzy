@@ -15,6 +15,7 @@
         public static final String VUFORIA_LICENSE = "Aabb6tf/////AAABmSBibmY6dkQil4rqX+dxkG53PUPetQoaTQVeWGLB5Cxtk4A6GNd0SKK5jwv0FnTDZhZjf+eYQurmTMlGnwpYPBxfxK3KkXz1Z/COEs4VHhN6TJ/E/9TcOQ5kaG+mhkjfug+9qu+dqQknCEUDgx7GKyva9vCcpKs3BBTAsWMo5R+oo4fVkg7/vL2pbkUufMAVlGfzellijvJIZZJiwjGOnygNOjBSlG0TieG4I3P2kALOu2NqV7gp8GA6D2Mynb8t/a6pc1Dsgo1M0bVwRvmZCaINHEkDkZiSpceOsGngoyDRhsrvkQFiI5RcIY4RfygXXgHcbxQPi+syBt0UeWk1Gy3SCemDXlEj7b/tz9NnYs7U";
 
         public enum DropLevel {
+            INITIAL,
             BOTTOM,
             COOP,
             MIDDLE,
