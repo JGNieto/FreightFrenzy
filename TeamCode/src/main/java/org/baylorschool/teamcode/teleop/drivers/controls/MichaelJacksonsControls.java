@@ -1,5 +1,6 @@
 package org.baylorschool.teamcode.teleop.drivers.controls;
 
+import org.baylorschool.Globals;
 import org.baylorschool.library.ControlMap;
 
 public class MichaelJacksonsControls extends ControlMap {
@@ -34,4 +35,15 @@ public class MichaelJacksonsControls extends ControlMap {
         }
         return 0;
     }
+
+    @Override
+    public Globals.DropLevel liftDropLevel() {
+        if (gamepad2.left_trigger > .2)
+            return Globals.DropLevel.TOP;
+        else if (gamepad2.right_trigger > 0.2)
+            return Globals.DropLevel.COOP;
+        else
+            return null;
+    }
+
 }

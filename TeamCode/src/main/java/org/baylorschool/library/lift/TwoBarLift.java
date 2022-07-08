@@ -23,7 +23,7 @@ public class TwoBarLift extends Lift {
 
 
     private static final double rollerGrabPower = -1;
-    private static final double rollerReleasePower = 0.7;
+    private static final double rollerReleasePower = .625;
 
     private static final double liftPowerUp = .4;
     private static final double liftPowerDown = -.2;
