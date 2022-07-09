@@ -154,7 +154,7 @@
         public static final double positionWithdrawnMiddle = 0;
         public static final double positionOpenRight = 0.64;
         public static final double positionOpenLeft = 0.565;
-        public static final double positionOpenMiddle = 0.48;
+        public static final double positionOpenMiddle = 0.5;
 
         public static final double mmPerTick = 2 * Math.PI * wheelRadius / odometryTicksPerRevolution;
 

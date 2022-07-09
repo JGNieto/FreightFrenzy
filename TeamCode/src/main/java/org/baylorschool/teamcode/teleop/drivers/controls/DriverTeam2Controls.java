@@ -2,6 +2,7 @@ package org.baylorschool.teamcode.teleop.drivers.controls;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.ControlMap;
+import org.baylorschool.library.lift.Lift;
 
 public class DriverTeam2Controls extends ControlMap {
     @Override
@@ -22,6 +23,11 @@ public class DriverTeam2Controls extends ControlMap {
             return Globals.DropLevel.BOTTOM;
         else
             return null;
+    }
+
+    @Override
+    public Globals.DropLevel liftDropLevel(Lift lift) {
+        return null;
     }
 
     @Override

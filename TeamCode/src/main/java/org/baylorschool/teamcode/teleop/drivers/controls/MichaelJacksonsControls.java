@@ -43,9 +43,9 @@ public class MichaelJacksonsControls extends ControlMap {
 
     @Override
     public Globals.DropLevel liftDropLevel(Lift lift) {
-        if (lift.getCapturedElements() == 1) {
+        if (lift.getCapturedElements() >= 1) {
             return Globals.DropLevel.COOP;
-        } else if (lift.getCapturedElements() == 0 && liftTimer.milliseconds() < 400) {
+        } else if (lift.getCapturedElements() == 0 && liftTimer.milliseconds() < 250) {
             liftTimer.reset();
             return Globals.DropLevel.INITIAL;
         } else

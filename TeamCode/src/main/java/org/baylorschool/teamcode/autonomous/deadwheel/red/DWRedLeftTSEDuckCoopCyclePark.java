@@ -35,12 +35,12 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
     private static final Location duckLocation = new Location(Places.middle(-2.5), Places.awayPerpendicular(-2.2), 0);
     private static final Location[] carouselToCycling = new Location[] {
             new Location(Places.closeParallel(-2.9) + 100, Places.middle(-1.8), 0),
-            new Location(Places.closeParallel(-2.9), Places.middle(-1.25), 90),
+            new Location(Places.closeParallel(-2.9), Places.middle(-1.17), 90),
     };
 
     private static final Location[] intakingToHub = new Location[] {
             new Location(Places.closeParallel(-3) + 100, Places.middle(-1.37), 0),
-            new Location(Places.middle(-2), Places.middle(-1.125), 90),
+            new Location(Places.middle(-1), Places.middle(-1.125), 90),
     };
 
     private int cycles;
@@ -70,9 +70,8 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
         telemetry.update();
 
         dropLevel = Globals.DropLevel.COOP;
-
+        dropLevel = Globals.DropLevel.COOP;
         lift.startThread();
-
         lift.moveToDropLevel(dropLevel);
 
         Location scoringLocation = lift.getScoringLocation(currentLocation, Lift.Hub.COOP, dropLevel);

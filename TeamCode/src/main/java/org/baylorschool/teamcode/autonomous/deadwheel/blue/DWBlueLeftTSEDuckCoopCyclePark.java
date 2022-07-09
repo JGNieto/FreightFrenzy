@@ -22,26 +22,26 @@ import org.baylorschool.library.lift.Lift;
 import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.localization.TouchSensors;
 
-@Autonomous(name = "DWRedLeftTSEDuckCoopCyclePark", group = "Red")
+@Autonomous(name = "DWBlueLeftTSEDuckCoopCyclePark", group = "Blue")
 public class DWBlueLeftTSEDuckCoopCyclePark extends LinearOpMode {
     private Lift lift;
     private Mecanum mecanum;
     private IMU imu;
     private Carousel carousel;
-    private Location currentLocation = new Location(Places.redLeftStart);
+    private Location currentLocation = new Location(Places.blueRightStart);
     private Globals.DropLevel dropLevel;
     private Odometry odometry;
     private ElapsedTime elapsedTime;
 
-    private static final Location duckLocation = new Location(Places.middle(2.5), Places.awayPerpendicular(-2.2), 0);
+    private static final Location duckLocation = new Location(Places.middle(2.5), Places.awayParallel(-2.2), 0);
     private static final Location[] carouselToCycling = new Location[] {
-            new Location(Places.closeParallel(-2.9) + 100, Places.middle(1.8), 0),
-            new Location(Places.closeParallel(-2.9), Places.middle(1.25), 90),
+            new Location(Places.closePerpendicular(-2.9) - 100, Places.middle(1.8), 0),
+            new Location(Places.closePerpendicular(-2.9), Places.middle(1.17), -90),
     };
 
     private static final Location[] intakingToHub = new Location[] {
-            new Location(Places.closeParallel(-3) + 100, Places.middle(1.37), 0),
-            new Location(Places.middle(-2), Places.middle(1.125), 90),
+            new Location(Places.closePerpendicular(-2), Places.middle(1.37), 0),
+            new Location(Places.middle(-1), Places.middle(1.125), -90),
     };
 
     private int cycles;
@@ -73,7 +73,6 @@ public class DWBlueLeftTSEDuckCoopCyclePark extends LinearOpMode {
         dropLevel = Globals.DropLevel.COOP;
 
         lift.startThread();
-
         lift.moveToDropLevel(dropLevel);
 
         Location scoringLocation = lift.getScoringLocation(currentLocation, Lift.Hub.COOP, dropLevel);
@@ -144,7 +143,7 @@ public class DWBlueLeftTSEDuckCoopCyclePark extends LinearOpMode {
         // Move next to the carousel.
         // We use moveSidewaysUntilTouch method to take advantage of its time limit and to avoid duplication.
         currentLocation = MoveSideways.moveSidewaysUntilTouch(
-                TouchSensors.Direction.RIGHT,
+                TouchSensors.Direction.LEFT,
                 1200,
                 odometry.getTouchSensors(),
                 1,
