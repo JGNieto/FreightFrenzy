@@ -25,8 +25,6 @@ import org.openftc.easyopencv.OpenCvWebcam;
 public class DWBlueRightDuckPark extends LinearOpMode {
     private Lift lift;
     private Mecanum mecanum;
-    private TSEPipeline tsePipeline;
-    private OpenCvWebcam webcam;
     private IMU imu;
     private Carousel carousel;
     private Location currentLocation = new Location(Places.blueRightStart);
@@ -58,8 +56,6 @@ public class DWBlueRightDuckPark extends LinearOpMode {
         odometry = new Odometry(hardwareMap, imu, false);
         elapsedTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
-        tsePipeline = new TSEPipeline(this);
-        webcam = TSEPipeline.openWebcam(this, tsePipeline);
         lift.moveDown(this);
 
         telemetry.addData("Status", "Waiting for vision...");
@@ -72,11 +68,8 @@ public class DWBlueRightDuckPark extends LinearOpMode {
         telemetry.addData("Status", "Starting...");
         telemetry.update();
 
-        dropLevel = Globals.DropLevel.BOTTOM;
+        dropLevel = Globals.DropLevel.MIDDLE;
 
-        // Remove if using vuforia:
-        TSEPipeline.stop(webcam);
-        //lift.startThread();
         lift.moveToDropLevel(dropLevel);
 
         telemetry.addData("Status", "Waiting...");

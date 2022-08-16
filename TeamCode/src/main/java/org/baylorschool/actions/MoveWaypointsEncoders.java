@@ -41,7 +41,7 @@ public class MoveWaypointsEncoders {
                         mecanum.setBackwards(false);
                         localization.setBackwards(false);
                     }
-                    opMode.sleep(500);
+                    opMode.sleep(200);
                     wasBusy = false;
                     continue;
                 }

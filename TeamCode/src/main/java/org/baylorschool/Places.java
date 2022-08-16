@@ -139,11 +139,11 @@ public class Places {
     };
 
     public static final Location[] CarouselToBluePark = new Location[] {
-            new Location(awayPerpendicular(-3), middle(1.5)),
+            new Location(awayPerpendicular(-2.7), middle(1.5),90),
     };
 
     public static final Location[] CarouselToRedPark = new Location[] {
-            new Location(awayPerpendicular(-3), middle(-1.5)),
+            new Location(awayPerpendicular(-2.85), middle(-1.5)),
     };
 
     public static final Location[] BlueLeftHubToWarehouse = new Location[] {
@@ -172,7 +172,7 @@ public class Places {
 
     public static final Location[] BlueRightToHub = new Location[] {
             blueRightStart,
-            new Location(middle(-1.5), middle(2.5)),
+            new Location(middle(-.95), middle(1), -90),
     };
 
     public static final Location[] BlueLeftToHub = new Location[] {
@@ -182,12 +182,12 @@ public class Places {
 
     public static final Location[] RedRightToHub = new Location[] {
             redRightStart,
-            new Location(middle(0.5), middle(-2.5)),
+            new Location(middle(0.5), middle(-2.6)),
     };
 
     public static final Location[] RedLeftToHub = new Location[] {
             redLeftStart,
-            new Location(middle(-1.5), middle(-2.5)),
+            new Location(middle(-.95), middle(-1)),
     };
 
     public static final Location[] BlueRightHubToPark = new Location[] {
@@ -202,7 +202,7 @@ public class Places {
 
     public static final Location[] BlueRightHubToCarousel = new Location[] {
             new Location(middle(-2.5), middle(1.5)).backwards(),
-            new Location(middle(-2.5), middle(2.5), 90).backwards(),
+            new Location(middle(-2.5), middle(2.5), 90),
     };
 
     public static final Location[] BlueLeftHubToCarousel = new Location[] {

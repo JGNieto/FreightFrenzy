@@ -21,7 +21,7 @@ import org.baylorschool.library.localization.Odometry;
 import org.baylorschool.library.localization.TouchSensors;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@Autonomous(name = "DWRedLeftTSEDuckPark", group = "Red")
+@Autonomous(name = "DWRedLeftTSEDuckPaw1rk", group = "Red")
 public class DWRedLeftTSEDuckPark extends LinearOpMode {
     private Lift lift;
     private Mecanum mecanum;

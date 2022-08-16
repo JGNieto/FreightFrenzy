@@ -18,10 +18,12 @@ import java.util.Arrays;
 import java.util.Collections;
 
 @Autonomous(name = "RedLeftTSEPark", group = "Red")
-public class RedLeftTSEPark extends LinearOpMode {
+public class RedLeftNODUCKTSEPark extends LinearOpMode {
 
     private TwoBarLift twoBarLift;
     private Sensors sensors;
+    private TSEPipeline tsePipeline;
+    private OpenCvWebcam webcam;
     private Location currentLocation = new Location(Places.redLeftStart);
     private Globals.DropLevel dropLevel;
     private Carousel carousel;
@@ -36,6 +38,8 @@ public class RedLeftTSEPark extends LinearOpMode {
         sensors = new Sensors(hardwareMap, false);
         sensors.initialize(hardwareMap, currentLocation.getHeading());
 
+        tsePipeline = new TSEPipeline(this);
+        webcam = TSEPipeline.openWebcam(this, tsePipeline);
         twoBarLift.moveDown(this);
 
         telemetry.addData("Status", "Waiting for vision...");
@@ -43,15 +47,17 @@ public class RedLeftTSEPark extends LinearOpMode {
 
         waitForStart();
         sensors.getMecanum().updateEncoderReadings();
+        dropLevel = tsePipeline.getDropLevel();
 
-        dropLevel = Globals.DropLevel.MIDDLE;
         twoBarLift.initialize();
         twoBarLift.startThread();
 
         // Remove if using vuforia:
+        TSEPipeline.stop(webcam);
 
-        twoBarLift.moveToDropLevel(dropLevel);
         currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedLeftToHub), this);
+        twoBarLift.moveToDropLevel(dropLevel);
+        currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Collections.singletonList(twoBarLift.getScoringLocation(currentLocation, TwoBarLift.Hub.RED, dropLevel)), this);
         twoBarLift.releaseItem();
         twoBarLift.retract(1500);
         currentLocation = MoveWaypointsEncoders.moveToWaypoints(currentLocation, sensors, Arrays.asList(Places.RedLeftHubToPark), this);

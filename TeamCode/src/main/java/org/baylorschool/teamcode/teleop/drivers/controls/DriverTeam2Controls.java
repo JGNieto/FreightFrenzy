@@ -1,5 +1,7 @@
 package org.baylorschool.teamcode.teleop.drivers.controls;
 
+import com.qualcomm.robotcore.hardware.DigitalChannel;
+
 import org.baylorschool.Globals;
 import org.baylorschool.library.ControlMap;
 import org.baylorschool.library.lift.Lift;
@@ -33,6 +35,11 @@ public class DriverTeam2Controls extends ControlMap {
     @Override
     public boolean liftRetract() {
         return gamepad2.dpad_down;
+    }
+
+    @Override
+    public Globals.DropLevel liftDropLevel(DigitalChannel limitswitch) {
+        return null;
     }
 
     public DriverTeam2Controls() {

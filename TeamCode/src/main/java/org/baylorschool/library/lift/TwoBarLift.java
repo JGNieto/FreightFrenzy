@@ -17,7 +17,7 @@ public class TwoBarLift extends Lift {
     private static final int ticksDifferenceBeforeUsingMovementPower = (int) (ticksPerRevolution * 15 / 360);
 
     public static final int bottomLevelTSHEncoder = 260;
-    public static final int coopTSHEncoder = 350;
+    public static final int coopTSHEncoder = 370;
     public static final int middleLevelTSHEncoder = 360;
     public static final int topLevelTSHEncoder = 490;
 
@@ -25,7 +25,7 @@ public class TwoBarLift extends Lift {
     private static final double rollerGrabPower = -1;
     private static final double rollerReleasePower = .625;
 
-    private static final double liftPowerUp = .4;
+    private static final double liftPowerUp = .45;
     private static final double liftPowerDown = -.2;
     private static final double liftPowerHold = .4;
 

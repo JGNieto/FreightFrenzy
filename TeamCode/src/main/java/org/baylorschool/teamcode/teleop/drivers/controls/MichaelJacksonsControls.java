@@ -1,5 +1,6 @@
 package org.baylorschool.teamcode.teleop.drivers.controls;
 
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.baylorschool.Globals;
@@ -11,6 +12,12 @@ public class MichaelJacksonsControls extends ControlMap {
     public MichaelJacksonsControls() {
         super();
     }
+
+    @Override
+    public Globals.DropLevel liftDropLevel(DigitalChannel limitswitch) {
+        return null;
+    }
+
     ElapsedTime liftTimer = new ElapsedTime();
 
     @Override
@@ -29,6 +36,11 @@ public class MichaelJacksonsControls extends ControlMap {
     }
 
     @Override
+    public Globals.DropLevel liftDropLevel(Lift lift) {
+        return null;
+    }
+
+    @Override
     public double tapeExtend() {
         if (gamepad1.left_trigger > .01 || gamepad1.right_trigger > .01) {
             return - gamepad1.left_trigger + gamepad1.right_trigger;
@@ -42,15 +54,14 @@ public class MichaelJacksonsControls extends ControlMap {
     }
 
     @Override
-    public Globals.DropLevel liftDropLevel(Lift lift) {
-        if (lift.getCapturedElements() >= 1) {
+    public Globals.DropLevel liftDropLevel() {
+        if (gamepad2.right_trigger > .2) {
             return Globals.DropLevel.COOP;
-        } else if (lift.getCapturedElements() == 0 && liftTimer.milliseconds() < 250) {
-            liftTimer.reset();
-            return Globals.DropLevel.INITIAL;
-        } else
+        } else if (gamepad2.left_trigger > .2) {
+            return Globals.DropLevel.TOP;
+        } else {
             return null;
+        }
     }
-
 
 }

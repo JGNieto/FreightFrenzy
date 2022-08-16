@@ -1,6 +1,7 @@
 package org.baylorschool.teamcode.teleop.drivers;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.baylorschool.Globals;
 import org.baylorschool.library.ControlMap;
@@ -18,6 +19,11 @@ public class TestTeleOp extends TeleOpLogic {
 class TestTeleOpControls extends ControlMap {
     public TestTeleOpControls() {
         super(true);
+    }
+
+    @Override
+    public Globals.DropLevel liftDropLevel(DigitalChannel limitswitch) {
+        return null;
     }
 
     @Override

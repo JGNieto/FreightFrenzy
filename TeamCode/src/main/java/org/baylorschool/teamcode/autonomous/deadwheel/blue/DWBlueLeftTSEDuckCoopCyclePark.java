@@ -35,12 +35,12 @@ public class DWBlueLeftTSEDuckCoopCyclePark extends LinearOpMode {
 
     private static final Location duckLocation = new Location(Places.middle(2.5), Places.awayParallel(-2.2), 0);
     private static final Location[] carouselToCycling = new Location[] {
-            new Location(Places.closePerpendicular(-2.9) - 100, Places.middle(1.8), 0),
-            new Location(Places.closePerpendicular(-2.9), Places.middle(1.17), -90),
+            new Location(Places.closePerpendicular(-3), Places.middle(1.7), 0),
+            new Location(Places.closePerpendicular(-3), Places.middle(1.5), -90),
     };
 
     private static final Location[] intakingToHub = new Location[] {
-            new Location(Places.closePerpendicular(-2), Places.middle(1.37), 0),
+            new Location(Places.closePerpendicular(-2), Places.middle(2), 0),
             new Location(Places.middle(-1), Places.middle(1.125), -90),
     };
 
@@ -89,10 +89,8 @@ public class DWBlueLeftTSEDuckCoopCyclePark extends LinearOpMode {
 
         lift.releaseItemLocalization(currentLocation, odometry);
 
-        currentLocation = MoveWaypoints.moveWaypoints(new Path(Location.moveLocation(new Location(currentLocation), 0, -150).setPurePursuitTurnSpeed(0)).setTimeout(1000), mecanum, odometry, currentLocation, this);
-
         lift.retract();
-
+/*
         while (opModeIsActive()) {
             currentLocation = MoveWaypoints.moveWaypoints(new Path(carouselToCycling), mecanum, odometry, currentLocation, this);
             lift.retract();
@@ -103,8 +101,7 @@ public class DWBlueLeftTSEDuckCoopCyclePark extends LinearOpMode {
 
             telemetry.log().add(String.valueOf(Globals.matchLength - elapsedTime.time()));
 
-            dropLevel = Globals.DropLevel.COOP;
-
+            dropLevel = Globals.DropLevel.MIDDLE;
             lift.startThread();
             lift.moveToDropLevel(dropLevel);
 
@@ -175,5 +172,7 @@ public class DWBlueLeftTSEDuckCoopCyclePark extends LinearOpMode {
         mecanum.stop();
         // Give the odometry time to withdraw.
         sleep(2000);
+
+ */
     }
 }

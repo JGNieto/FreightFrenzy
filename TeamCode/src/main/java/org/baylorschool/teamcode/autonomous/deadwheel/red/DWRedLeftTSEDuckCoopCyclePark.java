@@ -70,7 +70,6 @@ public class DWRedLeftTSEDuckCoopCyclePark extends LinearOpMode {
         telemetry.update();
 
         dropLevel = Globals.DropLevel.COOP;
-        dropLevel = Globals.DropLevel.COOP;
         lift.startThread();
         lift.moveToDropLevel(dropLevel);
 

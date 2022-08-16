@@ -1,5 +1,6 @@
 package org.baylorschool.library;
 
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.baylorschool.Globals;
@@ -80,6 +81,8 @@ public abstract class ControlMap {
     public boolean liftRetract() {
         return false;
     }
+
+    public abstract Globals.DropLevel liftDropLevel(DigitalChannel limitswitch);
 
     public Globals.DropLevel liftDropLevel() {
         return null;
