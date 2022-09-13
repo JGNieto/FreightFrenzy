@@ -17,7 +17,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 import java.util.Arrays;
 import java.util.Collections;
 
-@Autonomous(name = "RedLeftTSEPark", group = "Red")
+@Autonomous(name = "RedLeftNODUCKTSEPark", group = "Red")
 public class RedLeftNODUCKTSEPark extends LinearOpMode {
 
     private TwoBarLift twoBarLift;
